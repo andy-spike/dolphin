@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from 'react'
 import { Check, ArrowLeft, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { Prose } from '@/components/Prose'
@@ -166,11 +167,40 @@ function Frame({
   children: React.ReactNode
   className?: string
 }) {
+  const rowRef = useRef<HTMLDivElement>(null)
+  const marginColRef = useRef<HTMLDivElement>(null)
+
+  // The margin column stretches to the section's full height by default (needed so a sticky
+  // label inside it has room to travel as the Student scrolls) — but align-items: baseline,
+  // the one thing that lines it up with the content's first line regardless of that content's
+  // font size, can't apply to a stretched item; a grid item is sized by stretch OR positioned
+  // by baseline, never both. So: borrow the grid's own baseline math for one frame to find the
+  // right offset, then bake it in as padding on the still-stretched column.
+  useLayoutEffect(() => {
+    const row = rowRef.current
+    const marginCol = marginColRef.current
+    if (!row || !marginCol) return
+
+    const align = () => {
+      if (!marginCol.offsetParent) return // hidden below `lg`
+      marginCol.style.paddingTop = '0px'
+      row.style.alignItems = 'baseline'
+      const baselineTop = marginCol.getBoundingClientRect().top
+      row.style.alignItems = ''
+      const stretchTop = marginCol.getBoundingClientRect().top
+      marginCol.style.paddingTop = `${baselineTop - stretchTop}px`
+    }
+
+    align()
+    window.addEventListener('resize', align)
+    return () => window.removeEventListener('resize', align)
+  }, [])
+
   return (
-    // items-baseline lines the margin up with the first line of content, whatever size
-    // that content's text is — no hand-tuned offset to keep in sync per section.
-    <div className={cn('lg:grid lg:grid-cols-[6.5rem_minmax(0,var(--measure))] lg:items-baseline lg:gap-x-8', className)}>
-      <div className="hidden lg:flex lg:justify-end">{margin}</div>
+    <div ref={rowRef} className={cn('lg:grid lg:grid-cols-[6.5rem_minmax(0,var(--measure))] lg:gap-x-8', className)}>
+      <div ref={marginColRef} className="hidden lg:flex lg:items-start lg:justify-end">
+        {margin}
+      </div>
       {/* The mobile-only heading before `children` stays in the DOM at lg+ (just hidden),
           so it breaks `first:` on the block after it — force that block's margin here instead. */}
       <div className="min-w-0 max-w-[var(--measure)] lg:max-w-none lg:[&>h3+*]:mt-0">{children}</div>
