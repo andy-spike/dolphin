@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { Check, Copy, Play, Loader2, X } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { useStream } from '@/lib/useStream'
@@ -38,11 +38,25 @@ function Prompt({ text }: { text: string }) {
   )
 }
 
+const MAX_ANSWER_HEIGHT = 320
+
 function Written({ ex }: { ex: WrittenExercise }) {
   const [answer, setAnswer] = useState(ex.answer)
   const [feedback, setFeedback] = useState(ex.feedback)
   const [checking, setChecking] = useState(false)
   const { shown, done } = useStream(feedback?.text ?? '', checking === false && !!feedback)
+  const answerRef = useRef<HTMLTextAreaElement>(null)
+
+  // Grows the box with the Student's answer, capped at MAX_ANSWER_HEIGHT — past that it scrolls instead.
+  // scrollHeight excludes the border even under border-box sizing, so it has to be added back in,
+  // or the box permanently overflows itself by exactly the border width.
+  useLayoutEffect(() => {
+    const el = answerRef.current
+    if (!el) return
+    const border = parseFloat(getComputedStyle(el).borderTopWidth) + parseFloat(getComputedStyle(el).borderBottomWidth)
+    el.style.height = 'auto'
+    el.style.height = `${Math.min(el.scrollHeight + border, MAX_ANSWER_HEIGHT)}px`
+  }, [answer])
 
   const check = () => {
     setChecking(true)
@@ -58,11 +72,13 @@ function Written({ ex }: { ex: WrittenExercise }) {
       <Prompt text={ex.prompt} />
       <div className="p-3">
         <textarea
+          ref={answerRef}
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           rows={5}
           placeholder="Write your answer…"
-          className="reading w-full resize-y border border-rule bg-paper px-4 py-3 text-[0.9375rem] outline-none transition-shadow placeholder:text-ink-faint focus:border-accent focus:ring-4 focus:ring-accent-wash"
+          className="reading w-full resize-none overflow-y-auto border border-rule bg-paper px-4 py-3 text-[0.9375rem] outline-none transition-shadow placeholder:text-ink-faint focus:border-accent focus:ring-4 focus:ring-accent-wash"
+          style={{ maxHeight: MAX_ANSWER_HEIGHT }}
         />
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
           <button
