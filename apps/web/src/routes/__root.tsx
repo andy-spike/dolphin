@@ -4,6 +4,11 @@ import {
   Scripts,
   createRootRoute,
 } from '@tanstack/react-router'
+import { DemoBar } from '@/DemoBar'
+import { Lamp } from '@/components/Lamp'
+import { Fault } from '@/components/Fault'
+import { DemoProvider, useDemoStore } from '@/lib/demo-store'
+import '@/index.css'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -23,9 +28,29 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body>
-        <Outlet />
+        <DemoProvider>
+          <Shell />
+        </DemoProvider>
         <Scripts />
       </body>
     </html>
+  )
+}
+
+function Shell() {
+  const { empty, setEmpty, fault, setFault, busy } = useDemoStore()
+  const health = fault === 'agent' ? 'down' : busy ? 'working' : 'ready'
+
+  return (
+    <div className="flex h-dvh overflow-hidden bg-paper">
+      <main className="flex min-w-0 flex-1 flex-col">
+        <div className="fixed bottom-3 left-3 z-50 flex items-center gap-2">
+          <DemoBar empty={empty} onEmpty={setEmpty} fault={fault} onFault={setFault} />
+          <Lamp health={health} />
+        </div>
+        <Fault kind={fault} />
+        <Outlet />
+      </main>
+    </div>
   )
 }

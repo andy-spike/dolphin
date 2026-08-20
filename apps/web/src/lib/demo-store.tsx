@@ -1,0 +1,47 @@
+import { createContext, useCallback, useContext, useState, type ReactNode } from 'react'
+import { courses as initialCourses } from '@/mock/data'
+import type { Course } from '@/mock/types'
+import type { FaultKind } from '@/components/Fault'
+
+type DemoStore = {
+  courses: Course[]
+  toggleComplete: (course: Course, index: number) => void
+  empty: boolean
+  setEmpty: (v: boolean) => void
+  fault: FaultKind
+  setFault: (f: FaultKind) => void
+  busy: boolean
+  setBusy: (b: boolean) => void
+}
+
+const DemoContext = createContext<DemoStore | null>(null)
+
+/** Holds the mock Course Library and reviewer-only demo switches across route navigation. */
+export function DemoProvider({ children }: { children: ReactNode }) {
+  const [courses, setCourses] = useState(initialCourses)
+  const [empty, setEmpty] = useState(false)
+  const [fault, setFault] = useState<FaultKind>('none')
+  const [busy, setBusy] = useState(false)
+
+  const toggleComplete = useCallback((course: Course, index: number) => {
+    setCourses((cs) =>
+      cs.map((c) =>
+        c.id !== course.id
+          ? c
+          : { ...c, lessons: c.lessons.map((l, i) => (i === index ? { ...l, complete: !l.complete } : l)) },
+      ),
+    )
+  }, [])
+
+  return (
+    <DemoContext.Provider value={{ courses, toggleComplete, empty, setEmpty, fault, setFault, busy, setBusy }}>
+      {children}
+    </DemoContext.Provider>
+  )
+}
+
+export function useDemoStore() {
+  const ctx = useContext(DemoContext)
+  if (!ctx) throw new Error('useDemoStore must be used within DemoProvider')
+  return ctx
+}
