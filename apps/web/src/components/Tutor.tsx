@@ -91,7 +91,7 @@ export function TutorMargin({ lessonTitle, lessonComplete }: { lessonTitle: stri
 }
 
 /** Drags the Tutor's left edge. Width is computed from the viewport's right edge, since the aside sits flush against it. */
-function ResizeHandle({ onResize }: { onResize: (w: number) => void }) {
+function ResizeHandle({ onResize }: { onResize: (w: number | null) => void }) {
   const dragging = useRef(false)
 
   const move = (e: React.PointerEvent) => {
@@ -111,6 +111,7 @@ function ResizeHandle({ onResize }: { onResize: (w: number) => void }) {
         dragging.current = false
         e.currentTarget.releasePointerCapture(e.pointerId)
       }}
+      onDoubleClick={() => onResize(null)}
       role="separator"
       aria-label="Resize the Tutor"
       aria-orientation="vertical"
