@@ -1,0 +1,524 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-17T00:00:00Z",
+  "title": "Design System: Dolphin",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Laid Paper",
+        "canonical": "#f2ede3",
+        "tonalRamp": [
+          "#342b18",
+          "#5c4c2b",
+          "#846c3d",
+          "#ac8d50",
+          "#bfa776",
+          "#d2c19e",
+          "#e4dac6",
+          "#f7f4ee"
+        ],
+        "note": "paper-raised #faf7f0 and paper-sunk #e7e0d2 are the shipped steps of this ramp."
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Precise Ink",
+        "canonical": "#1e1c19",
+        "tonalRamp": [
+          "#2a2723",
+          "#4a453d",
+          "#696258",
+          "#898072",
+          "#a49d92",
+          "#beb9b2",
+          "#d9d6d1",
+          "#f3f2f1"
+        ],
+        "note": "ink-soft #5a544a (6.42:1 on paper) and ink-faint #6b6355 (5.08:1) are the shipped steps."
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Hairline Rule",
+        "canonical": "#d5ccbb",
+        "tonalRamp": [
+          "#2f291d",
+          "#534833",
+          "#77684a",
+          "#9b8760",
+          "#b3a283",
+          "#c9bda7",
+          "#dfd8cb",
+          "#f5f3ef"
+        ]
+      },
+      "steel": {
+        "role": "secondary",
+        "displayName": "Brushed Steel",
+        "canonical": "#4a5058",
+        "tonalRamp": [
+          "#23262a",
+          "#3e4349",
+          "#585f69",
+          "#737c89",
+          "#929aa3",
+          "#b2b7be",
+          "#d1d5d9",
+          "#f1f2f3"
+        ],
+        "note": "Bench rail, notebook spines, shelf fixtures. on-steel-soft #c6c9ce measures 4.90:1 here."
+      },
+      "felt": {
+        "role": "secondary",
+        "displayName": "Wool Felt",
+        "canonical": "#3a4139",
+        "tonalRamp": [
+          "#242924",
+          "#40483f",
+          "#5c675a",
+          "#778675",
+          "#96a194",
+          "#b4bdb3",
+          "#d3d8d2",
+          "#f2f3f1"
+        ],
+        "note": "A region-scale field colour, only the Course Library today. on-felt-soft #b4bcaf measures 5.39:1 here."
+      },
+      "brass": {
+        "role": "primary",
+        "displayName": "Brass",
+        "canonical": "#b58234",
+        "tonalRamp": [
+          "#3b2b11",
+          "#694b1e",
+          "#966c2b",
+          "#c38c38",
+          "#d2a663",
+          "#dfc091",
+          "#ecdabe",
+          "#f9f4eb"
+        ],
+        "note": "2.90:1 on paper — fills and rules only, never text on paper."
+      },
+      "brass-ink": {
+        "role": "primary",
+        "displayName": "Brass Ink",
+        "canonical": "#7e5518",
+        "tonalRamp": [
+          "#402b0c",
+          "#714c16",
+          "#a26d1f",
+          "#d38e28",
+          "#dfa857",
+          "#e8c188",
+          "#f2dbb9",
+          "#fbf4ea"
+        ],
+        "note": "The text-grade sibling of brass. 5.62:1 on paper. Also the caret and the focus ring on paper."
+      },
+      "brass-wash": {
+        "role": "primary",
+        "displayName": "Brass Wash",
+        "canonical": "#f0e3ca",
+        "tonalRamp": [
+          "#3c2d11",
+          "#694f1e",
+          "#96722b",
+          "#c49437",
+          "#d3ac63",
+          "#e0c490",
+          "#eddcbe",
+          "#f9f4eb"
+        ],
+        "note": "Current row, quiet-control hover, prose note, and ::selection on paper."
+      },
+      "fail": {
+        "role": "tertiary",
+        "displayName": "Test Fail",
+        "canonical": "#9b3620",
+        "tonalRamp": [
+          "#3f160d",
+          "#702717",
+          "#a03821",
+          "#d0492b",
+          "#dd7059",
+          "#e79a89",
+          "#f1c3ba",
+          "#fbedea"
+        ],
+        "note": "Faults and failing tests only. Never an accent."
+      },
+      "pass": {
+        "role": "tertiary",
+        "displayName": "Test Pass",
+        "canonical": "#2f6b3c",
+        "tonalRamp": [
+          "#17351e",
+          "#295e35",
+          "#3b864b",
+          "#4daf62",
+          "#74c285",
+          "#9cd4a8",
+          "#c5e5cc",
+          "#edf7ef"
+        ],
+        "note": "Passing tests, a completed Lesson, a sound Tutor verdict. Never an accent."
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The one big line a station is allowed: the Brief's question, a Lesson title, the closed Course's Topic."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Station status lines and the Course Library heading."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "A notebook's Topic, a Lesson prose heading, a Syllabus entry."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Lesson prose. 46rem measure, roughly 68-72 characters."
+      },
+      "body-small": {
+        "displayName": "Body Small",
+        "purpose": "Exercise prompts, agent replies, supporting copy. The Tutor panel steps down once more to 0.875rem."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "The machine voice: every count, state, unit, section name, button caption and metadata line. Applied as the `label` utility class."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Code blocks, inline spans, Course Folder paths, Source labels, filenames."
+      }
+    },
+    "shadows": [
+      {
+        "name": "bound-object",
+        "value": "0 2px 3px rgba(0,0,0,0.3), 0 10px 20px -6px rgba(0,0,0,0.45)",
+        "purpose": "A bound notebook standing on the felt shelf. The only shadow on a content object."
+      },
+      {
+        "name": "popover",
+        "value": "0 6px 28px -6px rgba(30,28,25,0.4)",
+        "purpose": "The Syllabus contents popover under the station header. Ink-tinted, never neutral black."
+      },
+      {
+        "name": "sheet",
+        "value": "0 -4px 24px rgba(30,28,25,0.28)",
+        "purpose": "The Tutor sheet lifting off the bottom edge below xl."
+      },
+      {
+        "name": "machined-inset",
+        "value": "inset 0 1px 2px rgba(0,0,0,0.4)",
+        "purpose": "A pressed rail button. Metal is seated into its housing, never floating above it."
+      },
+      {
+        "name": "bezel-inset",
+        "value": "inset 0 1px 1.5px rgba(0,0,0,0.55)",
+        "purpose": "The lamp bezel and the notebook spine well."
+      },
+      {
+        "name": "nameplate",
+        "value": "0 1px 2px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.45)",
+        "purpose": "The engraved brass nameplate on the rail: contact shadow plus a top highlight."
+      },
+      {
+        "name": "lit-brass",
+        "value": "0 0 5px 1px rgba(210,162,82,0.75)",
+        "purpose": "The agent lamp filament. The one glow in the system."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-desk",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The only easing token. Fast start, long settle — the way a drawer closes."
+      },
+      {
+        "name": "duration-color",
+        "value": "150ms",
+        "purpose": "Every colour transition on a control."
+      },
+      {
+        "name": "duration-machined",
+        "value": "200ms",
+        "purpose": "A machined transform: the nameplate lift, the toggle knob."
+      },
+      {
+        "name": "duration-land",
+        "value": "200ms",
+        "purpose": "The contents popover landing."
+      },
+      {
+        "name": "duration-sheet",
+        "value": "280ms",
+        "purpose": "The Tutor sheet rising below xl."
+      },
+      {
+        "name": "duration-lift",
+        "value": "300ms",
+        "purpose": "A notebook lifting 6px on hover or focus."
+      },
+      {
+        "name": "duration-lesson-land",
+        "value": "420ms",
+        "purpose": "A generated Lesson arriving in the Generating list."
+      },
+      {
+        "name": "duration-progress",
+        "value": "500ms",
+        "purpose": "The brass Progress ribbon growing along a notebook's foot."
+      },
+      {
+        "name": "keyframes-lamp",
+        "value": "@keyframes lamp { 0%,100% { opacity: 1 } 50% { opacity: 0.45 } } — 1.4s infinite",
+        "purpose": "The working pulse, shared by the lamp, live State Chips and the writing row."
+      },
+      {
+        "name": "keyframes-land",
+        "value": "@keyframes land { from { opacity: 0; transform: translateY(0.75rem) } to { opacity: 1; transform: none } }",
+        "purpose": "A thing that just arrived."
+      },
+      {
+        "name": "keyframes-sheet",
+        "value": "@keyframes sheet { from { transform: translateY(4%); opacity: 0 } to { transform: none; opacity: 1 } }",
+        "purpose": "The summoned Tutor sheet."
+      },
+      {
+        "name": "stream",
+        "value": "260 characters per second on requestAnimationFrame, trailed by a solid brass block cursor",
+        "purpose": "The app's one authored motion. Every agent that speaks reveals text this way."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important } }",
+        "purpose": "Global collapse. Any new motion must survive it without losing meaning."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "md",
+        "value": "768px",
+        "purpose": "Page padding steps up; the Rail widens 56px to 64px; the Lesson stepper joins the header line."
+      },
+      {
+        "name": "lg",
+        "value": "1024px",
+        "purpose": "The Syllabus station splits into outline and Generator chat."
+      },
+      {
+        "name": "xl",
+        "value": "1280px",
+        "purpose": "The Tutor docks as a 23rem margin panel; Lesson and Tutor scroll independently."
+      },
+      {
+        "name": "2xl",
+        "value": "1536px",
+        "purpose": "The docked Tutor widens to 26rem."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one committing action per station. Ink at rest, brass under the hand.",
+      "html": "<button class=\"ds-btn-primary\">Generate the Course</button>",
+      "css": ".ds-btn-primary { font-family: var(--font-mono, \"JetBrains Mono Variable\", ui-monospace, monospace); font-size: 0.6875rem; font-weight: 550; line-height: 1; letter-spacing: 0.09em; text-transform: uppercase; background: var(--color-ink, #1e1c19); color: var(--color-paper, #f2ede3); border: none; border-radius: 0; padding: 14px 20px; cursor: pointer; transition: background-color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:hover { background: var(--color-brass-ink, #7e5518); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-brass-ink, #7e5518); outline-offset: 2px; border-radius: 1px; } .ds-btn-primary:disabled { background: var(--color-rule, #d5ccbb); color: rgba(107,99,85,0.7); cursor: not-allowed; }"
+    },
+    {
+      "name": "Quiet Button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "The second action in a pair. A hairline rectangle that warms to brass on hover.",
+      "html": "<button class=\"ds-btn-quiet\">Back to the Course Library</button>",
+      "css": ".ds-btn-quiet { font-family: var(--font-mono, \"JetBrains Mono Variable\", ui-monospace, monospace); font-size: 0.6875rem; font-weight: 550; line-height: 1; letter-spacing: 0.09em; text-transform: uppercase; background: transparent; color: var(--color-ink-soft, #5a544a); border: 1px solid var(--color-rule, #d5ccbb); border-radius: 0; padding: 14px 20px; cursor: pointer; transition: color 150ms, background-color 150ms, border-color 150ms; } .ds-btn-quiet:hover { border-color: rgba(126,85,24,0.5); background: var(--color-brass-wash, #f0e3ca); color: var(--color-brass-ink, #7e5518); } .ds-btn-quiet:focus-visible { outline: 2px solid var(--color-brass-ink, #7e5518); outline-offset: 2px; border-radius: 1px; }"
+    },
+    {
+      "name": "State Chip",
+      "kind": "chip",
+      "refersTo": "chip-state",
+      "description": "Course State as a stamped mark, not a coloured pill. Live states take brass-ink and a pulsing dot.",
+      "html": "<span class=\"ds-chip-state\">Ready</span> <span class=\"ds-chip-state ds-chip-state--live\"><span class=\"ds-chip-dot\"></span>Generating</span>",
+      "css": ".ds-chip-state { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono, \"JetBrains Mono Variable\", ui-monospace, monospace); font-size: 0.6875rem; font-weight: 550; line-height: 1; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-ink-faint, #6b6355); border: 1px solid var(--color-rule, #d5ccbb); border-radius: 0; padding: 4px 6px; } .ds-chip-state--live { color: var(--color-brass-ink, #7e5518); border-color: rgba(126,85,24,0.45); } .ds-chip-dot { width: 4px; height: 4px; border-radius: 9999px; background: var(--color-brass-ink, #7e5518); animation: ds-lamp 1.4s cubic-bezier(0.16,1,0.3,1) infinite; } @keyframes ds-lamp { 0%,100% { opacity: 1 } 50% { opacity: 0.45 } }"
+    },
+    {
+      "name": "Ruled Input",
+      "kind": "input",
+      "refersTo": "input-ruled",
+      "description": "The Brief's Topic and Goal. No box at all — a 2px rule that lights brass under the cursor.",
+      "html": "<p class=\"ds-ruled-line\"><label class=\"ds-ruled-label\" for=\"ds-topic\">I want to learn</label><input class=\"ds-ruled-input\" id=\"ds-topic\" placeholder=\"distributed systems\" /></p>",
+      "css": ".ds-ruled-line { font-family: var(--font-prose, \"Literata Variable\", Charter, Georgia, serif); font-size: 1.25rem; line-height: 1.6; } .ds-ruled-label { color: var(--color-ink-soft, #5a544a); } .ds-ruled-input { margin-left: 8px; min-width: 18ch; font: inherit; color: var(--color-ink, #1e1c19); background: transparent; border: none; border-bottom: 2px solid var(--color-rule, #d5ccbb); border-radius: 0; padding-bottom: 4px; outline: none; caret-color: var(--color-brass-ink, #7e5518); } .ds-ruled-input::placeholder { color: var(--color-ink-faint, #6b6355); } .ds-ruled-input:focus { border-bottom-color: var(--color-brass, #b58234); }"
+    },
+    {
+      "name": "Composer",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "The agent composer used by the Generator chat and the Tutor. The whole wrapper responds to focus, not just the field.",
+      "html": "<form class=\"ds-composer\"><textarea class=\"ds-composer-field\" rows=\"2\" placeholder=\"Ask the Tutor…\"></textarea><button class=\"ds-composer-send\" aria-label=\"Send\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"9 10 4 15 9 20\"></polyline><path d=\"M20 4v7a4 4 0 0 1-4 4H4\"></path></svg></button></form>",
+      "css": ".ds-composer { display: flex; align-items: flex-end; gap: 8px; background: var(--color-paper-raised, #faf7f0); border: 1px solid var(--color-rule, #d5ccbb); border-radius: 0; padding: 8px 12px; } .ds-composer:focus-within { border-color: rgba(126,85,24,0.55); } .ds-composer-field { flex: 1; min-height: 0; max-height: 128px; resize: none; background: transparent; border: none; outline: none; font-family: var(--font-prose, \"Literata Variable\", Charter, Georgia, serif); font-size: 0.875rem; line-height: 1.65; color: var(--color-ink, #1e1c19); } .ds-composer-field::placeholder { color: var(--color-ink-faint, #6b6355); } .ds-composer-send { display: grid; place-items: center; width: 28px; height: 28px; flex-shrink: 0; border: none; border-radius: 2px; background: var(--color-brass-ink, #7e5518); color: var(--color-paper-raised, #faf7f0); cursor: pointer; transition: background-color 150ms; } .ds-composer-send:hover { background: var(--color-ink, #1e1c19); } .ds-composer-send:focus-visible { outline: 2px solid var(--color-brass-ink, #7e5518); outline-offset: 2px; }"
+    },
+    {
+      "name": "Web Search Toggle",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "The Brief's web-search switch. One of the few genuinely round objects in the system.",
+      "html": "<button class=\"ds-toggle\" role=\"switch\" aria-checked=\"true\"><span class=\"ds-toggle-track\"><span class=\"ds-toggle-knob\"></span></span><span class=\"ds-toggle-text\">On</span></button>",
+      "css": ".ds-toggle { display: flex; align-items: center; gap: 12px; background: none; border: none; padding: 0; cursor: pointer; } .ds-toggle-track { position: relative; width: 44px; height: 24px; border-radius: 9999px; background: var(--color-brass, #b58234); border: 1px solid rgba(126,85,24,0.5); transition: background-color 200ms cubic-bezier(0.16,1,0.3,1); } .ds-toggle-knob { position: absolute; top: 2px; left: 22px; width: 18px; height: 18px; border-radius: 9999px; background: var(--color-paper-raised, #faf7f0); box-shadow: 0 1px 2px rgba(0,0,0,0.3); transition: left 200ms cubic-bezier(0.16,1,0.3,1); } .ds-toggle[aria-checked=\"false\"] .ds-toggle-track { background: var(--color-paper-sunk, #e7e0d2); border-color: var(--color-rule, #d5ccbb); } .ds-toggle[aria-checked=\"false\"] .ds-toggle-knob { left: 2px; } .ds-toggle-text { font-family: var(--font-mono, \"JetBrains Mono Variable\", ui-monospace, monospace); font-size: 0.6875rem; font-weight: 550; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-ink-soft, #5a544a); } .ds-toggle:focus-visible { outline: 2px solid var(--color-brass-ink, #7e5518); outline-offset: 2px; border-radius: 1px; }"
+    },
+    {
+      "name": "Bench Rail",
+      "kind": "nav",
+      "refersTo": "rail",
+      "description": "The whole of navigation: an engraved brass nameplate, the Course Library, the open Course as a spine filled to its Progress, and the agent lamp pinned to the foot.",
+      "html": "<nav class=\"ds-rail\" aria-label=\"Bench\"><button class=\"ds-rail-plate\"><span class=\"ds-rail-plate-text\">Dolphin</span></button><button class=\"ds-rail-btn ds-rail-btn--active\" aria-current=\"page\"><span class=\"ds-rail-tab\"></span><svg width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 6l4 14\"></path><path d=\"M12 6v14\"></path><path d=\"M8 8v12\"></path><path d=\"M4 4v16\"></path></svg></button><button class=\"ds-rail-btn\"><span class=\"ds-rail-spine\"><span class=\"ds-rail-spine-fill\"></span></span></button><span class=\"ds-rail-divider\"></span><span class=\"ds-rail-lamp\"><span class=\"ds-rail-lamp-lit\"></span></span></nav>",
+      "css": ".ds-rail { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 64px; padding: 16px 0; background-color: var(--color-steel, #4a5058); background-image: linear-gradient(90deg, rgba(255,255,255,0.07), transparent 22%, transparent 78%, rgba(0,0,0,0.16)), repeating-linear-gradient(0deg, rgba(255,255,255,0.024) 0 1px, transparent 1px 3px); } .ds-rail::after { content: \"\"; position: absolute; inset: 0 0 0 auto; width: 1px; background: rgba(0,0,0,0.35); } .ds-rail-plate { margin-bottom: 12px; padding: 14px 6px; border: none; border-radius: 2px; background: linear-gradient(to bottom, #d2a252, #b58234); box-shadow: 0 1px 2px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.45); cursor: pointer; transition: transform 200ms cubic-bezier(0.16,1,0.3,1); } .ds-rail-plate:hover { transform: translateY(-1px); } .ds-rail-plate-text { display: block; writing-mode: vertical-rl; transform: rotate(180deg); font-family: var(--font-mono, \"JetBrains Mono Variable\", ui-monospace, monospace); font-size: 0.625rem; font-weight: 550; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(44,50,44,0.85); text-shadow: 0 1px 0 rgba(255,255,255,0.35); } .ds-rail-btn { position: relative; display: grid; place-items: center; width: 36px; height: 36px; border: none; border-radius: 3px; background: transparent; color: var(--color-on-steel-soft, #c6c9ce); cursor: pointer; transition: background-color 150ms, color 150ms; } .ds-rail-btn:hover { background: rgba(56,61,68,0.55); color: var(--color-on-steel, #f2ede3); } .ds-rail-btn--active { background: var(--color-steel-dark, #383d44); color: var(--color-brass-bright, #d2a252); box-shadow: inset 0 1px 2px rgba(0,0,0,0.4); } .ds-rail-tab { position: absolute; top: 4px; bottom: 4px; left: -10px; width: 2px; border-radius: 0 2px 2px 0; background: var(--color-brass, #b58234); } .ds-rail-spine { position: relative; display: block; width: 14px; height: 20px; overflow: hidden; border-radius: 1px; background: var(--color-steel-dark, #383d44); box-shadow: inset 0 0 0 1px rgba(242,237,227,0.25); } .ds-rail-spine-fill { position: absolute; inset: auto 0 0 0; height: 60%; background: var(--color-brass, #b58234); } .ds-rail-divider { width: 24px; height: 1px; margin: 8px 0; background: rgba(242,237,227,0.15); } .ds-rail-lamp { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 9999px; background: var(--color-steel-dark, #383d44); box-shadow: inset 0 1px 1.5px rgba(0,0,0,0.55), 0 0 0 1px rgba(181,130,52,0.45); } .ds-rail-lamp-lit { width: 6px; height: 6px; border-radius: 9999px; background: var(--color-brass-bright, #d2a252); box-shadow: 0 0 5px 1px rgba(210,162,82,0.75); } .ds-rail-btn:focus-visible, .ds-rail-plate:focus-visible { outline: 2px solid var(--color-brass-bright, #d2a252); outline-offset: 2px; border-radius: 1px; }"
+    },
+    {
+      "name": "Bound Notebook",
+      "kind": "card",
+      "refersTo": "notebook-cover",
+      "description": "The Course Library's unit. Spine width encodes Lesson count, cover height encodes Time Budget, and the foot carries the brass Progress ribbon.",
+      "html": "<button class=\"ds-notebook\"><span class=\"ds-notebook-spine\"></span><span class=\"ds-notebook-thread\"></span><span class=\"ds-notebook-pages\"></span><span class=\"ds-notebook-body\"><span class=\"ds-notebook-state\">In Progress</span><span class=\"ds-notebook-topic\">Distributed systems</span><span class=\"ds-notebook-goal\">Reason about replication out loud.</span><span class=\"ds-notebook-meta\">intermediate · 8h · web</span></span><span class=\"ds-notebook-foot\"><span class=\"ds-notebook-ribbon\"></span><span class=\"ds-notebook-count\">4 of 9 lessons<em>44%</em></span></span></button>",
+      "css": ".ds-notebook { position: relative; display: flex; flex-direction: column; width: 240px; height: 330px; overflow: hidden; text-align: left; border: none; padding: 0; cursor: pointer; border-radius: 0 3px 3px 0; background-color: var(--color-paper-raised, #faf7f0); background-image: repeating-linear-gradient(90deg, rgba(30,28,25,0.022) 0 1px, transparent 1px 3px), repeating-linear-gradient(0deg, rgba(30,28,25,0.016) 0 1px, transparent 1px 4px); box-shadow: 0 2px 3px rgba(0,0,0,0.3), 0 10px 20px -6px rgba(0,0,0,0.45); transition: transform 300ms cubic-bezier(0.16,1,0.3,1); } .ds-notebook:hover, .ds-notebook:focus-visible { transform: translateY(-6px); } .ds-notebook-spine { position: absolute; inset: 0 auto 0 0; width: 20px; background: linear-gradient(to right, #383d44, #4a5058); box-shadow: inset -2px 0 3px rgba(0,0,0,0.35); } .ds-notebook-thread { position: absolute; top: 24px; bottom: 24px; left: 6px; width: 1px; background: repeating-linear-gradient(0deg, rgba(242,237,227,0.5) 0 4px, transparent 4px 9px); } .ds-notebook-pages { position: absolute; top: 6px; bottom: 6px; right: 0; width: 6px; background: repeating-linear-gradient(0deg, rgba(30,28,25,0.13) 0 1px, transparent 1px 3px); } .ds-notebook-body { display: flex; flex: 1; flex-direction: column; gap: 12px; padding: 24px 24px 24px 42px; } .ds-notebook-state { align-self: flex-start; font-family: var(--font-mono, \"JetBrains Mono Variable\", ui-monospace, monospace); font-size: 0.6875rem; font-weight: 550; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-ink-faint, #6b6355); border: 1px solid var(--color-rule, #d5ccbb); padding: 4px 6px; } .ds-notebook-topic { font-family: var(--font-prose, \"Literata Variable\", Charter, Georgia, serif); font-size: 1.0625rem; font-weight: 500; line-height: 1.25; color: var(--color-ink, #1e1c19); text-wrap: balance; } .ds-notebook-goal { font-family: var(--font-prose, \"Literata Variable\", Charter, Georgia, serif); font-size: 0.8125rem; line-height: 1.625; color: var(--color-ink-soft, #5a544a); } .ds-notebook-meta { margin-top: auto; font-family: var(--font-mono, \"JetBrains Mono Variable\", ui-monospace, monospace); font-size: 0.6875rem; font-weight: 550; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-ink-faint, #6b6355); } .ds-notebook-foot { position: relative; border-top: 1px solid var(--color-rule, #d5ccbb); background: var(--color-paper-sunk, #e7e0d2); padding-left: 42px; } .ds-notebook-ribbon { position: absolute; left: 0; bottom: 0; height: 3px; width: 44%; background: var(--color-brass, #b58234); transition: width 500ms cubic-bezier(0.16,1,0.3,1); } .ds-notebook-count { display: flex; justify-content: space-between; gap: 12px; padding: 10px 20px 10px 0; font-family: var(--font-mono, \"JetBrains Mono Variable\", ui-monospace, monospace); font-size: 0.6875rem; font-weight: 550; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-ink-faint, #6b6355); } .ds-notebook-count em { font-style: normal; color: var(--color-brass-ink, #7e5518); } .ds-notebook:focus-visible { outline: 2px solid var(--color-brass-ink, #7e5518); outline-offset: 2px; }"
+    },
+    {
+      "name": "Agent Turn",
+      "kind": "custom",
+      "refersTo": "tutor-panel",
+      "description": "How the Generator and the Tutor speak. Unbubbled: the Student is a brass left rule, the agent is plain prose trailed by the streaming block cursor.",
+      "html": "<div class=\"ds-thread\"><div class=\"ds-turn-student\"><p class=\"ds-turn-who\">You</p><p class=\"ds-turn-text\">Split lesson four — it is doing two things.</p></div><p class=\"ds-turn-agent\">Done — I have rewritten that entry and left the rest of the Syllabus alone.<span class=\"ds-caret\"></span></p></div>",
+      "css": ".ds-thread { display: flex; flex-direction: column; gap: 20px; background: var(--color-paper-sunk, #e7e0d2); padding: 20px 16px; } .ds-turn-student { border-left: 1px solid var(--color-brass, #b58234); padding-left: 14px; } .ds-turn-who { margin: 0 0 6px; font-family: var(--font-mono, \"JetBrains Mono Variable\", ui-monospace, monospace); font-size: 0.6875rem; font-weight: 550; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-brass-ink, #7e5518); } .ds-turn-text { margin: 0; font-family: var(--font-prose, \"Literata Variable\", Charter, Georgia, serif); font-size: 0.875rem; line-height: 1.65; color: var(--color-ink, #1e1c19); } .ds-turn-agent { margin: 0; font-family: var(--font-prose, \"Literata Variable\", Charter, Georgia, serif); font-size: 0.875rem; line-height: 1.65; color: var(--color-ink-soft, #5a544a); } .ds-caret { display: inline-block; width: 0.45em; height: 1.05em; margin-left: 2px; transform: translateY(0.15em); background: var(--color-brass, #b58234); }"
+    },
+    {
+      "name": "Fault Banner",
+      "kind": "custom",
+      "refersTo": "chip-state",
+      "description": "Errors name the problem, then the recovery. A full-width strip at the top of the station, never a modal, never a bare code.",
+      "html": "<div class=\"ds-fault\" role=\"alert\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"></path><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"></line><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"></line></svg><p class=\"ds-fault-text\"><strong>Docker is not running, so Code Exercises cannot be tested.</strong> Start Docker and press Run tests again. Reading, Written Exercises and the Tutor all work without it.</p></div>",
+      "css": ".ds-fault { display: flex; align-items: flex-start; gap: 12px; padding: 12px 20px; background: rgba(155,54,32,0.08); border-bottom: 1px solid rgba(155,54,32,0.25); color: var(--color-fail, #9b3620); } .ds-fault svg { flex-shrink: 0; margin-top: 1px; } .ds-fault-text { margin: 0; font-family: var(--font-prose, \"Literata Variable\", Charter, Georgia, serif); font-size: 0.875rem; line-height: 1.625; color: var(--color-ink-soft, #5a544a); } .ds-fault-text strong { font-weight: 500; color: var(--color-fail, #9b3620); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Workshop Desk",
+    "overview": "Dolphin is one workbench. A steel bench rail runs the full height of the far left; everything to its right is whatever the Course State has clamped in the bench right now — the Course Library, the Brief, the Syllabus, the Generating run, a Lesson, or the closed Course. The rail is the only permanent furniture in the app. There is no sidebar of Lessons, no file tree, no breadcrumb trail: a Course is a thing being worked on, not a folder being browsed.\n\nThe materials are literal and few. Warm laid paper carries reading. Precise ink carries text. Brushed steel is the bench edge. Wool felt is a field colour used at region scale — the Course Library shelf is felt wall-to-wall, not a felt panel floating on paper. Brass is the single accent: Progress, live state, the lamp, the nameplate, the cursor that trails streaming text. Each material carries a hairline grain drawn with repeating gradients — a tooth you feel at reading distance, never a decorative texture wash.\n\nSeparation is done with hairline rules and seams, never with cards. Corners are square by default; the only radii in the system are the 2-3px chamfers of machined parts and full rounds on genuinely round objects. Depth is reserved for objects that are physically on the desk — a bound notebook, a popover, a summoned sheet. Flat regions of the interface cast nothing.",
+    "keyCharacteristics": [
+      "One workbench; the Course State selects the station, the Student never navigates to one.",
+      "Hairline rules and seams do all separation. No cards.",
+      "Square by default; 2-3px only where something is machined.",
+      "Literata sets every reading surface; JetBrains Mono sets every label, number, path and code span, and nothing else.",
+      "One brass accent, used sparingly and never as body text on paper.",
+      "Light-only. There is no dark theme, and felt and steel are materials, not a dark mode.",
+      "Fully offline: both faces are self-hosted variable fonts, no CDN, no remote assets."
+    ],
+    "rules": [
+      {
+        "name": "The Brass Ink Rule",
+        "body": "Brass (#B58234) is 2.90:1 on paper — it fails as text and always will. Any brass-coloured word, number or icon-with-a-word on a paper surface uses brass-ink (#7E5518, 5.62:1). Reserve brass itself for fills, rules, ribbons and glows, where contrast ratio does not apply. On felt or steel the sibling is brass-bright. This is the one colour trap in the system; every new surface must clear it.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Metal Rule",
+        "body": "There is exactly one accent hue. If a new surface needs to mean live, current, progressing or the agent is working, it says so in brass. It does not introduce a second accent, and it does not borrow pass or fail — those two mean a test result and nothing else.",
+        "section": "colors"
+      },
+      {
+        "name": "The Region Colour Rule",
+        "body": "Felt and steel are materials at region scale, not surface treatments. A felt region fills its whole scroll container edge to edge and carries .on-dark so selection, focus ring and scrollbar re-theme with it. Never a felt card on paper, never a paper card on felt.",
+        "section": "colors"
+      },
+      {
+        "name": "The Machine Voice Rule",
+        "body": "Mono is confined to labels, numbers, paths and code. If it is a sentence a person reads, it is Literata. If it is a value a machine produced, it is JetBrains Mono. There is no third face and no display face.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Measure Rule",
+        "body": "Reading columns are capped and centred: 46rem for a Lesson, 44rem for the Brief, 38rem for a chat thread or the closed Course. A station that has no measure cap is not finished.",
+        "section": "typography"
+      },
+      {
+        "name": "The Heading Air Rule",
+        "body": "More space above a heading than below it — a Lesson prose heading takes 44px above and 16px below; a Lesson section takes 56px above. The gap belongs to the section that is starting, not the one that ended.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Eyebrow Rule",
+        "body": "Headings stand alone. No kicker or eyebrow line above them, and no section numbers in prose. The mono section labels in a Lesson (Concept, Examples, Exercises) are the Lesson's own fixed structure named once, not decoration.",
+        "section": "typography"
+      },
+      {
+        "name": "The Objects-Only Rule",
+        "body": "If it is a region of the interface, it is flat and separated by a hairline. If it is an object on the desk, it may cast a shadow. A panel that lifts is a card, and this system has no cards.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Seated Metal Rule",
+        "body": "Steel and brass are seated with inset shadows and a hairline highlight, never with an outer drop shadow. Metal in this world is bolted to the bench.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Square Default Rule",
+        "body": "New elements are square. A radius must be justified as either a machined part (2-3px) or a genuinely round object (full). It looked softer is not a justification.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Silhouette Rule",
+        "body": "A notebook's proportions carry data: spine width encodes Lesson count (11-22px), cover height encodes Time Budget (296-362px). Two notebooks of the same size are the same size of Course. Do not add decorative variation to a shape that already means something.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Progress Rule",
+        "body": "Progress is always a brass rule along an edge — 3px along a notebook's foot, a fill height on the rail spine. It is never a filled wash behind text, never a ring, never a percentage badge on a coloured pill. The number may accompany the rule; it never replaces it.",
+        "section": "components"
+      },
+      {
+        "name": "The Stamped State Rule",
+        "body": "Course State is a bordered mono stamp. Its only variable is live versus static — brass-ink for a Course the agents are working on, faint ink for one they are not. Never one hue per state.",
+        "section": "components"
+      },
+      {
+        "name": "The Honest Progress Rule",
+        "body": "Long work shows what landed, not that something is happening. Generating lists every Lesson in the Syllabus and resolves them in sequence. The only spinner in the build is inside a button that is already labelled with what it is doing.",
+        "section": "components"
+      },
+      {
+        "name": "The One Authored Motion Rule",
+        "body": "useStream is the app's signature motion: text reveals at 260 characters per second on requestAnimationFrame, trailed by a solid brass block cursor, and it is used everywhere an agent speaks — the Generator, the Tutor, Written Exercise feedback, a failing test's hint. Do not add a second reveal idiom.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do use brass-ink (#7E5518) for any brass-coloured text on paper, and brass-bright (#D2A252) for it on felt or steel. Plain brass is fills and rules only.",
+      "Do separate with 1px rule hairlines and seams; use rule-soft for repeated rows inside a single list.",
+      "Do cap every reading column (46rem Lesson, 44rem Brief, 38rem thread) and centre it.",
+      "Do put more space above a heading than below it.",
+      "Do set every label, count, unit, path and code span in the label or code mono roles, and everything a person reads as a sentence in Literata.",
+      "Do give a felt or steel region the .on-dark class so selection, focus ring and scrollbar re-theme with the material.",
+      "Do apply a material's grain utility together with its background colour (felt-grain bg-felt, paper-grain bg-paper, steel-grain bg-steel).",
+      "Do pair every disabled control with a label line saying what would enable it.",
+      "Do name the problem and then the recovery in every Fault; state which parts of the app still work.",
+      "Do take icons from lucide-react at 11-20px, stroke 1.6-2.4.",
+      "Do route all agent text through useStream."
+    ],
+    "donts": [
+      "Don't build a card. No shadowed, filled, rounded container for a region of the interface — a bordered hairline rectangle is the container in this system.",
+      "Don't put a shadow on anything that is not an object on the desk (a notebook, a popover, a sheet, or seated metal).",
+      "Don't introduce a second accent hue, and don't press pass or fail into service as an accent — they mean a test result.",
+      "Don't hue-code Course State. It is a stamped mono chip whose only variable is live versus static.",
+      "Don't render Progress as a filled wash behind text, a ring, or a badge. It is a brass rule along an edge.",
+      "Don't add a radius above 3px. Square is the default; full rounds are for genuinely round objects.",
+      "Don't set a sentence in JetBrains Mono, or a label, count or path in Literata.",
+      "Don't add an eyebrow or kicker line above a heading, and don't number sections in prose.",
+      "Don't ship a chat bubble. Turns are a brass left rule for the Student and plain prose for the agent.",
+      "Don't replace honest progress with a spinner. A spinner is allowed only inside a button that already says what it is doing.",
+      "Don't load a font, icon set or image from a CDN. The app must render identically with no network.",
+      "Don't build a dark theme. Felt and steel are materials in a light interface; the document declares color-scheme: light.",
+      "Don't reintroduce a sidebar of Lessons. The Rail carries the Course Library, the open Course and the lamp; the Syllabus lives in the station header's contents popover."
+    ]
+  }
+}

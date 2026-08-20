@@ -1,0 +1,182 @@
+@import "tailwindcss";
+/* Two self-hosted faces, no CDN. Figtree for everything read, JetBrains Mono
+   for everything measured. */
+@import "@fontsource-variable/figtree";
+@import "@fontsource-variable/jetbrains-mono";
+
+@theme {
+  /* Flexoki neutrals: warm paper, true ink. */
+  --color-paper: #FFFCF0;
+  --color-paper-raised: #FFFFFF;
+  --color-paper-sunk: #F2F0E5;
+
+  --color-ink: #100F0F;
+  --color-ink-soft: #575653;
+  --color-ink-faint: #6F6E69;
+  --color-ink-ghost: #A5A29B;
+
+  --color-rule: #E6E4D9;
+  --color-rule-soft: #F0EEE6;
+  --color-rule-strong: #CECDC3;
+
+  /* Blue owns action, focus and control. */
+  --color-accent: #205EA6;
+  --color-accent-strong: #1A4A84;
+  --color-accent-wash: #E1ECEB;
+  --color-accent-soft: #C4D9ED;
+
+  /* Flexoki 600 tones. These carry Course State and nothing else; their
+     wash is the same tone at 10%, so every State hovers with equal weight. */
+  --color-state-drafting: #5E409D;
+  --color-state-generating: #205EA6;
+  --color-state-ready: #1C6C66;
+  --color-state-progress: #BC5215;
+  --color-state-complete: #536907;
+
+  --color-fail: #AF3029;
+  --color-fail-wash: #FFE1D5;
+  --color-pass: #536907;
+  --color-pass-wash: #EDEECF;
+
+  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, monospace;
+
+  /* One measure for reading prose: ~72 characters of Figtree at 17px. */
+  --measure: 39rem;
+
+  --ease-workspace: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    background: var(--color-paper);
+    color-scheme: light;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  /* The parts we did not draw still belong to the palette. */
+  ::selection {
+    background: var(--color-accent-soft);
+    color: var(--color-ink);
+  }
+  :where(input, textarea) {
+    caret-color: var(--color-accent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-rule-strong) transparent;
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-rule-strong);
+    border: 3px solid transparent;
+    background-clip: content-box;
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-ink-ghost);
+    background-clip: content-box;
+  }
+  a { text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+  /* Figtree ships lining figures; the mono carries slashed zero for paths. */
+  :where(h1, h2, h3, h4) { text-wrap: balance; }
+}
+
+/* --- Voices ------------------------------------------------------------- */
+
+/** Machine voice: counts, states, paths, keys, button faces. Never a sentence. */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.085em;
+  text-transform: uppercase;
+  font-weight: 550;
+}
+
+/** A figure meant to be read as a number, not as text. */
+@utility numeral {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "zero" 1;
+}
+
+/** The one big voice. Weight and tracking do the work a display cut used to. */
+@utility display {
+  font-weight: 500;
+  letter-spacing: -0.028em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+/** Course topics, lesson headings, row titles. */
+@utility title {
+  font-weight: 600;
+  letter-spacing: -0.014em;
+  line-height: 1.3;
+}
+
+/** Long reading. */
+@utility reading {
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: -0.003em;
+  text-wrap: pretty;
+}
+
+/** Supporting copy and agent replies. */
+@utility supporting {
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: -0.003em;
+  text-wrap: pretty;
+}
+
+/* --- Motion ------------------------------------------------------------- */
+
+@keyframes lamp {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@keyframes land {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes sheet {
+  from { transform: translateY(6%); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+/** The one authored entrance: a station arrives, its heading settles first. */
+@keyframes station {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@utility station-in {
+  animation: station 380ms var(--ease-workspace) both;
+}
+
+/** Long threads and lists end in paper, not in a hard cut. */
+@utility fade-foot {
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

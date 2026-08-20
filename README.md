@@ -1,0 +1,53 @@
+# Dolphin
+
+A local web application that generates personalized courses.
+
+The student describes what they want to learn in a **Brief**, iterates on a **Syllabus** with the **Generator**, then studies the generated **Course** with help from the **Tutor**. Courses are markdown files on the student's own machine.
+
+Dolphin drives the coding-agent SDKs already installed locally (Codex, Claude Code), so the student reuses their existing AI subscription instead of paying for a separate model API.
+
+## Status
+
+**Frontend only.** There is no backend yet. Every screen runs on synthetic data in `apps/web/src/mock/data.ts`, and only Lesson 3 of the first course is fully authored. Nothing generates a real course today.
+
+What exists:
+
+| Course State | Station |
+|---|---|
+| — | Course Library, Brief |
+| Drafting | Syllabus outline + Generator chat |
+| Generating | Generating (resumable, lesson by lesson) |
+| Ready / In Progress | Lesson + Tutor margin |
+| Complete | Course close |
+
+A flask icon at the bottom of the left rail opens a panel for switching mock states — empty library, and the three Fault states.
+
+## Running it
+
+Requires Node and pnpm.
+
+```bash
+pnpm install
+pnpm dev
+```
+
+Then open the URL Vite prints.
+
+```bash
+pnpm build      # typecheck + production build
+```
+
+## Design
+
+The visual world is **The Inky Learning Workspace** — a [Flexoki](https://stephango.com/flexoki)-derived palette on warm paper (`#FFFCF0`) and true ink (`#100F0F`), with Figtree for everything read and JetBrains Mono for everything measured. Blue carries action, focus and control; each of the five Course States carries its own Flexoki hue.
+
+- [`DESIGN.md`](DESIGN.md) — the design system: tokens, type scale, components, and the rules behind them.
+- [`CONTEXT.md`](CONTEXT.md) — the domain language. These terms are canonical; use them exactly.
+- [`PRODUCT.md`](PRODUCT.md) — product purpose, users, constraints.
+- [`docs/adr/`](docs/adr) — architecture decisions, including superseded ones.
+
+## Stack
+
+TypeScript monorepo (pnpm workspaces). Vite + React + Tailwind CSS v4 on the frontend. The planned backend is Hono on Node with SQLite via Drizzle, a Docker sandbox for Code Exercises, and SSE for live agent output — see [`docs/adr/0004-technology-stack.md`](docs/adr/0004-technology-stack.md).
+
+Fonts are self-hosted; the app makes no network requests to third parties.

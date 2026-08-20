@@ -1,0 +1,41 @@
+{
+  "title": "Choose Dolphin’s Course Library composition",
+  "question": "Which version feels like the polished minimalist software product Dolphin should become?",
+  "options": [
+    {
+      "id": "focus",
+      "label": "A — Focus first",
+      "kicker": "CONTINUE STUDYING",
+      "thesis": "The next Lesson leads; the rest of the Course Library stays quiet.",
+      "palette": ["#FFFCF0", "#100F0F", "#205EA6", "#66800B"],
+      "materials": ["flat warm fields", "fine rules", "sans and mono"],
+      "viewport": "One focused continuation region followed by a compact Course list.",
+      "risk": "The safest composition and the closest to a conventional product home.",
+      "comp": ".impeccable/mocks/comp/flexoki-focus-v2.png"
+    },
+    {
+      "id": "index",
+      "label": "B — Course index",
+      "kicker": "TYPOGRAPHIC SYSTEM",
+      "thesis": "Courses read as a disciplined index, with the current Course expanding in place.",
+      "palette": ["#FFFCF0", "#F2F0E5", "#100F0F", "#205EA6"],
+      "materials": ["baseline grid", "hairline separators", "numbered rows"],
+      "viewport": "A single typographic list with one expanded Course and no persistent sidebar.",
+      "risk": "The strongest identity, but it relies on precise responsive typography.",
+      "comp": ".impeccable/mocks/comp/flexoki-index-v2.png"
+    },
+    {
+      "id": "split",
+      "label": "C — Split view",
+      "kicker": "DESKTOP PRODUCT",
+      "thesis": "The Course Library becomes a stable browser with the selected Course always in context.",
+      "palette": ["#FFFCF0", "#F2F0E5", "#100F0F", "#205EA6"],
+      "materials": ["two-pane shell", "document surface", "semantic color"],
+      "viewport": "A compact Course pane and a detailed Syllabus pane share one continuous frame.",
+      "risk": "The most useful desktop composition, but it commits Dolphin to a stronger app shell.",
+      "comp": ".impeccable/mocks/comp/flexoki-split-v2.png"
+    }
+  ],
+  "buildPath": { "value": "comp", "toggle": true },
+  "steer": true
+}

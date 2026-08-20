@@ -1,0 +1,8 @@
+{
+  "name": "dolphin",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @dolphin/web dev",
+    "build": "pnpm --filter @dolphin/web build"
+  }
+}
