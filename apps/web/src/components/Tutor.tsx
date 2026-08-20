@@ -9,12 +9,16 @@ type Mode = 'tutor' | 'tailor'
 
 const asks = ['Explain this differently', 'Where does this break?', 'One more example']
 
+const MIN_TUTOR_WIDTH = 300
+const MAX_TUTOR_WIDTH = 560
+
 export function TutorMargin({ lessonTitle, lessonComplete }: { lessonTitle: string; lessonComplete: boolean }) {
   const [mode, setMode] = useState<Mode>('tutor')
   const [threads, setThreads] = useState<Record<Mode, Turn[]>>({ tutor: tutorThread, tailor: tailorThread })
   const [draft, setDraft] = useState('')
   const [streamIndex, setStreamIndex] = useState(-1)
   const [sheet, setSheet] = useState(false)
+  const [width, setWidth] = useState<number | null>(null)
 
   const turns = threads[mode]
 
@@ -52,8 +56,13 @@ export function TutorMargin({ lessonTitle, lessonComplete }: { lessonTitle: stri
     <>
       <aside
         aria-label="Tutor"
-        className="hidden shrink-0 flex-col border-l border-rule bg-paper-sunk xl:flex xl:w-[23rem] 2xl:w-[27rem]"
+        style={width ? { width } : undefined}
+        className={cn(
+          'relative hidden shrink-0 flex-col border-l border-rule bg-paper-sunk xl:flex',
+          !width && 'xl:w-[23rem] 2xl:w-[27rem]',
+        )}
       >
+        <ResizeHandle onResize={setWidth} />
         {panel}
       </aside>
 
@@ -78,6 +87,35 @@ export function TutorMargin({ lessonTitle, lessonComplete }: { lessonTitle: stri
         </div>
       )}
     </>
+  )
+}
+
+/** Drags the Tutor's left edge. Width is computed from the viewport's right edge, since the aside sits flush against it. */
+function ResizeHandle({ onResize }: { onResize: (w: number) => void }) {
+  const dragging = useRef(false)
+
+  const move = (e: React.PointerEvent) => {
+    if (!dragging.current) return
+    const w = Math.min(MAX_TUTOR_WIDTH, Math.max(MIN_TUTOR_WIDTH, window.innerWidth - e.clientX))
+    onResize(w)
+  }
+
+  return (
+    <div
+      onPointerDown={(e) => {
+        dragging.current = true
+        e.currentTarget.setPointerCapture(e.pointerId)
+      }}
+      onPointerMove={move}
+      onPointerUp={(e) => {
+        dragging.current = false
+        e.currentTarget.releasePointerCapture(e.pointerId)
+      }}
+      role="separator"
+      aria-label="Resize the Tutor"
+      aria-orientation="vertical"
+      className="absolute inset-y-0 left-0 z-10 w-1.5 -translate-x-1/2 cursor-col-resize touch-none hover:bg-accent-soft/60 active:bg-accent-soft"
+    />
   )
 }
 
