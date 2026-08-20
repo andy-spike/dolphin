@@ -71,7 +71,7 @@ export function LessonStation({
             <Section title="Examples">
               <Prose blocks={lesson.examples} />
             </Section>
-            <Section title="Exercises" marginPad={false}>
+            <Section title="Exercises">
               <ExerciseList exercises={lesson.exercises} dockerDown={dockerDown} />
             </Section>
 
@@ -161,18 +161,16 @@ function Frame({
   margin,
   children,
   className,
-  marginPad = true,
 }: {
   margin?: React.ReactNode
   children: React.ReactNode
   className?: string
-  /** The pt-3 nudge centers the margin against a large "reading" first line. Content
-   *  that opens with the same small label size (like Exercises) needs no nudge. */
-  marginPad?: boolean
 }) {
   return (
-    <div className={cn('lg:grid lg:grid-cols-[6.5rem_minmax(0,var(--measure))] lg:gap-x-8', className)}>
-      <div className={cn('hidden lg:flex lg:items-start lg:justify-end', marginPad && 'lg:pt-3')}>{margin}</div>
+    // items-baseline lines the margin up with the first line of content, whatever size
+    // that content's text is — no hand-tuned offset to keep in sync per section.
+    <div className={cn('lg:grid lg:grid-cols-[6.5rem_minmax(0,var(--measure))] lg:items-baseline lg:gap-x-8', className)}>
+      <div className="hidden lg:flex lg:justify-end">{margin}</div>
       {/* The mobile-only heading before `children` stays in the DOM at lg+ (just hidden),
           so it breaks `first:` on the block after it — force that block's margin here instead. */}
       <div className="min-w-0 max-w-[var(--measure)] lg:max-w-none lg:[&>h3+*]:mt-0">{children}</div>
@@ -181,21 +179,10 @@ function Frame({
 }
 
 /** The section name hangs in the margin and stays with the Student as they read. */
-function Section({
-  title,
-  children,
-  marginPad = true,
-}: {
-  title: string
-  children: React.ReactNode
-  marginPad?: boolean
-}) {
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mt-14 lg:mt-20">
-      <Frame
-        marginPad={marginPad}
-        margin={<span className="label sticky top-4 text-ink-faint">{title}</span>}
-      >
+      <Frame margin={<span className="label sticky top-4 text-ink-faint">{title}</span>}>
         <h3 className="label mb-5 flex items-center gap-3 text-ink-faint lg:hidden">
           {title}
           <span className="h-px flex-1 bg-rule" />
