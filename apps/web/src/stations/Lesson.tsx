@@ -1,10 +1,10 @@
-import { Check, ArrowRight } from 'lucide-react'
+import { Check, ArrowLeft, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { Prose } from '@/components/Prose'
 import { ExerciseList } from '@/components/Exercises'
 import { TutorMargin } from '@/components/Tutor'
 import { StationHead } from '@/components/StationHead'
-import type { Course } from '@/mock/types'
+import type { Course, Lesson } from '@/mock/types'
 
 export function LessonStation({
   course,
@@ -22,6 +22,7 @@ export function LessonStation({
   dockerDown: boolean
 }) {
   const lesson = course.lessons[index]
+  const prev = course.lessons[index - 1]
   const next = course.lessons[index + 1]
 
   return (
@@ -96,21 +97,11 @@ export function LessonStation({
                   {lesson.complete ? 'Marked complete' : 'Mark this Lesson complete'}
                 </button>
 
-                {next && (
-                  <button
-                    onClick={() => onStep(index + 1)}
-                    className="group mt-8 flex w-full items-center gap-5 border border-rule bg-paper-raised px-5 py-5 text-left transition-colors duration-150 hover:border-accent-soft hover:bg-accent-wash"
-                  >
-                    <span className="min-w-0 flex-1">
-                      <span className="label block text-ink-faint transition-colors group-hover:text-accent">Next lesson</span>
-                      <span className="title mt-2 block text-[1.125rem]/snug transition-colors group-hover:text-accent">
-                        {next.title}
-                      </span>
-                    </span>
-                    <span className="grid size-9 shrink-0 place-items-center border border-rule text-ink-faint transition-all duration-200 group-hover:translate-x-1 group-hover:border-accent-soft group-hover:bg-paper-raised group-hover:text-accent">
-                      <ArrowRight size={16} strokeWidth={1.9} />
-                    </span>
-                  </button>
+                {(prev || next) && (
+                  <div className={cn('mt-8 grid gap-4', prev && next ? 'grid-cols-2' : 'grid-cols-1')}>
+                    {prev && <AdjacentLessonButton lesson={prev} direction="prev" onClick={() => onStep(index - 1)} />}
+                    {next && <AdjacentLessonButton lesson={next} direction="next" onClick={() => onStep(index + 1)} />}
+                  </div>
                 )}
               </div>
             </footer>
@@ -120,6 +111,45 @@ export function LessonStation({
         <TutorMargin lessonTitle={lesson.title} lessonComplete={lesson.complete} />
       </div>
     </>
+  )
+}
+
+function AdjacentLessonButton({
+  lesson,
+  direction,
+  onClick,
+}: {
+  lesson: Lesson
+  direction: 'prev' | 'next'
+  onClick: () => void
+}) {
+  const isPrev = direction === 'prev'
+  const Icon = isPrev ? ArrowLeft : ArrowRight
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        'group flex w-full items-center gap-5 border border-rule bg-paper-raised px-5 py-5 transition-colors duration-150 hover:border-accent-soft hover:bg-accent-wash',
+        isPrev ? 'flex-row-reverse text-right' : 'text-left',
+      )}
+    >
+      <span className="min-w-0 flex-1">
+        <span className="label block text-ink-faint transition-colors group-hover:text-accent">
+          {isPrev ? 'Previous lesson' : 'Next lesson'}
+        </span>
+        <span className="title mt-2 block text-[1.125rem]/snug transition-colors group-hover:text-accent">
+          {lesson.title}
+        </span>
+      </span>
+      <span
+        className={cn(
+          'grid size-9 shrink-0 place-items-center border border-rule text-ink-faint transition-all duration-200 group-hover:border-accent-soft group-hover:bg-paper-raised group-hover:text-accent',
+          isPrev ? 'group-hover:-translate-x-1' : 'group-hover:translate-x-1',
+        )}
+      >
+        <Icon size={16} strokeWidth={1.9} />
+      </span>
+    </button>
   )
 }
 
