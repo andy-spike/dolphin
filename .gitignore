@@ -1,8 +1,7 @@
 node_modules
 dist
+**/.impeccable/
+**/.tanstack/
 *.local
 *.tsbuildinfo
 .DS_Store
-
-# transient interview-server scratch, not design record
-.impeccable/questions/
