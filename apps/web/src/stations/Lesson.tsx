@@ -11,12 +11,14 @@ export function LessonStation({
   index,
   onStep,
   onToggleComplete,
+  onLibrary,
   dockerDown,
 }: {
   course: Course
   index: number
   onStep: (i: number) => void
   onToggleComplete: () => void
+  onLibrary: () => void
   dockerDown: boolean
 }) {
   const lesson = course.lessons[index]
@@ -27,6 +29,7 @@ export function LessonStation({
       <StationHead
         course={course}
         station="Lesson"
+        onLibrary={onLibrary}
         stepper={{
           n: lesson.n,
           of: course.lessons.length,
@@ -47,11 +50,11 @@ export function LessonStation({
               <h2 className="display text-[clamp(1.875rem,3.8vw,2.5rem)]">{lesson.title}</h2>
               <p className="label mt-5 flex flex-wrap items-center gap-2.5 text-ink-faint">
                 Lesson {lesson.n} of {course.lessons.length}
-                <span className="size-[3px] rounded-full bg-rule-strong" />
+                <span className="size-[3px] bg-rule-strong" />
                 {lesson.minutes} minutes
                 {lesson.complete && (
                   <>
-                    <span className="size-[3px] rounded-full bg-rule-strong" />
+                    <span className="size-[3px] bg-rule-strong" />
                     <span className="inline-flex items-center gap-1 text-pass">
                       <Check size={12} strokeWidth={2.6} />
                       Complete
@@ -76,15 +79,15 @@ export function LessonStation({
                 <button
                   onClick={onToggleComplete}
                   className={cn(
-                    'label inline-flex items-center gap-2.5 rounded-full px-5 py-3 transition-colors duration-150',
+                    'label inline-flex items-center gap-2.5 border px-5 py-3 transition-colors duration-150',
                     lesson.complete
-                      ? 'border border-pass/25 bg-pass-wash text-pass hover:bg-pass/12'
-                      : 'bg-accent text-white hover:bg-accent-strong',
+                      ? 'border-pass/25 bg-pass-wash text-pass hover:bg-pass/12'
+                      : 'border-transparent bg-accent text-white hover:bg-accent-strong',
                   )}
                 >
                   <span
                     className={cn(
-                      'grid size-4 place-items-center rounded-full border',
+                      'grid size-4 place-items-center border',
                       lesson.complete ? 'border-pass bg-pass text-white' : 'border-white/45',
                     )}
                   >
@@ -96,7 +99,7 @@ export function LessonStation({
                 {next && (
                   <button
                     onClick={() => onStep(index + 1)}
-                    className="group mt-8 flex w-full items-center gap-5 rounded-[12px] border border-rule bg-paper-raised px-5 py-5 text-left transition-colors duration-150 hover:border-accent-soft hover:bg-accent-wash"
+                    className="group mt-8 flex w-full items-center gap-5 border border-rule bg-paper-raised px-5 py-5 text-left transition-colors duration-150 hover:border-accent-soft hover:bg-accent-wash"
                   >
                     <span className="min-w-0 flex-1">
                       <span className="label block text-ink-faint transition-colors group-hover:text-accent">Next lesson</span>
@@ -104,7 +107,7 @@ export function LessonStation({
                         {next.title}
                       </span>
                     </span>
-                    <span className="grid size-9 shrink-0 place-items-center rounded-full border border-rule text-ink-faint transition-all duration-200 group-hover:translate-x-1 group-hover:border-accent-soft group-hover:bg-paper-raised group-hover:text-accent">
+                    <span className="grid size-9 shrink-0 place-items-center border border-rule text-ink-faint transition-all duration-200 group-hover:translate-x-1 group-hover:border-accent-soft group-hover:bg-paper-raised group-hover:text-accent">
                       <ArrowRight size={16} strokeWidth={1.9} />
                     </span>
                   </button>
@@ -136,7 +139,9 @@ function Frame({
   return (
     <div className={cn('lg:grid lg:grid-cols-[6.5rem_minmax(0,var(--measure))] lg:gap-x-8', className)}>
       <div className="hidden lg:flex lg:items-start lg:justify-end lg:pt-3">{margin}</div>
-      <div className="min-w-0 max-w-[var(--measure)] lg:max-w-none">{children}</div>
+      {/* The mobile-only heading before `children` stays in the DOM at lg+ (just hidden),
+          so it breaks `first:` on the block after it — force that block's margin here instead. */}
+      <div className="min-w-0 max-w-[var(--measure)] lg:max-w-none lg:[&>h3+*]:mt-0">{children}</div>
     </div>
   )
 }

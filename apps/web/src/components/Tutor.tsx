@@ -70,7 +70,7 @@ export function TutorMargin({ lessonTitle, lessonComplete }: { lessonTitle: stri
           <button aria-label="Close the Tutor" onClick={() => setSheet(false)} className="flex-1" />
           <aside
             aria-label="Tutor"
-            className="flex h-[85dvh] flex-col overflow-hidden rounded-t-[18px] border-t border-rule bg-paper-sunk shadow-[0_-12px_32px_rgba(16,15,15,0.16)]"
+            className="flex h-[85dvh] flex-col overflow-hidden border-t border-rule bg-paper-sunk shadow-[0_-12px_32px_rgba(16,15,15,0.16)]"
             style={{ animation: 'sheet 280ms var(--ease-workspace) both' }}
           >
             {panel}
@@ -137,7 +137,7 @@ function Panel({
           <button
             onClick={onClose}
             aria-label="Close the Tutor"
-            className="ml-auto grid size-8 place-items-center rounded-full text-ink-faint hover:bg-paper-sunk hover:text-ink"
+            className="ml-auto grid size-8 place-items-center text-ink-faint hover:bg-paper-sunk hover:text-ink"
           >
             <X size={16} strokeWidth={2} />
           </button>
@@ -181,7 +181,7 @@ function Panel({
             <button
               key={a}
               onClick={() => setDraft(a)}
-              className="label rounded-full border border-rule px-2.5 py-1.5 text-ink-faint transition-colors hover:border-accent-soft hover:bg-accent-wash hover:text-accent"
+              className="label border border-rule px-2.5 py-1.5 text-ink-faint transition-colors hover:border-accent-soft hover:bg-accent-wash hover:text-accent"
             >
               {a}
             </button>
@@ -197,7 +197,7 @@ function Panel({
         }}
         className="shrink-0 p-3"
       >
-        <div className="flex items-end gap-2 rounded-[12px] border border-rule bg-paper-raised px-3 py-2.5 transition-shadow focus-within:border-accent focus-within:ring-4 focus-within:ring-accent-wash">
+        <div className="flex items-end gap-2 border border-rule bg-paper-raised px-3 py-2.5 transition-shadow focus-within:border-accent focus-within:ring-4 focus-within:ring-accent-wash">
           <textarea
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
@@ -217,7 +217,7 @@ function Panel({
             disabled={!draft.trim()}
             aria-label="Send"
             className={cn(
-              'grid size-8 shrink-0 place-items-center rounded-full transition-colors',
+              'grid size-8 shrink-0 place-items-center transition-colors',
               draft.trim() ? 'bg-accent text-white hover:bg-accent-strong' : 'bg-rule text-ink-faint/60',
             )}
           >
@@ -234,7 +234,7 @@ function TurnView({ turn, streaming }: { turn: Turn; streaming: boolean }) {
 
   if (turn.from === 'student') {
     return (
-      <div className="rounded-[12px] bg-accent px-4 py-3">
+      <div className="bg-accent px-4 py-3">
         <p className="label mb-1.5 text-white/70">You</p>
         <p className="supporting text-[0.875rem] text-white">{turn.text}</p>
       </div>
@@ -263,7 +263,7 @@ function ModeTab({ active, onClick, children }: { active: boolean; onClick: () =
       )}
     >
       {children}
-      {active && <span className="absolute inset-x-0 -bottom-px h-[2px] rounded-full bg-accent" />}
+      {active && <span className="absolute inset-x-0 -bottom-px h-[2px] bg-accent" />}
     </button>
   )
 }

@@ -12,7 +12,7 @@ export function ExerciseList({ exercises, dockerDown }: { exercises: Exercise[];
         <li key={ex.id}>
           <p className="label mb-3 flex items-center gap-2.5 text-ink-faint">
             Exercise {i + 1} of {exercises.length}
-            <span className="size-[3px] rounded-full bg-rule-strong" />
+            <span className="size-[3px] bg-rule-strong" />
             <span className="text-ink">{ex.kind === 'written' ? 'Written' : ex.language}</span>
           </p>
           {ex.kind === 'written' ? <Written ex={ex} /> : <CodeTask ex={ex} dockerDown={dockerDown} />}
@@ -27,7 +27,7 @@ function Prompt({ text }: { text: string }) {
     <p className="reading border-b border-rule px-5 py-4 text-[0.9375rem]">
       {text.split('`').map((part, i) =>
         i % 2 ? (
-          <code key={i} className="rounded-[4px] bg-paper-sunk px-1.5 py-0.5 font-mono text-[0.8rem]">
+          <code key={i} className="bg-paper-sunk px-1.5 py-0.5 font-mono text-[0.8rem]">
             {part}
           </code>
         ) : (
@@ -54,7 +54,7 @@ function Written({ ex }: { ex: WrittenExercise }) {
   }
 
   return (
-    <div className="overflow-hidden rounded-[12px] border border-rule bg-paper-raised">
+    <div className="overflow-hidden border border-rule bg-paper-raised">
       <Prompt text={ex.prompt} />
       <div className="p-3">
         <textarea
@@ -62,14 +62,14 @@ function Written({ ex }: { ex: WrittenExercise }) {
           onChange={(e) => setAnswer(e.target.value)}
           rows={5}
           placeholder="Write your answer…"
-          className="reading w-full resize-y rounded-[10px] border border-rule bg-paper px-4 py-3 text-[0.9375rem] outline-none transition-shadow placeholder:text-ink-faint focus:border-accent focus:ring-4 focus:ring-accent-wash"
+          className="reading w-full resize-y border border-rule bg-paper px-4 py-3 text-[0.9375rem] outline-none transition-shadow placeholder:text-ink-faint focus:border-accent focus:ring-4 focus:ring-accent-wash"
         />
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
           <button
             onClick={check}
             disabled={!answer.trim() || checking}
             className={cn(
-              'label inline-flex items-center gap-2 rounded-full px-4 py-2.5 transition-colors',
+              'label inline-flex items-center gap-2 px-4 py-2.5 transition-colors',
               answer.trim() && !checking
                 ? 'bg-ink text-paper hover:bg-accent'
                 : 'cursor-not-allowed bg-rule text-ink-faint/70',
@@ -88,7 +88,7 @@ function Written({ ex }: { ex: WrittenExercise }) {
             Tutor
             <span
               className={cn(
-                'rounded-full px-2 py-1',
+                'px-2 py-1',
                 feedback.verdict === 'good' ? 'bg-pass-wash text-pass' : 'bg-accent-wash text-accent',
               )}
             >
@@ -122,7 +122,7 @@ function CodeTask({ ex, dockerDown }: { ex: CodeExercise; dockerDown: boolean })
   }
 
   return (
-    <div className="overflow-hidden rounded-[12px] border border-rule bg-paper-raised">
+    <div className="overflow-hidden border border-rule bg-paper-raised">
       <Prompt text={ex.prompt} />
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-rule bg-paper-sunk px-5 py-3">
@@ -145,7 +145,7 @@ function CodeTask({ ex, dockerDown }: { ex: CodeExercise; dockerDown: boolean })
           onClick={start}
           disabled={run === 'running' || dockerDown}
           className={cn(
-            'label inline-flex items-center gap-2 rounded-full px-4 py-2.5 transition-colors',
+            'label inline-flex items-center gap-2 px-4 py-2.5 transition-colors',
             dockerDown || run === 'running'
               ? 'cursor-not-allowed bg-rule text-ink-faint'
               : 'bg-ink text-paper hover:bg-accent',
@@ -185,7 +185,7 @@ function Result({ ex, run }: { ex: CodeExercise; run: 'pass' | 'fail' }) {
       <div className="flex flex-wrap items-center gap-3">
         <span
           className={cn(
-            'grid size-6 shrink-0 place-items-center rounded-full text-white',
+            'grid size-6 shrink-0 place-items-center text-white',
             run === 'pass' ? 'bg-pass' : 'bg-fail',
           )}
         >

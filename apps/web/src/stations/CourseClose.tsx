@@ -34,7 +34,7 @@ export function CourseCloseStation({
             <Stat term="Difficulty" value={course.difficulty} word />
           </dl>
 
-          <p className="mt-10 inline-flex items-center gap-2.5 rounded-full border border-rule bg-paper-raised px-4 py-2.5 numeral text-[0.8125rem] text-ink-soft">
+          <p className="mt-10 inline-flex items-center gap-2.5 border border-rule bg-paper-raised px-4 py-2.5 numeral text-[0.8125rem] text-ink-soft">
             <FolderOpen size={14} strokeWidth={1.8} className="text-ink-faint" />
             {course.folder}
           </p>

@@ -31,7 +31,7 @@ export function Prose({ blocks }: { blocks: Block[] }) {
             )
           case 'note':
             return (
-              <p key={i} className="reading mt-7 rounded-[10px] bg-paper-sunk px-5 py-4 text-[0.9375rem] text-ink-soft">
+              <p key={i} className="reading mt-7 bg-paper-sunk px-5 py-4 text-[0.9375rem] text-ink-soft">
                 {b.text}
               </p>
             )
@@ -45,7 +45,7 @@ export function Prose({ blocks }: { blocks: Block[] }) {
 
 export function Code({ lang, text }: { lang: string; text: string }) {
   return (
-    <figure className="mt-7 overflow-hidden rounded-[12px] border border-rule bg-paper-sunk">
+    <figure className="mt-7 overflow-hidden border border-rule bg-paper-sunk">
       <figcaption className="label flex items-center justify-between border-b border-rule bg-paper-raised px-4 py-2.5 text-ink-faint">
         {lang}
       </figcaption>

@@ -1,14 +1,7 @@
-# Technology stack
+# Hosted technology stack
 
-Dolphin is a TypeScript monorepo with two apps: a Vite + React frontend and a Hono (Node) backend, managed with pnpm workspaces. The backend is the long-lived process that drives the agent SDKs, orchestrates Docker, and streams to the browser.
+Dolphin is a TypeScript monorepo managed with pnpm workspaces. TanStack Start and TanStack Query run the hosted web application on Cloudflare Workers. TanStack AI provides the Generator, Tutor, Tailor Mode, chat primitives, Server-Sent Events, and Harness adapters. Daytona runs every Harness and Code Exercise in an isolated Sandbox.
 
-The supporting choices:
+Cloudflare D1 stores relational data. R2 stores Course Folders, Sources, and exports. Cloudflare Queues dispatch durable Agent Jobs. Better Auth provides email/password and Google OAuth. The private beta uses an allowlist and fixed per-Student Quotas. Email verification, magic links, and password recovery are not part of v1.
 
-- **UI styling**: Tailwind CSS v4 with shadcn/ui components.
-- **Local store**: SQLite via Drizzle ORM on better-sqlite3, for progress and settings only.
-- **Sandbox**: shell out to the Docker CLI (`docker run`) for Code Exercise test runs, rather than the dockerode library.
-- **Live updates**: Server-Sent Events (SSE) for the server-to-browser link. The agent SDKs stream partial output to the server natively; SSE relays it to the browser. WebSocket was rejected as more than the one-way stream requires.
-- **Testing**: Vitest for unit and integration tests now; Playwright for end-to-end tests later.
-- **Agent driver**: one `AgentDriver` interface with the first implementation on `@openai/codex-sdk`; a Claude implementation on `@anthropic-ai/claude-agent-sdk` follows.
-
-These are deliberately boring, proven tools. The unusual part of the system is the agent core (ADR-0001), not the web stack, so the web stack stays conventional.
+Code Exercises use a fresh, network-disabled Daytona Sandbox for each run. The first release supports TypeScript and Python. Agent Sandboxes can access only the selected Harness, approved Sources, and web search when the Brief enables it. Server-Sent Events stream Agent Job activity to the browser. Vitest tests units and integrations; Playwright follows for end-to-end tests.

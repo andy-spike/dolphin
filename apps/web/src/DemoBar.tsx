@@ -24,7 +24,7 @@ export function DemoBar({
         aria-label="Mock state controls"
         aria-expanded={open}
         className={cn(
-          'grid size-9 place-items-center rounded-[8px] transition-colors duration-150',
+          'grid size-9 place-items-center transition-colors duration-150',
           open ? 'bg-ink text-paper' : 'text-ink-faint hover:bg-paper-sunk hover:text-ink-soft',
         )}
       >
@@ -33,7 +33,7 @@ export function DemoBar({
 
       {open && (
         <div
-          className="fixed bottom-3 left-[4.5rem] z-50 flex w-48 flex-col gap-0.5 rounded-[12px] border border-rule bg-paper-raised p-1.5 shadow-[0_12px_32px_-12px_rgba(16,15,15,0.28)]"
+          className="fixed bottom-[3.5rem] left-3 z-50 flex w-48 flex-col gap-0.5 border border-rule bg-paper-raised p-1.5 shadow-[0_12px_32px_-12px_rgba(16,15,15,0.28)]"
           style={{ animation: 'land 200ms var(--ease-workspace) both' }}
         >
           <span className="label flex items-center justify-between px-2 pt-1.5 pb-2 text-ink-faint">
@@ -66,7 +66,7 @@ function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; chi
     <button
       onClick={onClick}
       className={cn(
-        'label rounded-[8px] px-2.5 py-2 text-left transition-colors duration-150',
+        'label px-2.5 py-2 text-left transition-colors duration-150',
         on ? 'bg-accent-wash text-accent' : 'text-ink-faint hover:bg-paper-sunk hover:text-ink',
       )}
     >

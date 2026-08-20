@@ -54,7 +54,7 @@ export function BriefStation({ onDraft }: { onDraft: () => void }) {
           </Field>
 
           <Field label="Difficulty" hint="How advanced the Course should be.">
-            <div className="inline-flex rounded-full border border-rule bg-paper-raised p-1">
+            <div className="inline-flex border border-rule bg-paper-raised p-1">
               {levels.map((l) => (
                 <button
                   key={l}
@@ -62,7 +62,7 @@ export function BriefStation({ onDraft }: { onDraft: () => void }) {
                   onClick={() => setDifficulty(l)}
                   aria-pressed={difficulty === l}
                   className={cn(
-                    'label rounded-full px-4 py-2 transition-colors',
+                    'label px-4 py-2 transition-colors',
                     difficulty === l ? 'bg-ink text-paper' : 'text-ink-faint hover:text-ink',
                   )}
                 >
@@ -90,7 +90,7 @@ export function BriefStation({ onDraft }: { onDraft: () => void }) {
           <Field label="Sources" hint="Documents the Generator must use. A URL, or a file on this machine.">
             <ul className="mb-3 space-y-2 empty:hidden">
               {sources.map((s, i) => (
-                <li key={i} className="flex items-center gap-3 rounded-[10px] border border-rule bg-paper-raised px-3.5 py-2.5">
+                <li key={i} className="flex items-center gap-3 border border-rule bg-paper-raised px-3.5 py-2.5">
                   {s.kind === 'url' ? (
                     <Link2 size={14} strokeWidth={1.8} className="shrink-0 text-ink-faint" />
                   ) : (
@@ -135,13 +135,13 @@ export function BriefStation({ onDraft }: { onDraft: () => void }) {
             >
               <span
                 className={cn(
-                  'relative h-6 w-11 rounded-full border transition-colors duration-200',
+                  'relative h-6 w-11 border transition-colors duration-200',
                   webSearch ? 'border-accent/30 bg-accent' : 'border-rule bg-paper-sunk',
                 )}
               >
                 <span
                   className={cn(
-                    'absolute top-0.5 size-4 rounded-full bg-white shadow-[0_1px_3px_rgba(16,15,15,0.25)] transition-[left] duration-200 ease-[var(--ease-workspace)]',
+                    'absolute top-0.5 size-4 bg-white shadow-[0_1px_3px_rgba(16,15,15,0.25)] transition-[left] duration-200 ease-[var(--ease-workspace)]',
                     webSearch ? 'left-[1.4rem]' : 'left-0.5',
                   )}
                 />
@@ -183,7 +183,7 @@ function AddSource({ icon: Icon, label, onClick }: { icon: typeof Link2; label: 
     <button
       type="button"
       onClick={onClick}
-      className="label inline-flex items-center gap-2 rounded-full border border-dashed border-rule-strong px-3.5 py-2.5 text-ink-faint transition-colors hover:border-accent-soft hover:bg-accent-wash hover:text-accent"
+      className="label inline-flex items-center gap-2 border border-dashed border-rule-strong px-3.5 py-2.5 text-ink-faint transition-colors hover:border-accent-soft hover:bg-accent-wash hover:text-accent"
     >
       <Plus size={13} strokeWidth={2.2} />
       <Icon size={13} strokeWidth={1.8} />

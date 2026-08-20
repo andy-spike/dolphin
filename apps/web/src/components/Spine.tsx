@@ -27,7 +27,7 @@ export function Spine({
   const notches = total > 1 && total <= 24 ? Array.from({ length: total - 1 }, (_, i) => i + 1) : []
 
   return (
-    <span className={cn('relative block h-[7px] overflow-hidden rounded-[3px]', track, className)} aria-hidden>
+    <span className={cn('relative block h-[7px] overflow-hidden ', track, className)} aria-hidden>
       <span
         className={cn('absolute inset-y-0 left-0 transition-[width] duration-500 ease-[var(--ease-workspace)]', fill)}
         style={{ width: `${pct}%` }}

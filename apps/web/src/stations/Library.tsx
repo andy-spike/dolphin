@@ -83,7 +83,7 @@ function Row({ course, n, onOpen }: { course: Course; n: number; onOpen: () => v
         {/* the row warms in its own State's hue, and bleeds past the measure */}
         <span
           className={cn(
-            'pointer-events-none absolute -inset-x-4 -inset-y-px -z-10 rounded-[10px] opacity-0 transition-opacity duration-200 group-hover:opacity-100',
+            'pointer-events-none absolute -inset-x-4 -inset-y-px -z-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100',
             tone.wash,
           )}
         />
@@ -101,7 +101,7 @@ function Row({ course, n, onOpen }: { course: Course; n: number; onOpen: () => v
           <span className="label mt-3.5 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-ink-faint">
             {meta.map((m, i) => (
               <span key={m as string} className="flex items-center gap-2.5">
-                {i > 0 && <span className="size-[3px] rounded-full bg-rule-strong" />}
+                {i > 0 && <span className="size-[3px] bg-rule-strong" />}
                 {m}
               </span>
             ))}
@@ -127,7 +127,7 @@ function Row({ course, n, onOpen }: { course: Course; n: number; onOpen: () => v
           </span>
         </span>
 
-        <span className="hidden size-8 shrink-0 translate-x-0 place-items-center rounded-full border border-rule text-ink-faint transition-all duration-200 group-hover:translate-x-1 group-hover:border-transparent group-hover:bg-ink group-hover:text-paper sm:grid">
+        <span className="hidden size-8 shrink-0 translate-x-0 place-items-center border border-rule text-ink-faint transition-all duration-200 group-hover:translate-x-1 group-hover:border-transparent group-hover:bg-ink group-hover:text-paper sm:grid">
           <ArrowRight size={15} strokeWidth={2} />
         </span>
       </button>

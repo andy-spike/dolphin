@@ -5,7 +5,15 @@ import { useStream } from '@/lib/useStream'
 import { StationHead } from '@/components/StationHead'
 import type { ChatTurn, Course } from '@/mock/types'
 
-export function SyllabusStation({ course, onGenerate }: { course: Course; onGenerate: () => void }) {
+export function SyllabusStation({
+  course,
+  onGenerate,
+  onLibrary,
+}: {
+  course: Course
+  onGenerate: () => void
+  onLibrary: () => void
+}) {
   const [turns, setTurns] = useState<ChatTurn[]>(course.chat)
   const [draft, setDraft] = useState('')
   const [streamIndex, setStreamIndex] = useState(-1)
@@ -32,7 +40,7 @@ export function SyllabusStation({ course, onGenerate }: { course: Course; onGene
 
   return (
     <>
-      <StationHead course={course} station="Syllabus" />
+      <StationHead course={course} station="Syllabus" onLibrary={onLibrary} />
 
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
         {/* The agreed outline. This is the artefact; the chat is how it changes. */}
@@ -41,7 +49,7 @@ export function SyllabusStation({ course, onGenerate }: { course: Course; onGene
             <h2 className="display text-[clamp(1.75rem,3.5vw,2.125rem)]">Syllabus</h2>
             <p className="label mt-4 flex items-center gap-2.5 text-ink-faint">
               {course.syllabus.length} lessons
-              <span className="size-[3px] rounded-full bg-rule-strong" />
+              <span className="size-[3px] bg-rule-strong" />
               <span className={cn(minutes > budget && 'text-fail')}>
                 {Math.floor(minutes / 60)}h {minutes % 60}m of {budget / 60}h
               </span>
@@ -67,7 +75,7 @@ export function SyllabusStation({ course, onGenerate }: { course: Course; onGene
             <div className="mt-10">
               <button
                 onClick={onGenerate}
-                className="label flex w-full items-center justify-center gap-2 rounded-full bg-accent px-5 py-3.5 text-white transition-colors hover:bg-accent-strong"
+                className="label flex w-full items-center justify-center gap-2 bg-accent px-5 py-3.5 text-white transition-colors hover:bg-accent-strong"
               >
                 <Sparkles size={14} strokeWidth={2} />
                 Generate the Course
@@ -100,7 +108,7 @@ export function SyllabusStation({ course, onGenerate }: { course: Course; onGene
             }}
             className="sticky bottom-0 shrink-0 border-t border-rule bg-paper-sunk p-4"
           >
-            <div className="mx-auto flex max-w-[36rem] items-end gap-2 rounded-[12px] border border-rule bg-paper-raised px-3.5 py-3 focus-within:border-accent focus-within:ring-4 focus-within:ring-accent-wash">
+            <div className="mx-auto flex max-w-[36rem] items-end gap-2 border border-rule bg-paper-raised px-3.5 py-3 focus-within:border-accent focus-within:ring-4 focus-within:ring-accent-wash">
               <textarea
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
@@ -119,7 +127,7 @@ export function SyllabusStation({ course, onGenerate }: { course: Course; onGene
                 disabled={!draft.trim()}
                 aria-label="Send"
                 className={cn(
-                  'grid size-9 shrink-0 place-items-center rounded-full transition-colors',
+                  'grid size-9 shrink-0 place-items-center transition-colors',
                   draft.trim() ? 'bg-accent text-white hover:bg-accent-strong' : 'bg-rule text-ink-faint/60',
                 )}
               >
@@ -181,7 +189,7 @@ function Turn({ turn, streaming }: { turn: ChatTurn; streaming: boolean }) {
 
   if (turn.from === 'student') {
     return (
-      <div className="self-end max-w-[90%] rounded-[12px] bg-accent px-4 py-3">
+      <div className="self-end max-w-[90%] bg-accent px-4 py-3">
         <p className="label mb-1.5 text-white/70">You</p>
         <p className="supporting text-[0.9375rem] text-white">{turn.text}</p>
       </div>

@@ -12,10 +12,10 @@ const copy: Record<Health, string> = {
 export function Lamp({ health }: { health: Health }) {
   return (
     <div className="group relative flex items-center justify-center py-1" title={copy[health]}>
-      <span className="grid size-7 place-items-center rounded-full border border-rule bg-paper">
+      <span className="grid size-7 place-items-center border border-rule bg-paper">
         <span
           className={cn(
-            'size-2 rounded-full',
+            'size-2 ',
             health === 'down' ? 'bg-rule-strong' : 'bg-accent',
             health === 'working' && 'animate-[lamp_1.4s_var(--ease-workspace)_infinite]',
           )}

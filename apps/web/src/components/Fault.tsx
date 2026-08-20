@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 export type FaultKind = 'none' | 'agent' | 'docker' | 'source'
 
 const Path = ({ children }: { children: ReactNode }) => (
-  <code className="numeral rounded-[4px] bg-fail/8 px-1.5 py-0.5 text-[0.8125rem] text-fail">{children}</code>
+  <code className="numeral bg-fail/8 px-1.5 py-0.5 text-[0.8125rem] text-fail">{children}</code>
 )
 
 /** Every Fault names the problem, then the recovery. Never a modal. */

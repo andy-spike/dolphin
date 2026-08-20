@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Check, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
+import { Check, ChevronLeft, ChevronRight, ChevronDown, LayoutGrid } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { Kbd } from './Kbd'
 import { StateChip } from './StateChip'
@@ -19,13 +19,24 @@ export function StationHead({
   course,
   station,
   stepper,
+  onLibrary,
 }: {
   course: Course
   station: string
   stepper?: Stepper
+  onLibrary?: () => void
 }) {
   return (
     <header className="relative z-20 flex shrink-0 items-center gap-x-3 border-b border-rule bg-paper-raised px-4 py-2.5 md:gap-x-4 md:px-7">
+      {onLibrary && (
+        <button
+          onClick={onLibrary}
+          aria-label="Course Library"
+          className="grid size-8 shrink-0 -ml-1.5 place-items-center text-ink-faint transition-colors hover:bg-paper-sunk hover:text-ink"
+        >
+          <LayoutGrid size={15} strokeWidth={1.9} />
+        </button>
+      )}
       <h1 className="title min-w-0 flex-1 truncate text-[0.9375rem] text-ink-soft sm:flex-none">{course.topic}</h1>
       <StateChip state={course.state} className="hidden sm:inline-flex" />
       <span className="sr-only">{station}</span>
@@ -51,7 +62,7 @@ function Stepper({ n, of, lessons, onJump, onPrev, onNext }: Stepper) {
   }, [onPrev, onNext])
 
   return (
-    <div className="ml-auto flex shrink-0 items-center rounded-full border border-rule">
+    <div className="ml-auto flex shrink-0 items-center border border-rule">
       <Step dir="prev" onClick={onPrev} />
       <Contents n={n} of={of} lessons={lessons} onJump={onJump} />
       <Step dir="next" onClick={onNext} />
@@ -68,7 +79,7 @@ function Step({ dir, onClick }: { dir: 'prev' | 'next'; onClick?: () => void }) 
       aria-label={dir === 'prev' ? 'Previous lesson' : 'Next lesson'}
       className={cn(
         'group/step relative grid size-8 place-items-center transition-colors',
-        dir === 'prev' ? 'rounded-l-full' : 'rounded-r-full',
+        dir === 'prev' ? '' : '',
         onClick ? 'text-ink-soft hover:bg-paper-sunk hover:text-ink active:bg-rule' : 'cursor-not-allowed text-ink-ghost/45',
       )}
     >
@@ -115,7 +126,7 @@ function Contents({ n, of, lessons, onJump }: Omit<Stepper, 'onPrev' | 'onNext'>
 
       {open && (
         <div
-          className="absolute top-full right-0 z-40 mt-2 max-h-[70dvh] w-[min(26rem,calc(100vw-3rem))] overflow-y-auto rounded-[12px] border border-rule bg-paper-raised shadow-[0_12px_32px_-12px_rgba(16,15,15,0.22)]"
+          className="absolute top-full right-0 z-40 mt-2 max-h-[70dvh] w-[min(26rem,calc(100vw-3rem))] overflow-y-auto border border-rule bg-paper-raised shadow-[0_12px_32px_-12px_rgba(16,15,15,0.22)]"
           style={{ animation: 'land 200ms var(--ease-workspace) both' }}
         >
           <p className="label sticky top-0 flex items-center justify-between border-b border-rule bg-paper-raised px-4 py-3 text-ink-faint">

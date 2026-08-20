@@ -19,7 +19,7 @@ export function Button({
     <button
       {...rest}
       className={cn(
-        'label inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 transition-[background-color,color,border-color,transform] duration-150',
+        'label inline-flex items-center justify-center gap-2 px-5 py-3 transition-[background-color,color,border-color,transform] duration-150',
         'disabled:pointer-events-none disabled:border-transparent disabled:bg-rule disabled:text-ink-faint',
         variants[variant],
         className,

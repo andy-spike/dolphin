@@ -77,6 +77,7 @@
     scrollbar-color: var(--color-rule-strong) transparent;
   }
   ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-button { display: none; }
   ::-webkit-scrollbar-thumb {
     background: var(--color-rule-strong);
     border: 3px solid transparent;

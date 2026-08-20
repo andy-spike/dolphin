@@ -1,5 +1,5 @@
-# The app is a local web server, not a packaged desktop app
+# Dolphin is a hosted web application
 
-Dolphin ships as a local web server the student starts and then opens in their browser at localhost. We rejected packaging it as a desktop app (Tauri or Electron).
+Dolphin runs as a private-beta web application on Cloudflare Workers. A Student signs in with email/password or Google OAuth, connects a Harness subscription, and studies Courses in a browser. We rejected a local web server because Students must be able to try Dolphin without installing Dolphin or a Harness.
 
-A packaged desktop shell would feel more like an installed app and could launch the agent SDKs and sandbox more tightly, but it adds a build and distribution step and platform-specific concerns. For a single student running the app on their own machine, a local server is simpler to build and run. The web UI stays identical, so we can wrap it in a desktop shell later if that ever becomes necessary.
+**Consequences**: Dolphin owns the application data, account access, Sandbox coordination, Quotas, export, and permanent deletion. The Student still owns their Course content through export and deletion controls.

@@ -12,7 +12,7 @@ export function StateChip({ state, className }: { state: CourseState; className?
     <span className={cn('label inline-flex w-fit shrink-0 items-center gap-1.5', tone.text, className)}>
       <span
         className={cn(
-          'size-1.5 shrink-0 rounded-full',
+          'size-1.5 shrink-0 ',
           tone.dot,
           tone.live && 'animate-[lamp_1.4s_var(--ease-workspace)_infinite]',
         )}

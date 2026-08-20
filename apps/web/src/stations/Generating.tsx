@@ -16,10 +16,12 @@ export function GeneratingStation({
   course,
   onOpen,
   onBusy,
+  onLibrary,
 }: {
   course: Course
   onOpen: () => void
   onBusy: (busy: boolean) => void
+  onLibrary: () => void
 }) {
   const total = course.syllabus.length
   const [done, setDone] = useState(course.generated)
@@ -45,7 +47,7 @@ export function GeneratingStation({
 
   return (
     <>
-      <StationHead course={course} station="Generating" />
+      <StationHead course={course} station="Generating" onLibrary={onLibrary} />
 
       <div className="min-h-0 flex-1 overflow-y-auto bg-paper">
         <div className="mx-auto w-full max-w-[48rem] px-6 pt-12 pb-20 md:px-10 md:pt-16">
@@ -82,11 +84,11 @@ export function GeneratingStation({
                 >
                   <span className="grid w-7 shrink-0 place-items-center">
                     {state === 'done' ? (
-                      <span className="grid size-5 place-items-center rounded-full bg-pass text-white">
+                      <span className="grid size-5 place-items-center bg-pass text-white">
                         <Check size={11} strokeWidth={3} />
                       </span>
                     ) : state === 'writing' ? (
-                      <span className="size-2.5 animate-[lamp_1.4s_var(--ease-workspace)_infinite] rounded-full bg-accent" />
+                      <span className="size-2.5 animate-[lamp_1.4s_var(--ease-workspace)_infinite] bg-accent" />
                     ) : (
                       <span className="numeral text-[0.75rem] text-ink-faint">{String(s.n).padStart(2, '0')}</span>
                     )}

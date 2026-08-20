@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
-import { Rail } from '@/components/Rail'
 import { Fault, type FaultKind } from '@/components/Fault'
+import { Lamp } from '@/components/Lamp'
 import { LibraryStation } from '@/stations/Library'
 import { BriefStation } from '@/stations/Brief'
 import { SyllabusStation } from '@/stations/Syllabus'
@@ -45,9 +45,6 @@ export default function App() {
   const health = fault === 'agent' ? 'down' : busy ? 'working' : 'ready'
 
   const open = 'course' in station ? station.course : null
-  const progress = open?.lessons.length
-    ? open.lessons.filter((l) => l.complete).length / open.lessons.length
-    : 0
 
   const toggleComplete = (course: Course, index: number) => {
     setCourses((cs) =>
@@ -69,17 +66,11 @@ export default function App() {
   return (
     <div className="flex h-dvh overflow-hidden bg-paper">
       {/* THESIS: Inky Learning Workspace — a study surface built the way Flexoki itself is presented: warm paper, true ink, a soft sans at modest sizes, colour used sparingly but meaningfully. OWN-WORLD: two self-hosted faces — Figtree Variable for every word read (scale from weight 400/500/600 and tracking, no display cut, capped at 3.25rem) and JetBrains Mono for the machine voice; paper #FFFCF0, ink #100F0F, hairline rules #E6E4D9. Colour does two jobs and no others: blue #205EA6 is action, focus and control, and each of the five Course States owns a Flexoki hue running cool → warm → green across the lifecycle. STORY: the Student scans a set index where every row wears its Course State, writes a Brief as a ruled sheet, argues an outline into shape, then reads one 39rem column with section names hanging in the margin, walking Lessons on the arrow keys. FIRST VIEWPORT: a "Course / Library" masthead over numbered rows, each ending in a per-lesson spine in its State's hue. FINISH: unreviewed is unfinished — this build ends with a browser pass at desktop and mobile, a contrast check on every State tone, and a DESIGN.md that matches what shipped */}
-      <Rail
-        health={health}
-        atLibrary={station.at === 'library'}
-        open={live}
-        progress={progress}
-        onLibrary={() => setStation({ at: 'library' })}
-        onOpen={() => live && setStation(stationFor(live))}
-        mock={<DemoBar empty={empty} onEmpty={setEmpty} fault={fault} onFault={setFault} />}
-      />
-
       <main className="flex min-w-0 flex-1 flex-col">
+        <div className="fixed bottom-3 left-3 z-50 flex items-center gap-2">
+          <DemoBar empty={empty} onEmpty={setEmpty} fault={fault} onFault={setFault} />
+          <Lamp health={health} />
+        </div>
         <Fault kind={fault} />
 
         {station.at === 'library' && (
@@ -100,6 +91,7 @@ export default function App() {
           <SyllabusStation
             course={station.course}
             onGenerate={() => setStation({ at: 'generating', course: courses[2] })}
+            onLibrary={() => setStation({ at: 'library' })}
           />
         )}
 
@@ -108,6 +100,7 @@ export default function App() {
             course={station.course}
             onBusy={onBusy}
             onOpen={() => setStation({ at: 'lesson', course: courses[0], index: 2 })}
+            onLibrary={() => setStation({ at: 'library' })}
           />
         )}
 
@@ -117,6 +110,7 @@ export default function App() {
             index={station.index}
             onStep={(i) => setStation({ ...station, index: i })}
             onToggleComplete={() => toggleComplete(station.course, station.index)}
+            onLibrary={() => setStation({ at: 'library' })}
             dockerDown={fault === 'docker'}
           />
         )}
