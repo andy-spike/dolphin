@@ -72,9 +72,14 @@
     outline-offset: 2px;
     border-radius: 4px;
   }
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-rule-strong) transparent;
+  /* Chromium ignores the -webkit-scrollbar-button override below when the
+     standard scrollbar-width/color properties are also set, and falls back
+     to its native scrollbar (with arrows). Scope those to Firefox only. */
+  @supports not selector(::-webkit-scrollbar) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-rule-strong) transparent;
+    }
   }
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-button { display: none; }
