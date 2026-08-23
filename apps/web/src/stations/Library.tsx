@@ -1,9 +1,10 @@
 import { Plus, ArrowRight } from 'lucide-react'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 import { stateTone } from '@/lib/state'
 import { StateChip } from '@/components/StateChip'
 import { Spine } from '@/components/Spine'
-import { Button } from '@/components/Button'
+import { Button } from '@/components/ui/button'
+import { StationHead } from '@/components/StationHead'
 import type { Course } from '@/mock/types'
 
 const counted = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']
@@ -21,49 +22,40 @@ export function LibraryStation({
   const studying = courses.filter((c) => c.state === 'In Progress').length
 
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto bg-paper">
-      <div className="sticky top-0 z-10 flex items-center gap-4 border-b border-rule bg-paper/85 px-6 py-2.5 backdrop-blur-sm md:px-10">
-        <span className="label text-ink">Dolphin</span>
-        <span className="ml-auto numeral text-[0.75rem] text-ink-faint">~/dolphin</span>
-      </div>
+    <>
+      <StationHead station="Course Library" />
 
-      <div className="mx-auto w-full max-w-[62rem] px-6 pb-24 md:px-10">
-        <header className="station-in flex flex-wrap items-end justify-between gap-6 pt-14 pb-8 md:pt-20">
-          <div>
-            <h1 className="display text-[clamp(2.25rem,5vw,3.25rem)]">
-              Course
-              <br />
-              Library
-            </h1>
-            <p className="supporting mt-4 text-ink-soft">
-              {courses.length === 0
-                ? 'Nothing here yet.'
-                : `${count(courses.length, 'course', 'courses')}. ${count(studying, 'in progress', 'in progress')}.`}
-            </p>
-          </div>
-          <Button onClick={onNew}>
-            <Plus size={14} strokeWidth={2.2} />
-            New course
-          </Button>
-        </header>
+      <div className="min-h-0 flex-1 overflow-y-auto bg-paper">
+        <div className="mx-auto w-full max-w-[62rem] px-6 pb-24 md:px-10">
+          <header className="station-in flex flex-wrap items-end justify-between gap-6 pt-14 pb-8 md:pt-20">
+            <div>
+              <h1 className="display text-[clamp(2.25rem,5vw,3.25rem)] text-nowrap">Course Library</h1>
+              <p className="supporting mt-4 text-ink-soft">
+                {courses.length === 0
+                  ? 'Nothing here yet.'
+                  : `${count(courses.length, 'course', 'courses')}. ${count(studying, 'in progress', 'in progress')}.`}
+              </p>
+            </div>
+            <Button onClick={onNew}>
+              <Plus size={14} strokeWidth={2.2} />
+              New course
+            </Button>
+          </header>
 
-        {courses.length === 0 ? (
-          <EmptyLibrary onNew={onNew} />
-        ) : (
-          <>
-            <ol className="border-t border-ink/85">
-              {courses.map((c, i) => (
-                <Row key={c.id} course={c} n={i + 1} onOpen={() => onOpen(c)} />
-              ))}
-            </ol>
-            <p className="supporting mt-10 max-w-[48ch] text-[0.875rem] text-ink-faint">
-              Every Course is markdown in <span className="numeral text-[0.8125rem] text-ink-soft">~/dolphin</span>. It
-              stays readable without this app, and nothing leaves this machine.
-            </p>
-          </>
-        )}
+          {courses.length === 0 ? (
+            <EmptyLibrary onNew={onNew} />
+          ) : (
+            <>
+              <ol className="border-t border-ink/85">
+                {courses.map((c, i) => (
+                  <Row key={c.id} course={c} n={i + 1} onOpen={() => onOpen(c)} />
+                ))}
+              </ol>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

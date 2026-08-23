@@ -6,13 +6,24 @@ import type { Course, Lesson } from './types'
 
 const lesson = (
   n: number,
+  module: number,
   title: string,
   minutes: number,
   complete: boolean,
   concept: Lesson['concept'],
   examples: Lesson['examples'],
   exercises: Lesson['exercises'],
-): Lesson => ({ id: `l${n}`, n, title, minutes, complete, concept, examples, exercises })
+): Lesson => ({ id: `l${n}`, n, module, title, minutes, complete, concept, examples, exercises })
+
+/** Chunks a course's Lessons into evenly-sized Modules, for demo Courses with no authored outline. */
+function autoModules(course: Course, size = 3) {
+  course.modules = []
+  course.lessons.forEach((l, i) => {
+    const n = Math.floor(i / size) + 1
+    if (!course.modules.some((m) => m.n === n)) course.modules.push({ n, title: `Part ${n}` })
+    l.module = n
+  })
+}
 
 const systemDesign: Course = {
   id: 'system-design',
@@ -28,13 +39,18 @@ const systemDesign: Course = {
   state: 'In Progress',
   folder: '~/dolphin/distributed-systems-for-backend-interviews',
   generated: 6,
+  modules: [
+    { n: 1, title: 'Why distribution happens' },
+    { n: 2, title: 'Correctness at scale' },
+    { n: 3, title: 'Consensus and practice' },
+  ],
   syllabus: [
-    { n: 1, title: 'Why one machine is not enough', minutes: 45, note: 'Failure, not scale, is the reason.' },
-    { n: 2, title: 'Replication: leaders and followers', minutes: 70, note: 'Sync vs async, and what each costs you.' },
-    { n: 3, title: 'Quorums and the consistency you actually get', minutes: 90, note: 'Where R + W > N comes from.' },
-    { n: 4, title: 'Partitioning and rebalancing', minutes: 75, note: 'Hash vs range, and the hot-shard trap.' },
-    { n: 5, title: 'Consensus without the folklore', minutes: 90, note: 'Raft as a state machine you can draw.' },
-    { n: 6, title: 'Designing under a real interview clock', minutes: 60, note: 'One end-to-end rehearsal.' },
+    { n: 1, module: 1, title: 'Why one machine is not enough', minutes: 45, note: 'Failure, not scale, is the reason.' },
+    { n: 2, module: 1, title: 'Replication: leaders and followers', minutes: 70, note: 'Sync vs async, and what each costs you.' },
+    { n: 3, module: 2, title: 'Quorums and the consistency you actually get', minutes: 90, note: 'Where R + W > N comes from.' },
+    { n: 4, module: 2, title: 'Partitioning and rebalancing', minutes: 75, note: 'Hash vs range, and the hot-shard trap.' },
+    { n: 5, module: 3, title: 'Consensus without the folklore', minutes: 90, note: 'Raft as a state machine you can draw.' },
+    { n: 6, module: 3, title: 'Designing under a real interview clock', minutes: 60, note: 'One end-to-end rehearsal.' },
   ],
   chat: [
     {
@@ -56,10 +72,11 @@ const systemDesign: Course = {
     },
   ],
   lessons: [
-    lesson(1, 'Why one machine is not enough', 45, true, [], [], []),
-    lesson(2, 'Replication: leaders and followers', 70, true, [], [], []),
+    lesson(1, 1, 'Why one machine is not enough', 45, true, [], [], []),
+    lesson(2, 1, 'Replication: leaders and followers', 70, true, [], [], []),
     lesson(
       3,
+      2,
       'Quorums and the consistency you actually get',
       90,
       false,
@@ -171,9 +188,9 @@ read(nodes, 1).value           // R = 1 → c     ⇒ 'blue'   (1 + 1 ≤ 3)`,
         },
       ],
     ),
-    lesson(4, 'Partitioning and rebalancing', 75, false, [], [], []),
-    lesson(5, 'Consensus without the folklore', 90, false, [], [], []),
-    lesson(6, 'Designing under a real interview clock', 60, false, [], [], []),
+    lesson(4, 2, 'Partitioning and rebalancing', 75, false, [], [], []),
+    lesson(5, 3, 'Consensus without the folklore', 90, false, [], [], []),
+    lesson(6, 3, 'Designing under a real interview clock', 60, false, [], [], []),
   ],
 }
 
@@ -190,10 +207,11 @@ const library: Course[] = [
     state: 'Complete',
     folder: '~/dolphin/rust-ownership-and-lifetimes',
     generated: 9,
+    modules: [],
     syllabus: [],
     chat: [],
     lessons: Array.from({ length: 9 }, (_, i) =>
-      lesson(i + 1, `Lesson ${i + 1}`, 60, true, [], [], []),
+      lesson(i + 1, 1, `Lesson ${i + 1}`, 60, true, [], [], []),
     ),
   },
   {
@@ -207,12 +225,17 @@ const library: Course[] = [
     state: 'Generating',
     folder: '~/dolphin/reading-the-postgres-query-planner',
     generated: 3,
+    modules: [
+      { n: 1, title: 'Reading the plan' },
+      { n: 2, title: 'Scan and join strategy' },
+      { n: 3, title: 'Diagnosis' },
+    ],
     syllabus: [
-      { n: 1, title: 'What EXPLAIN is actually printing', minutes: 40, note: '' },
-      { n: 2, title: 'Costs, rows, and where estimates come from', minutes: 55, note: '' },
-      { n: 3, title: 'Scan nodes: seq, index, bitmap', minutes: 65, note: '' },
-      { n: 4, title: 'Join strategies and why one was chosen', minutes: 70, note: '' },
-      { n: 5, title: 'Reading a plan that lied to you', minutes: 60, note: '' },
+      { n: 1, module: 1, title: 'What EXPLAIN is actually printing', minutes: 40, note: '' },
+      { n: 2, module: 1, title: 'Costs, rows, and where estimates come from', minutes: 55, note: '' },
+      { n: 3, module: 2, title: 'Scan nodes: seq, index, bitmap', minutes: 65, note: '' },
+      { n: 4, module: 2, title: 'Join strategies and why one was chosen', minutes: 70, note: '' },
+      { n: 5, module: 3, title: 'Reading a plan that lied to you', minutes: 60, note: '' },
     ],
     chat: [],
     lessons: [],
@@ -228,10 +251,11 @@ const library: Course[] = [
     state: 'Drafting',
     folder: '~/dolphin/webassembly-from-the-instruction-level-up',
     generated: 0,
+    modules: [{ n: 1, title: 'Instruction-level WebAssembly' }],
     syllabus: [
-      { n: 1, title: 'The stack machine underneath', minutes: 50, note: 'No registers, no heap you did not build.' },
-      { n: 2, title: 'Reading .wat until it stops looking foreign', minutes: 65, note: '' },
-      { n: 3, title: 'Linear memory, and who is allowed to touch it', minutes: 70, note: '' },
+      { n: 1, module: 1, title: 'The stack machine underneath', minutes: 50, note: 'No registers, no heap you did not build.' },
+      { n: 2, module: 1, title: 'Reading .wat until it stops looking foreign', minutes: 65, note: '' },
+      { n: 3, module: 1, title: 'Linear memory, and who is allowed to touch it', minutes: 70, note: '' },
     ],
     chat: [
       {
@@ -268,10 +292,11 @@ const library: Course[] = [
     state: 'Ready',
     folder: '~/dolphin/transformers-without-the-maths-anxiety',
     generated: 11,
+    modules: [],
     syllabus: [],
     chat: [],
     lessons: Array.from({ length: 11 }, (_, i) =>
-      lesson(i + 1, `Lesson ${i + 1}`, 70, false, [], [], []),
+      lesson(i + 1, 1, `Lesson ${i + 1}`, 70, false, [], [], []),
     ),
   },
   {
@@ -285,13 +310,16 @@ const library: Course[] = [
     state: 'In Progress',
     folder: '~/dolphin/typography-for-interface-designers',
     generated: 5,
+    modules: [],
     syllabus: [],
     chat: [],
     lessons: Array.from({ length: 5 }, (_, i) =>
-      lesson(i + 1, `Lesson ${i + 1}`, 45, i < 2, [], [], []),
+      lesson(i + 1, 1, `Lesson ${i + 1}`, 45, i < 2, [], [], []),
     ),
   },
 ]
+
+for (const course of [library[1], library[4], library[5]]) autoModules(course)
 
 export const courses = library
 export const openCourse = systemDesign

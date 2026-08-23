@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Check, Play, Square } from 'lucide-react'
-import { cn } from '@/lib/cn'
-import { Button } from '@/components/Button'
+import { cn } from '@/lib/utils'
+import { groupByModule } from '@/lib/modules'
+import { Button } from '@/components/ui/button'
 import { StationHead } from '@/components/StationHead'
 import type { Course } from '@/mock/types'
 
@@ -70,49 +71,59 @@ export function GeneratingStation({
             </p>
           </header>
 
-          <ol className="mt-12 border-t border-ink/85">
-            {course.syllabus.map((s, i) => {
-              const state = i < done ? 'done' : i === done && !stopped ? 'writing' : 'waiting'
-              return (
-                <li
-                  key={s.n}
-                  style={state === 'done' ? { animation: 'land 320ms var(--ease-workspace) both' } : undefined}
-                  className={cn(
-                    'flex items-center gap-4 border-b border-rule py-4',
-                    state === 'waiting' && 'opacity-45',
-                  )}
-                >
-                  <span className="grid w-7 shrink-0 place-items-center">
-                    {state === 'done' ? (
-                      <span className="grid size-5 place-items-center bg-pass text-white">
-                        <Check size={11} strokeWidth={3} />
-                      </span>
-                    ) : state === 'writing' ? (
-                      <span className="size-2.5 animate-[lamp_1.4s_var(--ease-workspace)_infinite] bg-accent" />
-                    ) : (
-                      <span className="numeral text-[0.75rem] text-ink-faint">{String(s.n).padStart(2, '0')}</span>
-                    )}
-                  </span>
+          <div className="mt-12 border-t border-ink/85">
+            {groupByModule(course.syllabus, course.modules).map(({ module, items }) => (
+              <div key={module.n}>
+                <p className="label mt-6 mb-1 text-ink-faint first:mt-0">{module.title}</p>
+                <ol>
+                  {items.map((s) => {
+                    const i = course.syllabus.indexOf(s)
+                    const state = i < done ? 'done' : i === done && !stopped ? 'writing' : 'waiting'
+                    return (
+                      <li
+                        key={s.n}
+                        style={state === 'done' ? { animation: 'land 320ms var(--ease-workspace) both' } : undefined}
+                        className={cn(
+                          'flex items-center gap-4 border-b border-rule py-4',
+                          state === 'waiting' && 'opacity-45',
+                        )}
+                      >
+                        <span className="grid w-7 shrink-0 place-items-center">
+                          {state === 'done' ? (
+                            <span className="grid size-5 place-items-center bg-pass text-white">
+                              <Check size={11} strokeWidth={3} />
+                            </span>
+                          ) : state === 'writing' ? (
+                            <span className="size-2.5 animate-[lamp_1.4s_var(--ease-workspace)_infinite] bg-accent" />
+                          ) : (
+                            <span className="numeral text-[0.75rem] text-ink-faint">{String(s.n).padStart(2, '0')}</span>
+                          )}
+                        </span>
 
-                  <div className="min-w-0 flex-1">
-                    <h2 className={cn('title text-[1.0625rem]/snug', state !== 'done' && 'font-normal text-ink-soft')}>
-                      {s.title}
-                    </h2>
-                    {state === 'writing' && <p className="supporting mt-1 text-[0.8125rem] text-accent">{writing[line]}</p>}
-                    {state === 'done' && (
-                      <p className="numeral mt-1 text-[0.75rem] text-ink-faint">
-                        lesson-{String(s.n).padStart(2, '0')}.md
-                      </p>
-                    )}
-                  </div>
+                        <div className="min-w-0 flex-1">
+                          <h2 className={cn('title text-[1.0625rem]/snug', state !== 'done' && 'font-normal text-ink-soft')}>
+                            {s.title}
+                          </h2>
+                          {state === 'writing' && (
+                            <p className="supporting mt-1 text-[0.8125rem] text-accent">{writing[line]}</p>
+                          )}
+                          {state === 'done' && (
+                            <p className="numeral mt-1 text-[0.75rem] text-ink-faint">
+                              lesson-{String(s.n).padStart(2, '0')}.md
+                            </p>
+                          )}
+                        </div>
 
-                  <span className="label shrink-0 text-ink-faint">
-                    {state === 'done' ? `${900 + s.n * 137} words` : `${s.minutes}m`}
-                  </span>
-                </li>
-              )
-            })}
-          </ol>
+                        <span className="label shrink-0 text-ink-faint">
+                          {state === 'done' ? `${900 + s.n * 137} words` : `${s.minutes}m`}
+                        </span>
+                      </li>
+                    )
+                  })}
+                </ol>
+              </div>
+            ))}
+          </div>
 
           <div className="mt-10 flex flex-wrap items-center gap-5">
             {finished ? (

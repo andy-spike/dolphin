@@ -1,54 +1,104 @@
-import { useEffect, useRef, useState } from 'react'
-import { Check, ChevronLeft, ChevronRight, ChevronDown, LayoutGrid } from 'lucide-react'
-import { cn } from '@/lib/cn'
-import { Kbd } from './Kbd'
+import { useEffect } from 'react'
+import { Check, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { groupByModule } from '@/lib/modules'
 import { StateChip } from './StateChip'
-import type { Course, Lesson } from '@/mock/types'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import type { Course, Lesson, Module } from '@/mock/types'
 
 type Stepper = {
   n: number
   of: number
   lessons: Lesson[]
+  modules: Module[]
   onJump: (i: number) => void
   onPrev?: () => void
   onNext?: () => void
 }
 
-/** Compact strip: what is open, what state it is in, and where you are inside it. */
+/**
+ * Compact strip, used on every screen. A toolbar of full-height cells divided by
+ * hairlines: the mark, then what is open and what state it is in, then where you
+ * are inside it. Without a Course (the Course Library itself) it is the mark alone.
+ */
 export function StationHead({
   course,
   station,
   stepper,
   onLibrary,
 }: {
-  course: Course
+  course?: Course
   station: string
   stepper?: Stepper
   onLibrary?: () => void
 }) {
   return (
-    <header className="relative z-20 flex shrink-0 items-center gap-x-3 border-b border-rule bg-paper-raised px-4 py-2.5 md:gap-x-4 md:px-7">
-      {onLibrary && (
-        <button
-          onClick={onLibrary}
-          aria-label="Course Library"
-          className="grid size-8 shrink-0 -ml-1.5 place-items-center text-ink-faint transition-colors hover:bg-paper-sunk hover:text-ink"
-        >
-          <LayoutGrid size={15} strokeWidth={1.9} />
-        </button>
-      )}
-      <h1 className="title min-w-0 flex-1 truncate text-[0.9375rem] text-ink-soft sm:flex-none">{course.topic}</h1>
-      <StateChip state={course.state} className="hidden sm:inline-flex" />
+    <header className="relative z-20 flex h-[3.25rem] shrink-0 items-stretch border-b border-rule bg-paper-sunk">
+      <Identity onLibrary={onLibrary} divided={Boolean(course)} />
       <span className="sr-only">{station}</span>
 
-      <p className="numeral hidden min-w-0 shrink truncate text-[0.75rem] text-ink-faint xl:block">{course.folder}</p>
+      {course && (
+        <div className="flex min-w-0 flex-1 items-center gap-x-3 px-4 md:px-5">
+          <p className="title min-w-0 flex-1 truncate text-[0.9375rem] text-ink">{course.topic}</p>
+          <StateChip state={course.state} className="hidden sm:inline-flex" />
+        </div>
+      )}
 
       {stepper && <Stepper {...stepper} />}
     </header>
   )
 }
 
-function Stepper({ n, of, lessons, onJump, onPrev, onNext }: Stepper) {
+/**
+ * The one place the brand is drawn, and the way back to the Course Library from
+ * every station. Off the Library itself, a chevron hints the mark is a way back.
+ */
+function Identity({ onLibrary, divided }: { onLibrary?: () => void; divided: boolean }) {
+  const mark = (
+    <span className="grid size-[1.5rem] shrink-0 place-items-center text-[1.1875rem] leading-none transition-transform duration-150 group-active/mark:scale-[0.94]">
+      🐬
+    </span>
+  )
+
+  const cell = cn(
+    'group/mark relative flex shrink-0 items-center gap-2 px-4 md:px-5',
+    divided && 'border-r border-rule-strong',
+  )
+
+  if (!onLibrary)
+    return (
+      <span className={cell}>
+        {mark}
+        <span className="label hidden pt-px text-ink-soft sm:inline">Dolphin</span>
+      </span>
+    )
+
+  return (
+    <button onClick={onLibrary} aria-label="Course Library" className={cell}>
+      <ChevronLeft
+        size={16}
+        strokeWidth={2}
+        className="shrink-0 text-ink-faint transition-colors duration-150 group-hover/mark:text-ink"
+      />
+      {mark}
+      <span className="label hidden pt-px text-ink-soft transition-colors duration-150 group-hover/mark:text-ink sm:inline">
+        Dolphin
+      </span>
+      <span className="label pointer-events-none absolute top-full left-4 z-40 mt-2 scale-95 border border-rule bg-paper-raised px-2 py-1.5 whitespace-nowrap text-ink-faint opacity-0 shadow-[0_12px_32px_-12px_rgba(16,15,15,0.22)] transition-[opacity,transform] duration-150 group-hover/mark:scale-100 group-hover/mark:opacity-100">
+        Course Library
+      </span>
+    </button>
+  )
+}
+
+function Stepper({ n, of, lessons, modules, onJump, onPrev, onNext }: Stepper) {
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       const el = e.target as HTMLElement | null
@@ -62,9 +112,9 @@ function Stepper({ n, of, lessons, onJump, onPrev, onNext }: Stepper) {
   }, [onPrev, onNext])
 
   return (
-    <div className="ml-auto flex shrink-0 items-center border border-rule">
+    <div className="ml-auto flex shrink-0 items-stretch">
       <Step dir="prev" onClick={onPrev} />
-      <Contents n={n} of={of} lessons={lessons} onJump={onJump} />
+      <Contents n={n} of={of} lessons={lessons} modules={modules} onJump={onJump} />
       <Step dir="next" onClick={onNext} />
     </div>
   )
@@ -78,75 +128,58 @@ function Step({ dir, onClick }: { dir: 'prev' | 'next'; onClick?: () => void }) 
       disabled={!onClick}
       aria-label={dir === 'prev' ? 'Previous lesson' : 'Next lesson'}
       className={cn(
-        'group/step relative grid size-8 place-items-center transition-colors',
-        dir === 'prev' ? '' : '',
-        onClick ? 'text-ink-soft hover:bg-paper-sunk hover:text-ink active:bg-rule' : 'cursor-not-allowed text-ink-ghost/45',
+        'group/step relative grid w-11 shrink-0 place-items-center border-l border-rule-strong transition-colors',
+        onClick
+          ? 'text-ink-soft hover:bg-paper hover:text-ink active:bg-rule'
+          : 'cursor-not-allowed text-ink-ghost/45',
       )}
     >
-      <Icon size={15} strokeWidth={2} />
-      {onClick && (
-        <span className="pointer-events-none absolute top-full left-1/2 z-40 mt-2 -translate-x-1/2 scale-95 opacity-0 transition-[opacity,transform] duration-150 group-hover/step:scale-100 group-hover/step:opacity-100">
-          <Kbd>{dir === 'prev' ? '\u2190' : '\u2192'}</Kbd>
-        </span>
-      )}
+      <Icon size={16} strokeWidth={2} />
     </button>
   )
 }
 
-function Contents({ n, of, lessons, onJump }: Omit<Stepper, 'onPrev' | 'onNext'>) {
-  const [open, setOpen] = useState(false)
-  const box = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!open) return
-    const away = (e: MouseEvent) => {
-      if (!box.current?.contains(e.target as Node)) setOpen(false)
-    }
-    const esc = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
-    document.addEventListener('mousedown', away)
-    document.addEventListener('keydown', esc)
-    return () => {
-      document.removeEventListener('mousedown', away)
-      document.removeEventListener('keydown', esc)
-    }
-  }, [open])
-
+function Contents({ n, of, lessons, modules, onJump }: Omit<Stepper, 'onPrev' | 'onNext'>) {
   const done = lessons.filter((l) => l.complete).length
 
   return (
-    <div ref={box} className="relative">
-      <button
-        onClick={() => setOpen(!open)}
-        aria-expanded={open}
-        className="label flex h-8 items-center gap-1.5 border-x border-rule px-3 text-ink-soft transition-colors hover:bg-paper-sunk hover:text-ink"
-      >
-        Lesson {n} of {of}
-        <ChevronDown size={12} strokeWidth={2.2} className={cn('text-ink-faint transition-transform duration-200', open && 'rotate-180')} />
-      </button>
+    <DropdownMenu>
+      <DropdownMenuTrigger className="group label flex shrink-0 items-center gap-1.5 border-l border-rule-strong px-3 text-ink-soft transition-colors hover:bg-paper hover:text-ink data-popup-open:bg-paper-raised data-popup-open:text-ink md:px-4 normal-case">
+        <span className="hidden sm:inline">
+          lesson {n} of {of}
+        </span>
+        <span className="sm:hidden">
+          {n}/{of}
+        </span>
+        <ChevronDown size={12} strokeWidth={2.2} className="text-ink-faint transition-transform duration-200 group-data-popup-open:rotate-180" />
+      </DropdownMenuTrigger>
 
-      {open && (
-        <div
-          className="absolute top-full right-0 z-40 mt-2 max-h-[70dvh] w-[min(26rem,calc(100vw-3rem))] overflow-y-auto border border-rule bg-paper-raised shadow-[0_12px_32px_-12px_rgba(16,15,15,0.22)]"
-          style={{ animation: 'land 200ms var(--ease-workspace) both' }}
-        >
-          <p className="label sticky top-0 flex items-center justify-between border-b border-rule bg-paper-raised px-4 py-3 text-ink-faint">
-            Syllabus
-            <span className="text-ink">
-              {done} of {of} complete
-            </span>
-          </p>
-          <ol>
-            {lessons.map((l, i) => (
-              <li key={l.id}>
-                <button
-                  onClick={() => {
-                    onJump(i)
-                    setOpen(false)
-                  }}
+      <DropdownMenuContent
+        align="end"
+        sideOffset={8}
+        className="max-h-[70dvh] w-[min(26rem,calc(100vw-3rem))] overflow-y-auto border-rule bg-paper-raised p-0 shadow-[0_12px_32px_-12px_rgba(16,15,15,0.22)]"
+      >
+        <p className="label sticky top-0 flex items-center justify-between border-b border-rule bg-paper-raised px-4 py-3 text-ink-faint normal-case">
+          syllabus
+          <span className="text-ink">
+            {done} of {of} complete
+          </span>
+        </p>
+        {groupByModule(lessons, modules).map(({ module, items }) => (
+          <DropdownMenuGroup key={module.n}>
+            <DropdownMenuLabel className="border-b border-rule-soft bg-paper-sunk px-4 py-2 text-ink-faint label normal-case">
+              {module.title.toLowerCase()}
+            </DropdownMenuLabel>
+            {items.map((l) => {
+              const i = lessons.indexOf(l)
+              return (
+                <DropdownMenuItem
+                  key={l.id}
+                  onSelect={() => onJump(i)}
                   aria-current={l.n === n ? 'true' : undefined}
                   className={cn(
-                    'flex w-full items-baseline gap-3 border-b border-rule-soft px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-paper-sunk',
-                    l.n === n && 'bg-accent-wash hover:bg-accent-wash',
+                    'items-baseline gap-3 border-b border-rule-soft px-4 py-3 last:border-b-0',
+                    l.n === n && 'bg-accent-wash',
                   )}
                 >
                   <span className="numeral grid w-5 shrink-0 justify-items-center text-[0.6875rem] text-ink-faint">
@@ -155,13 +188,13 @@ function Contents({ n, of, lessons, onJump }: Omit<Stepper, 'onPrev' | 'onNext'>
                   <span className={cn('title min-w-0 flex-1 text-[0.9375rem]/snug', l.n === n ? 'text-accent' : 'font-normal text-ink-soft')}>
                     {l.title}
                   </span>
-                  <span className="label shrink-0 text-ink-faint">{l.minutes}m</span>
-                </button>
-              </li>
-            ))}
-          </ol>
-        </div>
-      )}
-    </div>
+                  <span className="label shrink-0 text-ink-faint normal-case">{l.minutes}m</span>
+                </DropdownMenuItem>
+              )
+            })}
+          </DropdownMenuGroup>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

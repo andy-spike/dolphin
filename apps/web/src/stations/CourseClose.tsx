@@ -1,6 +1,6 @@
-import { RotateCcw, FolderOpen } from 'lucide-react'
-import { cn } from '@/lib/cn'
-import { Button } from '@/components/Button'
+import { RotateCcw } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { StationHead } from '@/components/StationHead'
 import type { Course } from '@/mock/types'
 
@@ -34,12 +34,8 @@ export function CourseCloseStation({
             <Stat term="Difficulty" value={course.difficulty} word />
           </dl>
 
-          <p className="mt-10 inline-flex items-center gap-2.5 border border-rule bg-paper-raised px-4 py-2.5 numeral text-[0.8125rem] text-ink-soft">
-            <FolderOpen size={14} strokeWidth={1.8} className="text-ink-faint" />
-            {course.folder}
-          </p>
-          <p className="supporting mt-4 max-w-[52ch] text-[0.875rem] text-ink-faint">
-            The Course Folder is yours. The markdown stays on this machine whether or not you open Dolphin again.
+          <p className="supporting mt-10 max-w-[52ch] text-[0.875rem] text-ink-faint">
+            The Course Folder is yours to keep, whether or not you open Dolphin again.
           </p>
 
           <div className="mt-10 flex flex-wrap gap-3">

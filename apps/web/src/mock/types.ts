@@ -39,6 +39,7 @@ export type Exercise = WrittenExercise | CodeExercise
 export type Lesson = {
   id: string
   n: number
+  module: number
   title: string
   minutes: number
   complete: boolean
@@ -47,7 +48,9 @@ export type Lesson = {
   exercises: Exercise[]
 }
 
-export type SyllabusEntry = { n: number; title: string; minutes: number; note: string }
+export type SyllabusEntry = { n: number; module: number; title: string; minutes: number; note: string }
+
+export type Module = { n: number; title: string }
 
 export type ChatTurn = { from: 'student' | 'generator'; text: string }
 
@@ -63,6 +66,7 @@ export type Course = {
   webSearch: boolean
   state: CourseState
   folder: string
+  modules: Module[]
   syllabus: SyllabusEntry[]
   chat: ChatTurn[]
   lessons: Lesson[]

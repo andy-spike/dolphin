@@ -19,7 +19,16 @@ export const Route = createRootRoute({
     ],
   }),
   component: RootDocument,
+  notFoundComponent: NotFound,
 })
+
+function NotFound() {
+  return (
+    <div className="flex h-dvh items-center justify-center bg-paper text-ink">
+      Page not found.
+    </div>
+  )
+}
 
 function RootDocument() {
   return (

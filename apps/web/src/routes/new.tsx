@@ -12,6 +12,7 @@ function New() {
   return (
     <BriefStation
       onDraft={() => navigate({ to: '/courses/$courseId', params: { courseId: courses[0].id } })}
+      onLibrary={() => navigate({ to: '/' })}
     />
   )
 }

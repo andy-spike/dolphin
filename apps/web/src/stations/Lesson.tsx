@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { Check, ArrowLeft, ArrowRight } from 'lucide-react'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 import { Prose } from '@/components/Prose'
 import { ExerciseList } from '@/components/Exercises'
 import { TutorMargin } from '@/components/Tutor'
@@ -36,6 +36,7 @@ export function LessonStation({
           n: lesson.n,
           of: course.lessons.length,
           lessons: course.lessons,
+          modules: course.modules,
           onJump: onStep,
           onPrev: index > 0 ? () => onStep(index - 1) : undefined,
           onNext: next ? () => onStep(index + 1) : undefined,
@@ -49,7 +50,8 @@ export function LessonStation({
               className="station-in"
               margin={<span className="numeral text-[0.9375rem] text-ink-faint">{String(lesson.n).padStart(2, '0')}</span>}
             >
-              <h2 className="display text-[clamp(1.875rem,3.8vw,2.5rem)]">{lesson.title}</h2>
+              <p className="label text-accent">{course.modules.find((m) => m.n === lesson.module)?.title}</p>
+              <h1 className="display mt-2 text-[clamp(1.875rem,3.8vw,2.5rem)]">{lesson.title}</h1>
               <p className="label mt-5 flex flex-wrap items-center gap-2.5 text-ink-faint">
                 Lesson {lesson.n} of {course.lessons.length}
                 <span className="size-[3px] bg-rule-strong" />
@@ -77,11 +79,11 @@ export function LessonStation({
             </Section>
 
             <footer className="mt-16 lg:pl-[8.5rem]">
-              <div className="border-t border-ink/85 pt-6">
+              <div className="pt-6">
                 <button
                   onClick={onToggleComplete}
                   className={cn(
-                    'label inline-flex items-center gap-2.5 border px-5 py-3 transition-colors duration-150',
+                    'label flex w-full items-center justify-center gap-2.5 border px-5 py-3 text-[0.75rem] transition-colors duration-150 normal-case',
                     lesson.complete
                       ? 'border-pass/25 bg-pass-wash text-pass hover:bg-pass/12'
                       : 'border-transparent bg-accent text-white hover:bg-accent-strong',
@@ -95,7 +97,7 @@ export function LessonStation({
                   >
                     {lesson.complete && <Check size={10} strokeWidth={3} />}
                   </span>
-                  {lesson.complete ? 'Marked complete' : 'Mark this Lesson complete'}
+                  {lesson.complete ? 'marked complete' : 'mark this lesson complete'}
                 </button>
 
                 {(prev || next) && (

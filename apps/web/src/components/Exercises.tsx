@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { Check, Copy, Play, Loader2, X } from 'lucide-react'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 import { useStream } from '@/lib/useStream'
 import { Spine } from '@/components/Spine'
 import type { CodeExercise, Exercise, WrittenExercise } from '@/mock/types'

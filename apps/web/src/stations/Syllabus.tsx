@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react'
 import { ArrowUp, Pencil, Sparkles } from 'lucide-react'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 import { useStream } from '@/lib/useStream'
+import { groupByModule } from '@/lib/modules'
 import { StationHead } from '@/components/StationHead'
 import type { ChatTurn, Course } from '@/mock/types'
 
@@ -46,7 +47,7 @@ export function SyllabusStation({
         {/* The agreed outline. This is the artefact; the chat is how it changes. */}
         <section className="min-h-0 shrink-0 bg-paper lg:w-[27rem] lg:overflow-y-auto lg:border-r lg:border-rule xl:w-[31rem]">
           <div className="station-in px-6 pt-10 pb-8 md:px-8">
-            <h2 className="display text-[clamp(1.75rem,3.5vw,2.125rem)]">Syllabus</h2>
+            <h1 className="display text-[clamp(1.75rem,3.5vw,2.125rem)]">Syllabus</h1>
             <p className="label mt-4 flex items-center gap-2.5 text-ink-faint">
               {course.syllabus.length} lessons
               <span className="size-[3px] bg-rule-strong" />
@@ -55,20 +56,27 @@ export function SyllabusStation({
               </span>
             </p>
 
-            <ol className="mt-8 border-t border-ink/85">
-              {course.syllabus.map((s) => (
-                <li key={s.n} className="flex gap-4 border-b border-rule py-4">
-                  <span className="numeral w-6 shrink-0 pt-1 text-[0.75rem] text-ink-faint">
-                    {String(s.n).padStart(2, '0')}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="title text-[1.0625rem]/snug">{s.title}</h3>
-                    {s.note && <p className="supporting mt-1.5 text-[0.875rem] text-ink-soft">{s.note}</p>}
-                  </div>
-                  <span className="label shrink-0 pt-1.5 text-ink-faint">{s.minutes}m</span>
-                </li>
+            <div className="mt-8 border-t border-ink/85">
+              {groupByModule(course.syllabus, course.modules).map(({ module, items }) => (
+                <div key={module.n}>
+                  <p className="label mt-5 mb-1 text-ink-faint first:mt-0">{module.title}</p>
+                  <ol>
+                    {items.map((s) => (
+                      <li key={s.n} className="flex gap-4 border-b border-rule py-4">
+                        <span className="numeral w-6 shrink-0 pt-1 text-[0.75rem] text-ink-faint">
+                          {String(s.n).padStart(2, '0')}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="title text-[1.0625rem]/snug">{s.title}</h3>
+                          {s.note && <p className="supporting mt-1.5 text-[0.875rem] text-ink-soft">{s.note}</p>}
+                        </div>
+                        <span className="label shrink-0 pt-1.5 text-ink-faint">{s.minutes}m</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
               ))}
-            </ol>
+            </div>
 
             <Brief course={course} />
 
@@ -81,9 +89,8 @@ export function SyllabusStation({
                 Generate the Course
               </button>
               <p className="supporting mt-3.5 text-[0.8125rem] text-ink-faint">
-                Writes {course.syllabus.length} markdown files to{' '}
-                <span className="numeral text-[0.75rem] text-ink-soft">{course.folder}</span>. You can stop it, and it
-                resumes from the first missing Lesson.
+                Writes {course.syllabus.length} markdown files. You can stop it, and it resumes from the first missing
+                Lesson.
               </p>
             </div>
           </div>
@@ -91,7 +98,7 @@ export function SyllabusStation({
 
         {/* Free chat until the Student and the Generator agree. */}
         <section className="flex min-h-0 flex-1 flex-col border-t border-rule bg-paper-sunk lg:border-t-0">
-          <h2 className="label shrink-0 border-b border-rule bg-paper-raised px-6 py-4 text-ink-faint">Generator</h2>
+          <h2 className="label shrink-0 border-b border-rule bg-transparent px-6 py-4 text-ink-faint">Generator</h2>
 
           <div ref={scroller} className="min-h-0 flex-1 px-6 py-8 lg:overflow-y-auto">
             <div className="mx-auto flex min-h-full w-full max-w-[36rem] flex-col justify-end gap-7">

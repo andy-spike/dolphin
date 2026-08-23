@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useDemoStore } from '@/lib/demo-store'
 import { SyllabusStation } from '@/stations/Syllabus'
@@ -23,6 +24,18 @@ function CoursePage() {
   const course = courses.find((c) => c.id === courseId)
   const toLibrary = () => navigate({ to: '/' })
 
+  const goToLesson = (courseId: string, index: number, replace?: boolean) =>
+    navigate({ to: '/courses/$courseId', params: { courseId }, search: { lesson: index }, replace })
+
+  // Pin the Student's lesson to the URL as soon as they land without one, so marking it
+  // complete can't recompute "first incomplete" out from under them and jump them forward.
+  useEffect(() => {
+    if (!course || lesson !== undefined) return
+    if (course.state === 'Drafting' || course.state === 'Generating' || course.state === 'Complete') return
+    const firstIncomplete = course.lessons.findIndex((l) => !l.complete)
+    goToLesson(course.id, firstIncomplete === -1 ? 0 : firstIncomplete, true)
+  }, [course, lesson])
+
   if (!course) {
     return (
       <div className="flex flex-1 flex-col items-start gap-4 p-10">
@@ -33,9 +46,6 @@ function CoursePage() {
       </div>
     )
   }
-
-  const goToLesson = (courseId: string, index: number) =>
-    navigate({ to: '/courses/$courseId', params: { courseId }, search: { lesson: index } })
 
   switch (course.state) {
     case 'Drafting':

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { FlaskConical, X } from 'lucide-react'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 import type { FaultKind } from '@/components/Fault'
 
 /** Not part of the product. A reviewer's switch for states with no live backend. */

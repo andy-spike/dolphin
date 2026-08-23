@@ -34,6 +34,10 @@ _Avoid_: Subject, theme
 What the student wants to achieve at the end of the course, given in the Brief.
 _Avoid_: Objective, aim
 
+**Module**:
+A named group of consecutive Lessons within a Course's Syllabus. Every Lesson belongs to exactly one Module.
+_Avoid_: Section, unit, chapter
+
 **Syllabus**:
 The agreed outline of the Course. The Student and the Generator iterate on it in a free chat until they agree. It is kept with the Course and both agents read it.
 _Avoid_: Outline, plan, table of contents

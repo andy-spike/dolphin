@@ -1,4 +1,4 @@
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 /**
  * One bar, notched once per unit — Lessons in a Course, hidden tests in a Code
