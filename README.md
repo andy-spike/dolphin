@@ -8,19 +8,22 @@ Dolphin drives the coding-agent SDKs already installed locally (Codex, Claude Co
 
 ## Status
 
-**Frontend only.** There is no backend yet. Every screen runs on synthetic data in `apps/web/src/mock/data.ts`, and only Lesson 3 of the first course is fully authored. Nothing generates a real course today.
+**Frontend only.** There is no backend yet. Every screen runs on synthetic data in `apps/web/src/mock/data.ts`, and only Lesson 3 of the first course is fully authored. Nothing generates a real course today, and signing in is a navigation rather than a check.
 
-What exists:
+Every screen the product needs is built:
 
-| Course State | Station |
+| Where the student is | Station |
 |---|---|
-| — | Course Library, Brief |
+| signed out | Sign in, sign up, the beta allowlist gate and its waiting list |
+| — | Course Library, Brief, Settings, Not found |
 | Drafting | Syllabus outline + Generator chat |
 | Generating | Generating (resumable, lesson by lesson) |
-| Ready / In Progress | Lesson + Tutor margin |
+| Ready / In Progress | Course Overview, then Lesson + Tutor margin |
 | Complete | Course close |
 
-A flask icon at the bottom of the left rail opens a panel for switching mock states — empty library, and the three Fault states.
+Settings is three addresses, reached from the account cell in the station strip: **harness connections** (connect and revoke, which is what the whole product rests on), **usage** (what dolphin has spent on your harness subscription, and recent agent jobs), and **account**.
+
+A flask icon at the bottom left opens a panel for switching mock states — empty library, a course lock, and the three fault states.
 
 ## Running it
 

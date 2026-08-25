@@ -94,7 +94,7 @@ function Written({ ex }: { ex: WrittenExercise }) {
             {checking && <Loader2 size={13} className="animate-spin" strokeWidth={2.2} />}
             {checking ? 'tutor is reading' : feedback ? 'ask again' : 'ask the tutor to check'}
           </button>
-          <p className="label text-ink-faint">Not graded, not stored</p>
+          <p className="label text-ink-faint">not graded, not stored</p>
         </div>
       </div>
 

@@ -2,7 +2,15 @@
  * Synthetic demonstration data. Every Course, Lesson and Tutor reply below was
  * authored for this design pass — none of it came from a Generator run.
  */
-import type { Course, Lesson } from './types'
+import type {
+  AgentJobRecord,
+  Course,
+  CourseState,
+  Harness,
+  Lesson,
+  UsageLine,
+  Student,
+} from './types'
 
 const lesson = (
   n: number,
@@ -377,3 +385,105 @@ for (const course of library) {
     }
   }
 }
+
+// --- The Student, their Harness Connections, and their Usage -----------------
+// Synthetic, like everything above. No Harness was contacted to write this.
+
+export const student: Student = {
+  name: 'Andy Sanabria',
+  email: 'ansanabria12@gmail.com',
+  initials: 'AS',
+  joined: 'March 2026',
+}
+
+export const harnesses: Harness[] = [
+  {
+    id: 'claude-code',
+    name: 'Claude Code',
+    vendor: 'Anthropic',
+    runs: 'the generator, the tutor and tailor mode',
+    connection: {
+      account: 'ansanabria12@gmail.com',
+      plan: 'Claude Max',
+      connectedOn: '4 March 2026',
+      lastJob: '2 hours ago',
+      jobs: 61,
+    },
+  },
+  {
+    id: 'codex',
+    name: 'Codex',
+    vendor: 'OpenAI',
+    runs: 'the generator, the tutor and tailor mode',
+    connection: null,
+  },
+]
+
+export const usage: UsageLine[] = [
+  {
+    id: 'agent-jobs',
+    label: 'agent jobs',
+    hint: 'one generator, tutor or tailor mode request, run on your own harness subscription.',
+    month: 74,
+    total: 318,
+  },
+  {
+    id: 'sandbox-runs',
+    label: 'sandbox runs',
+    hint: 'one code exercise checked against its hidden tests. dolphin pays for these.',
+    month: 23,
+    total: 96,
+  },
+]
+
+export const agentJobs: AgentJobRecord[] = [
+  {
+    id: 'j1',
+    kind: 'Tutor',
+    course: 'Distributed systems for backend interviews',
+    detail: 'checked a written exercise in lesson 3',
+    at: '2 hours ago',
+    harness: 'Claude Code',
+  },
+  {
+    id: 'j2',
+    kind: 'Generator',
+    course: 'Reading the Postgres query planner',
+    detail: 'wrote lessons 1 to 3',
+    at: 'yesterday',
+    harness: 'Claude Code',
+  },
+  {
+    id: 'j3',
+    kind: 'Tailor Mode',
+    course: 'Distributed systems for backend interviews',
+    detail: 'rewrote the concept section of lesson 5',
+    at: 'yesterday',
+    harness: 'Claude Code',
+  },
+  {
+    id: 'j4',
+    kind: 'Generator',
+    course: 'WebAssembly from the instruction level up',
+    detail: 'drafted the syllabus',
+    at: '3 days ago',
+    harness: 'Claude Code',
+  },
+  {
+    id: 'j5',
+    kind: 'Tutor',
+    course: 'Typography for interface designers',
+    detail: 'answered 4 questions in lesson 2',
+    at: '5 days ago',
+    harness: 'Claude Code',
+  },
+]
+
+/** The five Course States in lifecycle order, with what each one means. */
+export const lifecycle: { state: CourseState; line: string }[] = [
+  { state: 'Drafting', line: 'you and the generator argue about the syllabus.' },
+  { state: 'Generating', line: 'the course is written, one lesson at a time.' },
+  { state: 'Ready', line: 'every lesson is on disk, nothing read yet.' },
+  { state: 'In Progress', line: 'you are partway through, the tutor is beside you.' },
+  { state: 'Complete', line: 'every lesson marked done. the folder stays yours.' },
+]

@@ -1,24 +1,32 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowUp, Pencil, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useStream } from '@/lib/useStream'
 import { groupByModule } from '@/lib/modules'
 import { StationHead } from '@/components/StationHead'
+import { Fact } from '@/components/Ruled'
 import type { ChatTurn, Course } from '@/mock/types'
 
 export function SyllabusStation({
   course,
   onGenerate,
+  onEditBrief,
   onLibrary,
 }: {
   course: Course
   onGenerate: () => void
+  onEditBrief: () => void
   onLibrary: () => void
 }) {
   const [turns, setTurns] = useState<ChatTurn[]>(course.chat)
   const [draft, setDraft] = useState('')
   const [streamIndex, setStreamIndex] = useState(-1)
   const scroller = useRef<HTMLDivElement>(null)
+
+  // Open on the newest turn: the thread is a conversation already in progress.
+  useEffect(() => {
+    scroller.current?.scrollTo({ top: 9e6 })
+  }, [])
 
   const minutes = course.syllabus.reduce((t, s) => t + s.minutes, 0)
   const budget = (parseInt(course.timeBudget, 10) || 8) * 60
@@ -56,10 +64,10 @@ export function SyllabusStation({
               </span>
             </p>
 
-            <div className="mt-8 border-t border-ink/85">
+            <div className="mt-8 border-t border-ink/85 pt-6">
               {groupByModule(course.syllabus, course.modules).map(({ module, items }) => (
-                <div key={module.n}>
-                  <p className="label mt-5 mb-1 text-ink-faint first:mt-0">{module.title}</p>
+                <div key={module.n} className="mt-8 first:mt-0">
+                  <p className="label mb-3 text-ink-faint">{module.title}</p>
                   <ol>
                     {items.map((s) => (
                       <li key={s.n} className="flex gap-4 border-b border-rule py-4">
@@ -78,7 +86,7 @@ export function SyllabusStation({
               ))}
             </div>
 
-            <Brief course={course} />
+            <Brief course={course} onEdit={onEditBrief} />
 
             <div className="mt-10">
               <button
@@ -126,7 +134,7 @@ export function SyllabusStation({
                   }
                 }}
                 rows={2}
-                placeholder="Change something before you agree…"
+                placeholder="change something before you agree…"
                 className="max-h-32 flex-1 resize-none bg-transparent supporting outline-none placeholder:text-ink-faint"
               />
               <button
@@ -148,22 +156,22 @@ export function SyllabusStation({
   )
 }
 
-function Brief({ course }: { course: Course }) {
+function Brief({ course, onEdit }: { course: Course; onEdit: () => void }) {
   return (
     <div className="mt-10">
       <div className="flex items-center justify-between border-b border-rule pb-2.5">
         <h3 className="label text-ink-faint">brief</h3>
-        <button className="label inline-flex items-center gap-1.5 text-ink-faint transition-colors hover:text-accent">
+        <button onClick={onEdit} className="label inline-flex items-center gap-1.5 text-ink-faint transition-colors hover:text-accent">
           <Pencil size={11} strokeWidth={2} />
           edit
         </button>
       </div>
       <dl className="supporting text-[0.875rem]">
-        <Row term="topic">{course.topic}</Row>
-        <Row term="goal">{course.goal}</Row>
-        <Row term="difficulty">{course.difficulty}</Row>
-        <Row term="time budget">{course.timeBudget}</Row>
-        <Row term="sources">
+        <Fact term="topic">{course.topic}</Fact>
+        <Fact term="goal">{course.goal}</Fact>
+        <Fact term="difficulty">{course.difficulty}</Fact>
+        <Fact term="time budget">{course.timeBudget}</Fact>
+        <Fact term="sources">
           {course.sources.length ? (
             <ul className="space-y-1">
               {course.sources.map((s) => (
@@ -175,21 +183,13 @@ function Brief({ course }: { course: Course }) {
           ) : (
             <span className="text-ink-faint">none</span>
           )}
-        </Row>
-        <Row term="web search">{course.webSearch ? 'on' : 'off'}</Row>
+        </Fact>
+        <Fact term="web search">{course.webSearch ? 'on' : 'off'}</Fact>
       </dl>
     </div>
   )
 }
 
-function Row({ term, children }: { term: string; children: React.ReactNode }) {
-  return (
-    <div className="flex gap-4 border-b border-rule-soft py-3">
-      <dt className="label w-24 shrink-0 pt-1 text-ink-faint">{term}</dt>
-      <dd className="min-w-0 flex-1 text-ink-soft">{children}</dd>
-    </div>
-  )
-}
 
 function Turn({ turn, streaming }: { turn: ChatTurn; streaming: boolean }) {
   const { shown, done } = useStream(turn.text, streaming && turn.from === 'generator')

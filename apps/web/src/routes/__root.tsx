@@ -3,7 +3,9 @@ import {
   Outlet,
   Scripts,
   createRootRoute,
+  useNavigate,
 } from '@tanstack/react-router'
+import { NotFoundStation } from '@/stations/NotFound'
 import { DemoBar } from '@/DemoBar'
 import { Lamp } from '@/components/Lamp'
 import { Fault } from '@/components/Fault'
@@ -23,9 +25,10 @@ export const Route = createRootRoute({
 })
 
 function NotFound() {
+  const navigate = useNavigate()
   return (
-    <div className="flex h-dvh items-center justify-center bg-paper text-ink">
-      page not found.
+    <div className="flex h-dvh flex-col overflow-hidden bg-paper">
+      <NotFoundStation onLibrary={() => navigate({ to: '/' })} onNew={() => navigate({ to: '/new' })} />
     </div>
   )
 }
@@ -47,14 +50,14 @@ function RootDocument() {
 }
 
 function Shell() {
-  const { empty, setEmpty, fault, setFault, busy } = useDemoStore()
+  const { empty, setEmpty, fault, setFault, busy, locked, setLocked } = useDemoStore()
   const health = fault === 'agent' ? 'down' : busy ? 'working' : 'ready'
 
   return (
     <div className="flex h-dvh overflow-hidden bg-paper">
       <main className="flex min-w-0 flex-1 flex-col">
-        <div className="fixed bottom-3 left-3 z-50 flex items-center gap-2">
-          <DemoBar empty={empty} onEmpty={setEmpty} fault={fault} onFault={setFault} />
+        <div className="fixed bottom-3 left-3 z-50 flex items-center gap-2 border border-rule bg-paper-raised px-1 shadow-[0_8px_24px_-12px_rgba(16,15,15,0.28)]">
+          <DemoBar empty={empty} onEmpty={setEmpty} fault={fault} onFault={setFault} locked={locked} onLocked={setLocked} />
           <Lamp health={health} />
         </div>
         <Fault kind={fault} />

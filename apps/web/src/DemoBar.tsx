@@ -9,11 +9,15 @@ export function DemoBar({
   onEmpty,
   fault,
   onFault,
+  locked,
+  onLocked,
 }: {
   empty: boolean
   onEmpty: (v: boolean) => void
   fault: FaultKind
   onFault: (f: FaultKind) => void
+  locked: boolean
+  onLocked: (v: boolean) => void
 }) {
   const [open, setOpen] = useState(false)
 
@@ -49,6 +53,9 @@ export function DemoBar({
 
           <Chip on={empty} onClick={() => onEmpty(!empty)}>
             empty library
+          </Chip>
+          <Chip on={locked} onClick={() => onLocked(!locked)}>
+            course lock
           </Chip>
           {(['none', 'agent', 'docker', 'source'] as FaultKind[]).map((f) => (
             <Chip key={f} on={fault === f} onClick={() => onFault(f)}>

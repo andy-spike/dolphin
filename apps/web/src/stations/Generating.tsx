@@ -71,10 +71,10 @@ export function GeneratingStation({
             </p>
           </header>
 
-          <div className="mt-12 border-t border-ink/85">
+          <div className="mt-12 border-t border-ink/85 pt-6">
             {groupByModule(course.syllabus, course.modules).map(({ module, items }) => (
-              <div key={module.n}>
-                <p className="label mt-6 mb-1 text-ink-faint first:mt-0">{module.title}</p>
+              <div key={module.n} className="mt-9 first:mt-0">
+                <p className="label mb-3 text-ink-faint">{module.title}</p>
                 <ol>
                   {items.map((s) => {
                     const i = course.syllabus.indexOf(s)

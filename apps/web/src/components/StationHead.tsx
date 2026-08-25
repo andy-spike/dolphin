@@ -3,6 +3,7 @@ import { Check, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { groupByModule } from '@/lib/modules'
 import { StateChip } from './StateChip'
+import { AccountMenu } from './AccountMenu'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,25 +34,41 @@ export function StationHead({
   station,
   stepper,
   onLibrary,
+  onCourse,
+  account = true,
 }: {
   course?: Course
   station: string
   stepper?: Stepper
   onLibrary?: () => void
+  /** Makes the Course name a way back to its Overview. */
+  onCourse?: () => void
+  /** Off only where the Student is not signed in yet. */
+  account?: boolean
 }) {
   return (
     <header className="relative z-20 flex h-[3.25rem] shrink-0 items-stretch border-b border-rule bg-paper-sunk">
-      <Identity onLibrary={onLibrary} divided={Boolean(course)} />
+      <Identity onLibrary={onLibrary} divided={Boolean(course) || account} />
       <span className="sr-only">{station}</span>
 
       {course && (
         <div className="flex min-w-0 flex-1 items-center gap-x-3 px-4 md:px-5">
-          <p className="title min-w-0 flex-1 truncate text-[0.9375rem] text-ink">{course.topic}</p>
+          {onCourse ? (
+            <button
+              onClick={onCourse}
+              className="title min-w-0 flex-1 truncate text-left text-[0.9375rem] text-ink underline decoration-transparent underline-offset-[0.3em] transition-colors hover:decoration-rule-strong"
+            >
+              {course.topic}
+            </button>
+          ) : (
+            <p className="title min-w-0 flex-1 truncate text-[0.9375rem] text-ink">{course.topic}</p>
+          )}
           <StateChip state={course.state} className="hidden sm:inline-flex" />
         </div>
       )}
 
       {stepper && <Stepper {...stepper} />}
+      {account && <div className={cn('flex items-stretch', !course && !stepper && 'ml-auto')}><AccountMenu /></div>}
     </header>
   )
 }
@@ -175,7 +192,7 @@ function Contents({ n, of, lessons, modules, onJump }: Omit<Stepper, 'onPrev' | 
               return (
                 <DropdownMenuItem
                   key={l.id}
-                  onSelect={() => onJump(i)}
+                  onClick={() => onJump(i)}
                   aria-current={l.n === n ? 'true' : undefined}
                   className={cn(
                     'items-baseline gap-3 border-b border-rule-soft px-4 py-3 last:border-b-0',

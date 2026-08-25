@@ -73,3 +73,51 @@ export type Course = {
   /** Lessons already written to disk while the Course State is Generating. */
   generated: number
 }
+
+/** The signed-in Student. In Dolphin the Student is the only kind of user. */
+export type Student = {
+  name: string
+  email: string
+  initials: string
+  joined: string
+}
+
+/**
+ * One Harness the Student can connect. A Harness Connection is the Student's
+ * revocable permission for Dolphin to run Agent Jobs on that subscription.
+ */
+export type Harness = {
+  id: string
+  name: string
+  vendor: string
+  /** What Dolphin runs on this Harness once it is connected. */
+  runs: string
+  connection: null | {
+    account: string
+    plan: string
+    connectedOn: string
+    lastJob: string
+    jobs: number
+  }
+}
+
+/**
+ * One line of Usage. Dolphin sets no ceiling of its own, so a line is a count
+ * and a period — never a fraction of an allowance.
+ */
+export type UsageLine = {
+  id: string
+  label: string
+  hint: string
+  month: number
+  total: number
+}
+
+export type AgentJobRecord = {
+  id: string
+  kind: 'Generator' | 'Tutor' | 'Tailor Mode'
+  course: string
+  detail: string
+  at: string
+  harness: string
+}

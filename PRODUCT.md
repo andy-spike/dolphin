@@ -34,7 +34,7 @@ The Student signs in through a browser. They read Lessons as markdown, answer Wr
 - Two Exercise kinds: Written Exercises (free-form answer, Tutor checks) and Code Exercises (hidden tests in a fresh, network-disabled Sandbox). The first release supports TypeScript and Python.
 - Tailor Mode may edit any Lesson, including completed Lessons. An edited completed Lesson returns to not complete.
 - Course States are Drafting, Generating, Ready, In Progress, and Complete. A Course Lock prevents another Agent Job from changing the Course while Tailor Mode works.
-- The private beta uses an allowlist and fixed Student Quotas. Email verification, magic links, and password recovery are out of scope for v1.
+- The private beta uses an allowlist. Dolphin meters no Usage of its own — the Student's Harness subscription is the only ceiling. Email verification, magic links, and password recovery are out of scope for v1.
 - Domain terms are canonical in `CONTEXT.md`.
 - Open: no version history for lessons in v1.
 
@@ -52,4 +52,4 @@ None. There are no testimonials, case studies, benchmarks, or screenshots. Futur
 2. A Student controls each Harness Connection and the Course it generates.
 3. Reuse the Student's existing Harness subscription.
 4. The Generator and Tutor are partners, not black boxes — iterate to agreement, then teach and adapt.
-5. Stay honest and simple: hidden tests, explicit Course States, and clear Quota boundaries.
+5. Stay honest and simple: hidden tests, explicit Course States, and visible Usage.

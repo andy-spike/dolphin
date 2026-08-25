@@ -5,6 +5,7 @@ import { Prose } from '@/components/Prose'
 import { ExerciseList } from '@/components/Exercises'
 import { TutorMargin } from '@/components/Tutor'
 import { StationHead } from '@/components/StationHead'
+import { CourseLock } from '@/components/CourseLock'
 import type { Course, Lesson } from '@/mock/types'
 
 export function LessonStation({
@@ -12,14 +13,18 @@ export function LessonStation({
   index,
   onStep,
   onToggleComplete,
+  onOverview,
   onLibrary,
+  locked,
   dockerDown,
 }: {
   course: Course
   index: number
   onStep: (i: number) => void
   onToggleComplete: () => void
+  onOverview: () => void
   onLibrary: () => void
+  locked: boolean
   dockerDown: boolean
 }) {
   const lesson = course.lessons[index]
@@ -32,6 +37,7 @@ export function LessonStation({
         course={course}
         station="lesson"
         onLibrary={onLibrary}
+        onCourse={onOverview}
         stepper={{
           n: lesson.n,
           of: course.lessons.length,
@@ -42,6 +48,8 @@ export function LessonStation({
           onNext: next ? () => onStep(index + 1) : undefined,
         }}
       />
+
+      {locked && <CourseLock files={[`lesson-${String(lesson.n).padStart(2, '0')}.md`, 'syllabus.md']} />}
 
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto xl:flex-row xl:overflow-hidden">
         <article key={lesson.id} className="min-h-0 flex-1 bg-paper xl:overflow-y-auto">

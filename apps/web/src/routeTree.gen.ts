@@ -11,7 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NewRouteImport } from './routes/new'
+import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as CoursesCourseIdRouteImport } from './routes/courses.$courseId'
+import { Route as SettingsIndexRouteImport } from './routes/settings.index'
+import { Route as SettingsAccountRouteImport } from './routes/settings.account'
+import { Route as SettingsUsageRouteImport } from './routes/settings.usage'
+import { Route as CoursesCourseIdBriefRouteImport } from './routes/courses.$courseId_.brief'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,40 +29,122 @@ const NewRoute = NewRouteImport.update({
   path: '/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignInRoute = SignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignUpRoute = SignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoursesCourseIdRoute = CoursesCourseIdRouteImport.update({
   id: '/courses/$courseId',
   path: '/courses/$courseId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsAccountRoute = SettingsAccountRouteImport.update({
+  id: '/settings/account',
+  path: '/settings/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsUsageRoute = SettingsUsageRouteImport.update({
+  id: '/settings/usage',
+  path: '/settings/usage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoursesCourseIdBriefRoute = CoursesCourseIdBriefRouteImport.update({
+  id: '/courses/$courseId_/brief',
+  path: '/courses/$courseId/brief',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/new': typeof NewRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
+  '/settings/account': typeof SettingsAccountRoute
+  '/settings/usage': typeof SettingsUsageRoute
+  '/settings/': typeof SettingsIndexRoute
+  '/courses/$courseId/brief': typeof CoursesCourseIdBriefRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/new': typeof NewRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
+  '/settings/account': typeof SettingsAccountRoute
+  '/settings/usage': typeof SettingsUsageRoute
+  '/settings': typeof SettingsIndexRoute
+  '/courses/$courseId/brief': typeof CoursesCourseIdBriefRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/new': typeof NewRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
+  '/settings/account': typeof SettingsAccountRoute
+  '/settings/usage': typeof SettingsUsageRoute
+  '/settings/': typeof SettingsIndexRoute
+  '/courses/$courseId_/brief': typeof CoursesCourseIdBriefRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/new' | '/courses/$courseId'
+  fullPaths:
+    | '/'
+    | '/new'
+    | '/sign-in'
+    | '/sign-up'
+    | '/courses/$courseId'
+    | '/settings/account'
+    | '/settings/usage'
+    | '/settings/'
+    | '/courses/$courseId/brief'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/new' | '/courses/$courseId'
-  id: '__root__' | '/' | '/new' | '/courses/$courseId'
+  to:
+    | '/'
+    | '/new'
+    | '/sign-in'
+    | '/sign-up'
+    | '/courses/$courseId'
+    | '/settings/account'
+    | '/settings/usage'
+    | '/settings'
+    | '/courses/$courseId/brief'
+  id:
+    | '__root__'
+    | '/'
+    | '/new'
+    | '/sign-in'
+    | '/sign-up'
+    | '/courses/$courseId'
+    | '/settings/account'
+    | '/settings/usage'
+    | '/settings/'
+    | '/courses/$courseId_/brief'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   NewRoute: typeof NewRoute
+  SignInRoute: typeof SignInRoute
+  SignUpRoute: typeof SignUpRoute
   CoursesCourseIdRoute: typeof CoursesCourseIdRoute
+  SettingsAccountRoute: typeof SettingsAccountRoute
+  SettingsUsageRoute: typeof SettingsUsageRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
+  CoursesCourseIdBriefRoute: typeof CoursesCourseIdBriefRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,11 +163,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/courses/$courseId': {
       id: '/courses/$courseId'
       path: '/courses/$courseId'
       fullPath: '/courses/$courseId'
       preLoaderRoute: typeof CoursesCourseIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof SettingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/account': {
+      id: '/settings/account'
+      path: '/settings/account'
+      fullPath: '/settings/account'
+      preLoaderRoute: typeof SettingsAccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/usage': {
+      id: '/settings/usage'
+      path: '/settings/usage'
+      fullPath: '/settings/usage'
+      preLoaderRoute: typeof SettingsUsageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/courses/$courseId_/brief': {
+      id: '/courses/$courseId_/brief'
+      path: '/courses/$courseId/brief'
+      fullPath: '/courses/$courseId/brief'
+      preLoaderRoute: typeof CoursesCourseIdBriefRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -88,7 +218,13 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   NewRoute: NewRoute,
+  SignInRoute: SignInRoute,
+  SignUpRoute: SignUpRoute,
   CoursesCourseIdRoute: CoursesCourseIdRoute,
+  SettingsAccountRoute: SettingsAccountRoute,
+  SettingsUsageRoute: SettingsUsageRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
+  CoursesCourseIdBriefRoute: CoursesCourseIdBriefRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,10 +1,11 @@
-import { useEffect } from 'react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useDemoStore } from '@/lib/demo-store'
 import { SyllabusStation } from '@/stations/Syllabus'
 import { GeneratingStation } from '@/stations/Generating'
+import { CourseOverviewStation } from '@/stations/CourseOverview'
 import { LessonStation } from '@/stations/Lesson'
 import { CourseCloseStation } from '@/stations/CourseClose'
+import { NotFoundStation } from '@/stations/NotFound'
 
 export const Route = createFileRoute('/courses/$courseId')({
   validateSearch: (search: Record<string, unknown>): { lesson?: number } => {
@@ -14,38 +15,27 @@ export const Route = createFileRoute('/courses/$courseId')({
   component: CoursePage,
 })
 
-/** The Course State decides the station; the Student never navigates to one directly. */
+/**
+ * The Course State decides the station; the Student never navigates to one
+ * directly. A written Course opens on its Overview, and `?lesson=n` is what
+ * opens a Lesson — so marking one complete can never recompute "first
+ * incomplete" out from under the Student and jump them forward.
+ */
 function CoursePage() {
   const { courseId } = Route.useParams()
   const { lesson } = Route.useSearch()
-  const { courses, toggleComplete, setBusy, fault } = useDemoStore()
+  const { courses, toggleComplete, deleteCourse, setBusy, fault, locked } = useDemoStore()
   const navigate = useNavigate()
 
   const course = courses.find((c) => c.id === courseId)
   const toLibrary = () => navigate({ to: '/' })
+  const toBrief = () => navigate({ to: '/courses/$courseId/brief', params: { courseId } })
 
-  const goToLesson = (courseId: string, index: number, replace?: boolean) =>
-    navigate({ to: '/courses/$courseId', params: { courseId }, search: { lesson: index }, replace })
+  const goToLesson = (id: string, index: number) =>
+    navigate({ to: '/courses/$courseId', params: { courseId: id }, search: { lesson: index } })
 
-  // Pin the Student's lesson to the URL as soon as they land without one, so marking it
-  // complete can't recompute "first incomplete" out from under them and jump them forward.
-  useEffect(() => {
-    if (!course || lesson !== undefined) return
-    if (course.state === 'Drafting' || course.state === 'Generating' || course.state === 'Complete') return
-    const firstIncomplete = course.lessons.findIndex((l) => !l.complete)
-    goToLesson(course.id, firstIncomplete === -1 ? 0 : firstIncomplete, true)
-  }, [course, lesson])
-
-  if (!course) {
-    return (
-      <div className="flex flex-1 flex-col items-start gap-4 p-10">
-        <p className="supporting text-ink-soft">no course by that id.</p>
-        <button onClick={toLibrary} className="label text-accent underline">
-          back to the course library
-        </button>
-      </div>
-    )
-  }
+  if (!course)
+    return <NotFoundStation what={courseId} onLibrary={toLibrary} onNew={() => navigate({ to: '/new' })} />
 
   switch (course.state) {
     case 'Drafting':
@@ -53,7 +43,11 @@ function CoursePage() {
         <SyllabusStation
           course={course}
           onLibrary={toLibrary}
-          onGenerate={() => navigate({ to: '/courses/$courseId', params: { courseId: courses[2].id } })}
+          onEditBrief={toBrief}
+          onGenerate={() => {
+            const generating = courses.find((c) => c.state === 'Generating')
+            if (generating) navigate({ to: '/courses/$courseId', params: { courseId: generating.id } })
+          }}
         />
       )
     case 'Generating':
@@ -62,7 +56,7 @@ function CoursePage() {
           course={course}
           onBusy={setBusy}
           onLibrary={toLibrary}
-          onOpen={() => goToLesson(courses[0].id, 2)}
+          onOpen={() => navigate({ to: '/courses/$courseId', params: { courseId: courses[0].id } })}
         />
       )
     case 'Complete':
@@ -70,14 +64,31 @@ function CoursePage() {
         <CourseCloseStation course={course} onLibrary={toLibrary} onReread={() => goToLesson(course.id, 0)} />
       )
     default: {
-      const firstIncomplete = course.lessons.findIndex((l) => !l.complete)
-      const index = lesson ?? (firstIncomplete === -1 ? 0 : firstIncomplete)
+      if (lesson === undefined)
+        return (
+          <CourseOverviewStation
+            course={course}
+            locked={locked}
+            onLesson={(i) => goToLesson(course.id, i)}
+            onEditBrief={toBrief}
+            onTailor={() => goToLesson(course.id, course.lessons.findIndex((l) => !l.complete))}
+            onDelete={() => {
+              deleteCourse(course.id)
+              toLibrary()
+            }}
+            onLibrary={toLibrary}
+          />
+        )
+
+      const index = Math.min(Math.max(lesson, 0), course.lessons.length - 1)
       return (
         <LessonStation
           course={course}
           index={index}
+          locked={locked}
           onStep={(i) => goToLesson(course.id, i)}
           onToggleComplete={() => toggleComplete(course, index)}
+          onOverview={() => navigate({ to: '/courses/$courseId', params: { courseId: course.id } })}
           onLibrary={toLibrary}
           dockerDown={fault === 'docker'}
         />

@@ -4,50 +4,78 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { StationHead } from '@/components/StationHead'
-import type { Source } from '@/mock/types'
+import { Field, Masthead, underline, opening } from '@/components/Ruled'
+import type { Course, Difficulty, Source } from '@/mock/types'
 
-type Familiarity = 'new to it' | 'some exposure' | 'already comfortable'
+const difficulties: Difficulty[] = ['beginner', 'intermediate', 'advanced']
 
-const familiarities: Familiarity[] = ['new to it', 'some exposure', 'already comfortable']
+export type BriefValues = Pick<Course, 'topic' | 'goal' | 'difficulty' | 'timeBudget' | 'sources' | 'webSearch'>
 
-export function BriefStation({ onDraft, onLibrary }: { onDraft: () => void; onLibrary: () => void }) {
-  const [topic, setTopic] = useState('')
-  const [goal, setGoal] = useState('')
-  const [familiarity, setFamiliarity] = useState<Familiarity>('some exposure')
-  const [budget, setBudget] = useState('8')
-  const [webSearch, setWebSearch] = useState(true)
-  const [sources, setSources] = useState<Source[]>([])
+/**
+ * The Brief is a ruled sheet, not a card: label and hint hang in the left
+ * column and the answer is the largest thing in its row. The same sheet writes
+ * a new Brief and edits the one a Course was generated from — editing it does
+ * not rewrite lessons, and the sheet says so rather than implying otherwise.
+ */
+export function BriefStation({
+  course,
+  onSubmit,
+  onLibrary,
+  onCancel,
+}: {
+  /** Present when the Student is editing the Brief of a Course that already exists. */
+  course?: Course
+  onSubmit: (values: BriefValues) => void
+  onLibrary: () => void
+  onCancel?: () => void
+}) {
+  const editing = Boolean(course)
+  const [topic, setTopic] = useState(course?.topic ?? '')
+  const [goal, setGoal] = useState(course?.goal ?? '')
+  const [difficulty, setDifficulty] = useState<Difficulty>(course?.difficulty ?? 'intermediate')
+  const [budget, setBudget] = useState(String(parseInt(course?.timeBudget ?? '8', 10) || 8))
+  const [webSearch, setWebSearch] = useState(course?.webSearch ?? true)
+  const [sources, setSources] = useState<Source[]>(course?.sources ?? [])
 
   const ready = topic.trim().length > 2 && goal.trim().length > 2
 
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!ready) return
+    const hours = parseInt(budget, 10) || 8
+    onSubmit({
+      topic: topic.trim(),
+      goal: goal.trim(),
+      difficulty,
+      timeBudget: `${hours} hour${hours === 1 ? '' : 's'}`,
+      sources,
+      webSearch,
+    })
+  }
+
   return (
     <>
-      <StationHead station="new course" onLibrary={onLibrary} />
+      <StationHead course={course} station={editing ? 'edit the brief' : 'new course'} onLibrary={onLibrary} />
 
       <div className="min-h-0 flex-1 overflow-y-auto bg-paper">
         <div className="mx-auto w-full max-w-[48rem] px-6 pt-14 pb-24 md:px-10 md:pt-20">
-          <header className="station-in">
-            <h1 className="display text-[clamp(2rem,4.5vw,2.75rem)]">what are we building you?</h1>
-            <p className="supporting mt-6 max-w-[54ch] text-ink-soft">
-              the generator reads this once, then drafts a syllabus you can argue with. nothing is written to disk until
-              you agree to it.
-            </p>
-          </header>
+          <Masthead
+            title={editing ? 'the brief behind this course.' : 'what are we building you?'}
+            lead={
+              editing
+                ? 'the generator read this once, and the tutor still reads it on every reply. changing it does not rewrite lessons that already exist — tailor mode does that.'
+                : 'the generator reads this once, then drafts a syllabus you can argue with. nothing is written to disk until you agree to it.'
+            }
+          />
 
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              if (ready) onDraft()
-            }}
-            className="mt-12 border-t border-ink/85"
-          >
+          <form onSubmit={submit} className={cn('mt-12', opening)}>
             <Field label="topic" hint="the subject you want to learn.">
               <Input
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 placeholder="distributed systems"
                 autoFocus
-                className="h-auto w-full rounded-none border-0 border-b border-rule bg-transparent px-0 py-0 pb-2 title text-[1.3125rem] md:text-[1.3125rem] outline-none transition-colors placeholder:font-normal placeholder:text-ink-faint focus-visible:border-accent focus-visible:ring-0"
+                className={underline}
               />
             </Field>
 
@@ -56,24 +84,24 @@ export function BriefStation({ onDraft, onLibrary }: { onDraft: () => void; onLi
                 value={goal}
                 onChange={(e) => setGoal(e.target.value)}
                 placeholder="reason about replication out loud"
-                className="h-auto w-full rounded-none border-0 border-b border-rule bg-transparent px-0 py-0 pb-2 title text-[1.3125rem] md:text-[1.3125rem] outline-none transition-colors placeholder:font-normal placeholder:text-ink-faint focus-visible:border-accent focus-visible:ring-0"
+                className={underline}
               />
             </Field>
 
-            <Field label="familiarity" hint="how much of this you already know.">
+            <Field label="difficulty" hint="how advanced the course should be.">
               <div className="inline-flex border border-rule bg-paper-raised p-1">
-                {familiarities.map((f) => (
+                {difficulties.map((d) => (
                   <button
-                    key={f}
+                    key={d}
                     type="button"
-                    onClick={() => setFamiliarity(f)}
-                    aria-pressed={familiarity === f}
+                    onClick={() => setDifficulty(d)}
+                    aria-pressed={difficulty === d}
                     className={cn(
                       'label px-4 py-2 transition-colors',
-                      familiarity === f ? 'bg-ink text-paper' : 'text-ink-faint hover:text-ink',
+                      difficulty === d ? 'bg-ink text-paper' : 'text-ink-faint hover:text-ink',
                     )}
                   >
-                    {f}
+                    {d}
                   </button>
                 ))}
               </div>
@@ -88,13 +116,13 @@ export function BriefStation({ onDraft, onLibrary }: { onDraft: () => void; onLi
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
                   aria-label="Hours in total"
-                  className="h-auto w-24 rounded-none border-0 border-b border-rule bg-transparent px-0 py-0 pb-1 numeral text-[1.625rem] md:text-[1.625rem] outline-none transition-colors [appearance:textfield] focus-visible:border-accent focus-visible:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                  className="h-auto w-20 rounded-none border-0 bg-transparent px-0 py-0 numeral text-[1.625rem] md:text-[1.625rem] outline-none [appearance:textfield] focus-visible:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />
                 <span className="label text-ink-faint">hours in total</span>
               </div>
             </Field>
 
-            <Field label="sources" hint="documents the generator must use. a url, or a file on this machine.">
+            <Field label="sources" hint="documents the generator must use. a public https url, or a pdf, markdown or text file.">
               <ul className="mb-3 space-y-2 empty:hidden">
                 {sources.map((s, i) => (
                   <li key={i} className="flex items-center gap-3 border border-rule bg-paper-raised px-3.5 py-2.5">
@@ -157,32 +185,28 @@ export function BriefStation({ onDraft, onLibrary }: { onDraft: () => void; onLi
               </button>
             </Field>
 
-            <div className="mt-10 flex flex-wrap items-center gap-5">
+            <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-4">
               <Button type="submit" disabled={!ready}>
-                draft the syllabus
-                <ArrowRight size={14} strokeWidth={2.2} />
+                {editing ? 'save the brief' : 'draft the syllabus'}
+                {!editing && <ArrowRight size={14} strokeWidth={2.2} />}
               </Button>
+              {editing && onCancel && (
+                <Button type="button" variant="quiet" onClick={onCancel}>
+                  discard changes
+                </Button>
+              )}
               <p className="label text-ink-faint">
-                {ready ? 'runs on your own agent · nothing uploaded' : 'topic and goal are required'}
+                {!ready
+                  ? 'topic and goal are required'
+                  : editing
+                    ? 'lessons already written stay as they are'
+                    : 'runs on your own harness · no model api key'}
               </p>
             </div>
           </form>
         </div>
       </div>
     </>
-  )
-}
-
-/** Label and hint hang in the left margin; the control keeps the full column. */
-function Field({ label, hint, children }: { label: string; hint: string; children: React.ReactNode }) {
-  return (
-    <div className="grid gap-x-8 gap-y-3 border-b border-rule-soft py-7 md:grid-cols-[11rem_minmax(0,1fr)]">
-      <div>
-        <p className="label text-ink">{label}</p>
-        <p className="supporting mt-2 text-[0.8125rem] text-ink-faint">{hint}</p>
-      </div>
-      <div className="min-w-0">{children}</div>
-    </div>
   )
 }
 

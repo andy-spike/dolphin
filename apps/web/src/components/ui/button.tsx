@@ -43,7 +43,8 @@ const buttonVariants = cva(
       {
         variant: ["default", "primary", "ink", "quiet", "danger"],
         size: "default",
-        class: "label h-auto gap-2 px-5 py-3 active:scale-[0.98]",
+        class:
+          "label h-auto gap-2 px-5 py-3 active:scale-[0.98] disabled:border-transparent disabled:bg-rule disabled:text-ink-faint disabled:opacity-100",
       },
     ],
     defaultVariants: {

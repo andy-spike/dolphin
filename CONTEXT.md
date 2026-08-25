@@ -102,9 +102,9 @@ _Avoid_: Container, VM, environment
 The temporary rule that prevents every other Agent Job from changing a Course while Tailor Mode works on it.
 _Avoid_: Mutex, lease, edit lock
 
-**Quota**:
-A Student's fixed beta allowance for agent work and Code Exercise runs.
-_Avoid_: Limit, allowance, budget
+**Usage**:
+The running count of Agent Jobs and Sandbox runs Dolphin has spent for a Student. Dolphin sets no allowance of its own; the Student's own Harness subscription is the only ceiling.
+_Avoid_: Quota, limit, allowance, budget
 
 **Generator**:
 The agent that builds the Syllabus and the Course from the Brief.
