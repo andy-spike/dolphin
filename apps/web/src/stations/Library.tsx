@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { StationHead } from '@/components/StationHead'
 import type { Course } from '@/mock/types'
 
-const counted = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']
+const counted = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
 const count = (n: number, one: string, many: string) => `${counted[n] ?? n} ${n === 1 ? one : many}`
 
 export function LibraryStation({
@@ -23,16 +23,16 @@ export function LibraryStation({
 
   return (
     <>
-      <StationHead station="Course Library" />
+      <StationHead station="course library" />
 
       <div className="min-h-0 flex-1 overflow-y-auto bg-paper">
         <div className="mx-auto w-full max-w-[62rem] px-6 pb-24 md:px-10">
           <header className="station-in flex flex-wrap items-end justify-between gap-6 pt-14 pb-8 md:pt-20">
             <div>
-              <h1 className="display text-[clamp(2.25rem,5vw,3.25rem)] text-nowrap">Course Library</h1>
+              <h1 className="display text-[clamp(2.25rem,5vw,3.25rem)] text-nowrap">course library</h1>
               <p className="supporting mt-4 text-ink-soft">
                 {courses.length === 0
-                  ? 'Nothing here yet.'
+                  ? 'nothing here yet.'
                   : `${count(courses.length, 'course', 'courses')}. ${count(studying, 'in progress', 'in progress')}.`}
               </p>
             </div>
@@ -131,15 +131,15 @@ function EmptyLibrary({ onNew }: { onNew: () => void }) {
   return (
     <div className="station-in border-t border-ink/85 pt-10">
       <p className="display max-w-[22ch] text-[clamp(1.5rem,3.2vw,1.9rem)] text-ink-soft">
-        Describe what you want to learn, and argue with the outline until it is right.
+        describe what you want to learn, and argue with the outline until it is right.
       </p>
       <p className="supporting mt-6 max-w-[56ch] text-ink-soft">
-        The Generator drafts a Syllabus from your Brief. Nothing is written to disk until you agree to it — and when it
+        the generator drafts a syllabus from your brief. nothing is written to disk until you agree to it — and when it
         is, it is markdown you own.
       </p>
       <Button onClick={onNew} className="mt-8">
         <Plus size={14} strokeWidth={2.2} />
-        Write your first Brief
+        write your first brief
       </Button>
     </div>
   )

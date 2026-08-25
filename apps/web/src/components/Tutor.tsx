@@ -130,7 +130,7 @@ function MobileTrigger() {
       className="label sticky bottom-0 z-20 flex shrink-0 items-center justify-center gap-2 bg-ink py-4 text-paper xl:hidden"
     >
       <MessagesSquare size={14} strokeWidth={1.8} />
-      Ask the Tutor
+      ask the tutor
     </button>
   )
 }
@@ -319,8 +319,8 @@ function Panel({
             {turns.length === 0 ? (
               <p className="supporting text-[0.875rem] text-ink-faint">
                 {mode === 'tutor'
-                  ? `Ask anything about “${lessonTitle}”. The Tutor has read the whole Course.`.toLowerCase()
-                  : 'Describe the change you want. The Tutor names every file it will touch before it writes.'}
+                  ? `ask anything about “${lessonTitle}”. the tutor has read the whole course.`
+                  : 'describe the change you want. the tutor names every file it will touch before it writes.'}
               </p>
             ) : (
               <div className="flex min-h-full shrink-0 flex-col justify-end gap-6">
@@ -391,7 +391,7 @@ function Panel({
 /** The thread's title is its first Student message, or a placeholder for an empty one. */
 function threadTitle(t: Thread) {
   const first = t.turns.find((x) => x.from === 'student')
-  return (first?.text ?? 'New thread').toLowerCase()
+  return first?.text ?? 'new thread'
 }
 
 function dateGroupLabel(d: Date) {

@@ -25,7 +25,7 @@ export const Route = createRootRoute({
 function NotFound() {
   return (
     <div className="flex h-dvh items-center justify-center bg-paper text-ink">
-      Page not found.
+      page not found.
     </div>
   )
 }

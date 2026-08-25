@@ -7,10 +7,10 @@ import { StationHead } from '@/components/StationHead'
 import type { Course } from '@/mock/types'
 
 const writing = [
-  'Outlining the Concept section…',
-  'Working an example that fails first…',
-  'Setting the hidden tests for the Code Exercise…',
-  'Checking this against Lesson 2 so nothing repeats…',
+  'outlining the concept section…',
+  'working an example that fails first…',
+  'setting the hidden tests for the code exercise…',
+  'checking this against lesson 2 so nothing repeats…',
 ]
 
 export function GeneratingStation({
@@ -48,21 +48,21 @@ export function GeneratingStation({
 
   return (
     <>
-      <StationHead course={course} station="Generating" onLibrary={onLibrary} />
+      <StationHead course={course} station="generating" onLibrary={onLibrary} />
 
       <div className="min-h-0 flex-1 overflow-y-auto bg-paper">
         <div className="mx-auto w-full max-w-[48rem] px-6 pt-12 pb-20 md:px-10 md:pt-16">
           <header className="station-in flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
             <div>
               <h1 className="display max-w-[14ch] text-[clamp(1.875rem,4vw,2.5rem)]">
-                {finished ? 'The Course is written.' : stopped ? 'Generation stopped.' : 'Writing your Course.'}
+                {finished ? 'the course is written.' : stopped ? 'generation stopped.' : 'writing your course.'}
               </h1>
               <p className="supporting mt-5 max-w-[52ch] text-ink-soft">
                 {finished
-                  ? 'Every Lesson is on disk. You can start reading now, and Tailor Mode can change any of it later.'
+                  ? 'every lesson is on disk. you can start reading now, and tailor mode can change any of it later.'
                   : stopped
-                    ? `Lessons 1 to ${done} are on disk and stay there. Resuming picks up at Lesson ${done + 1} — nothing already written is redone.`
-                    : 'Each Lesson is written to its own markdown file as it finishes. You can stop at any point and resume later.'}
+                    ? `lessons 1 to ${done} are on disk and stay there. resuming picks up at lesson ${done + 1} — nothing already written is redone.`
+                    : 'each lesson is written to its own markdown file as it finishes. you can stop at any point and resume later.'}
               </p>
             </div>
             <p className="numeral shrink-0 text-[3rem] leading-none text-ink tabular-nums">
@@ -127,11 +127,11 @@ export function GeneratingStation({
 
           <div className="mt-10 flex flex-wrap items-center gap-5">
             {finished ? (
-              <Button onClick={onOpen}>Start Lesson 1</Button>
+              <Button onClick={onOpen}>start lesson 1</Button>
             ) : stopped ? (
               <Button variant="ink" onClick={() => setStopped(false)}>
                 <Play size={12} strokeWidth={2.4} className="fill-current" />
-                Resume from Lesson {done + 1}
+                resume from lesson {done + 1}
               </Button>
             ) : (
               <Button variant="danger" onClick={() => setStopped(true)}>
@@ -139,7 +139,7 @@ export function GeneratingStation({
                 Stop generating
               </Button>
             )}
-            <p className="label text-ink-faint">One generation at a time</p>
+            <p className="label text-ink-faint">one generation at a time</p>
           </div>
         </div>
       </div>

@@ -41,13 +41,13 @@ export function SyllabusStation({
 
   return (
     <>
-      <StationHead course={course} station="Syllabus" onLibrary={onLibrary} />
+      <StationHead course={course} station="syllabus" onLibrary={onLibrary} />
 
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
         {/* The agreed outline. This is the artefact; the chat is how it changes. */}
         <section className="min-h-0 shrink-0 bg-paper lg:w-[27rem] lg:overflow-y-auto lg:border-r lg:border-rule xl:w-[31rem]">
           <div className="station-in px-6 pt-10 pb-8 md:px-8">
-            <h1 className="display text-[clamp(1.75rem,3.5vw,2.125rem)]">Syllabus</h1>
+            <h1 className="display text-[clamp(1.75rem,3.5vw,2.125rem)]">syllabus</h1>
             <p className="label mt-4 flex items-center gap-2.5 text-ink-faint">
               {course.syllabus.length} lessons
               <span className="size-[3px] bg-rule-strong" />
@@ -86,11 +86,11 @@ export function SyllabusStation({
                 className="label flex w-full items-center justify-center gap-2 bg-accent px-5 py-3.5 text-white transition-colors hover:bg-accent-strong"
               >
                 <Sparkles size={14} strokeWidth={2} />
-                Generate the Course
+                generate the course
               </button>
               <p className="supporting mt-3.5 text-[0.8125rem] text-ink-faint">
-                Writes {course.syllabus.length} markdown files. You can stop it, and it resumes from the first missing
-                Lesson.
+                writes {course.syllabus.length} markdown files. you can stop it, and it resumes from the first missing
+                lesson.
               </p>
             </div>
           </div>
@@ -98,7 +98,7 @@ export function SyllabusStation({
 
         {/* Free chat until the Student and the Generator agree. */}
         <section className="flex min-h-0 flex-1 flex-col border-t border-rule bg-paper-sunk lg:border-t-0">
-          <h2 className="label shrink-0 border-b border-rule bg-transparent px-6 py-4 text-ink-faint">Generator</h2>
+          <h2 className="label shrink-0 border-b border-rule bg-transparent px-6 py-4 text-ink-faint">generator</h2>
 
           <div ref={scroller} className="min-h-0 flex-1 px-6 py-8 lg:overflow-y-auto">
             <div className="mx-auto flex min-h-full w-full max-w-[36rem] flex-col justify-end gap-7">
@@ -152,18 +152,18 @@ function Brief({ course }: { course: Course }) {
   return (
     <div className="mt-10">
       <div className="flex items-center justify-between border-b border-rule pb-2.5">
-        <h3 className="label text-ink-faint">Brief</h3>
+        <h3 className="label text-ink-faint">brief</h3>
         <button className="label inline-flex items-center gap-1.5 text-ink-faint transition-colors hover:text-accent">
           <Pencil size={11} strokeWidth={2} />
-          Edit
+          edit
         </button>
       </div>
       <dl className="supporting text-[0.875rem]">
-        <Row term="Topic">{course.topic}</Row>
-        <Row term="Goal">{course.goal}</Row>
-        <Row term="Difficulty">{course.difficulty}</Row>
-        <Row term="Time Budget">{course.timeBudget}</Row>
-        <Row term="Sources">
+        <Row term="topic">{course.topic}</Row>
+        <Row term="goal">{course.goal}</Row>
+        <Row term="difficulty">{course.difficulty}</Row>
+        <Row term="time budget">{course.timeBudget}</Row>
+        <Row term="sources">
           {course.sources.length ? (
             <ul className="space-y-1">
               {course.sources.map((s) => (
@@ -173,10 +173,10 @@ function Brief({ course }: { course: Course }) {
               ))}
             </ul>
           ) : (
-            <span className="text-ink-faint">None</span>
+            <span className="text-ink-faint">none</span>
           )}
         </Row>
-        <Row term="Web search">{course.webSearch ? 'On' : 'Off'}</Row>
+        <Row term="web search">{course.webSearch ? 'on' : 'off'}</Row>
       </dl>
     </div>
   )
@@ -197,14 +197,14 @@ function Turn({ turn, streaming }: { turn: ChatTurn; streaming: boolean }) {
   if (turn.from === 'student') {
     return (
       <div className="self-end max-w-[90%] bg-accent px-4 py-3">
-        <p className="label mb-1.5 text-white/70">You</p>
+        <p className="label mb-1.5 text-white/70">you</p>
         <p className="supporting text-[0.9375rem] text-white">{turn.text}</p>
       </div>
     )
   }
   return (
     <div>
-      <p className="label mb-2 text-ink-faint">Generator</p>
+      <p className="label mb-2 text-ink-faint">generator</p>
       <p className="supporting text-ink-soft">
         {shown}
         {!done && <span className="ml-0.5 inline-block h-[1em] w-[3px] translate-y-0.5 bg-accent" />}

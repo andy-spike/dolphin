@@ -39,9 +39,9 @@ function CoursePage() {
   if (!course) {
     return (
       <div className="flex flex-1 flex-col items-start gap-4 p-10">
-        <p className="supporting text-ink-soft">No Course by that id.</p>
+        <p className="supporting text-ink-soft">no course by that id.</p>
         <button onClick={toLibrary} className="label text-accent underline">
-          Back to the Course Library
+          back to the course library
         </button>
       </div>
     )

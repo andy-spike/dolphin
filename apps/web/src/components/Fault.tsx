@@ -10,24 +10,24 @@ const Path = ({ children }: { children: ReactNode }) => (
 /** Every Fault names the problem, then the recovery. Never a modal. */
 const faults: Record<Exclude<FaultKind, 'none'>, { problem: string; recovery: ReactNode }> = {
   agent: {
-    problem: 'No agent found on this machine.',
+    problem: 'no agent found on this machine.',
     recovery: (
       <>
-        Dolphin drives the coding agent you already have. Install <Path>codex</Path> or <Path>claude</Path>, then reload
-        this page — nothing in your Course Library is affected.
+        dolphin drives the coding agent you already have. install <Path>codex</Path> or <Path>claude</Path>, then reload
+        this page — nothing in your course library is affected.
       </>
     ),
   },
   docker: {
-    problem: 'Docker is not running, so Code Exercises cannot be tested.',
-    recovery: <>Start Docker and press Run tests again. Reading, Written Exercises and the Tutor all work without it.</>,
+    problem: 'docker is not running, so code exercises cannot be tested.',
+    recovery: <>start docker and press run tests again. reading, written exercises and the tutor all work without it.</>,
   },
   source: {
-    problem: 'One Source could not be read.',
+    problem: 'one source could not be read.',
     recovery: (
       <>
-        <Path>jepsen.io/consistency</Path> returned 404. The Generator wrote this Course from your remaining Sources —
-        edit the Brief to replace it.
+        <Path>jepsen.io/consistency</Path> returned 404. the generator wrote this course from your remaining sources —
+        edit the brief to replace it.
       </>
     ),
   },

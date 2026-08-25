@@ -37,7 +37,7 @@ export function DemoBar({
           style={{ animation: 'land 200ms var(--ease-workspace) both' }}
         >
           <span className="label flex items-center justify-between px-2 pt-1.5 pb-2 text-ink-faint">
-            Mock states
+            mock states
             <button
               onClick={() => setOpen(false)}
               aria-label="Hide mock controls"
@@ -48,11 +48,11 @@ export function DemoBar({
           </span>
 
           <Chip on={empty} onClick={() => onEmpty(!empty)}>
-            Empty library
+            empty library
           </Chip>
           {(['none', 'agent', 'docker', 'source'] as FaultKind[]).map((f) => (
             <Chip key={f} on={fault === f} onClick={() => onFault(f)}>
-              {f === 'none' ? 'No fault' : f}
+              {f === 'none' ? 'no fault' : f}
             </Chip>
           ))}
         </div>

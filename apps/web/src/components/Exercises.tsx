@@ -11,9 +11,9 @@ export function ExerciseList({ exercises, dockerDown }: { exercises: Exercise[];
       {exercises.map((ex, i) => (
         <li key={ex.id}>
           <p className="label mb-3 flex items-center gap-2.5 text-ink-faint">
-            Exercise {i + 1} of {exercises.length}
+            exercise {i + 1} of {exercises.length}
             <span className="size-[3px] bg-rule-strong" />
-            <span className="text-ink">{ex.kind === 'written' ? 'Written' : ex.language}</span>
+            <span className="text-ink">{ex.kind === 'written' ? 'written' : ex.language.toLowerCase()}</span>
           </p>
           {ex.kind === 'written' ? <Written ex={ex} /> : <CodeTask ex={ex} dockerDown={dockerDown} />}
         </li>
@@ -76,7 +76,7 @@ function Written({ ex }: { ex: WrittenExercise }) {
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           rows={5}
-          placeholder="Write your answer…"
+          placeholder="write your answer…"
           className="reading w-full resize-none overflow-y-auto border border-rule bg-paper px-4 py-3 text-[0.9375rem] outline-none transition-shadow placeholder:text-ink-faint focus:border-accent focus:ring-4 focus:ring-accent-wash"
           style={{ maxHeight: MAX_ANSWER_HEIGHT }}
         />
@@ -92,7 +92,7 @@ function Written({ ex }: { ex: WrittenExercise }) {
             )}
           >
             {checking && <Loader2 size={13} className="animate-spin" strokeWidth={2.2} />}
-            {checking ? 'Tutor is reading' : feedback ? 'Ask again' : 'Ask the Tutor to check'}
+            {checking ? 'tutor is reading' : feedback ? 'ask again' : 'ask the tutor to check'}
           </button>
           <p className="label text-ink-faint">Not graded, not stored</p>
         </div>
@@ -101,14 +101,14 @@ function Written({ ex }: { ex: WrittenExercise }) {
       {feedback && (
         <div className="border-t border-rule bg-paper-sunk px-5 py-4">
           <p className="label mb-2.5 flex items-center gap-2.5 text-ink-faint">
-            Tutor
+            tutor
             <span
               className={cn(
                 'px-2 py-1',
                 feedback.verdict === 'good' ? 'bg-pass-wash text-pass' : 'bg-accent-wash text-accent',
               )}
             >
-              {feedback.verdict === 'good' ? 'Sound' : 'Partly there'}
+              {feedback.verdict === 'good' ? 'sound' : 'partly there'}
             </span>
           </p>
           <p className="reading text-[0.9375rem] text-ink-soft">
@@ -142,7 +142,7 @@ function CodeTask({ ex, dockerDown }: { ex: CodeExercise; dockerDown: boolean })
       <Prompt text={ex.prompt} />
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-rule bg-paper-sunk px-5 py-3">
-        <p className="label text-ink-faint">Edit in your editor</p>
+        <p className="label text-ink-faint">edit in your editor</p>
         <button
           onClick={copy}
           className="group inline-flex items-center gap-2 numeral text-[0.75rem] text-accent underline decoration-accent/30 hover:decoration-accent"
@@ -172,18 +172,18 @@ function CodeTask({ ex, dockerDown }: { ex: CodeExercise; dockerDown: boolean })
           ) : (
             <Play size={12} strokeWidth={2.4} className="fill-current" />
           )}
-          {run === 'running' ? 'Running in Docker' : 'Run tests'}
+          {run === 'running' ? 'running in docker' : 'run tests'}
         </button>
         <p className="label text-ink-faint">
-          {dockerDown ? 'Docker is not running' : run === 'untried' ? 'Tests are hidden' : `${ex.total} hidden tests`}
+          {dockerDown ? 'docker is not running' : run === 'untried' ? 'tests are hidden' : `${ex.total} hidden tests`}
         </p>
       </div>
 
       {dockerDown ? (
         <p className="supporting border-t border-rule bg-paper-sunk px-5 py-4 text-[0.875rem] text-ink-faint">
           {run === 'pass' || run === 'fail'
-            ? 'The last result is hidden while Docker is down — it may no longer match your file.'
-            : 'Start Docker to run the hidden tests.'}
+            ? 'the last result is hidden while docker is down — it may no longer match your file.'
+            : 'start docker to run the hidden tests.'}
         </p>
       ) : (
         (run === 'pass' || run === 'fail') && <Result ex={ex} run={run} />

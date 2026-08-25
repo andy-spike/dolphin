@@ -3,9 +3,9 @@ import { cn } from '@/lib/utils'
 export type Health = 'ready' | 'working' | 'down'
 
 const copy: Record<Health, string> = {
-  ready: 'Agent ready',
-  working: 'Agent working',
-  down: 'No agent found',
+  ready: 'agent ready',
+  working: 'agent working',
+  down: 'no agent found',
 }
 
 /** Whether the Student's own coding agent is alive. Blue means live; nothing else does. */

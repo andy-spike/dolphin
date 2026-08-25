@@ -81,7 +81,7 @@ function Identity({ onLibrary, divided }: { onLibrary?: () => void; divided: boo
     )
 
   return (
-    <button onClick={onLibrary} aria-label="Course Library" className={cell}>
+    <button onClick={onLibrary} aria-label="course library" className={cell}>
       <ChevronLeft
         size={16}
         strokeWidth={2}
@@ -92,7 +92,7 @@ function Identity({ onLibrary, divided }: { onLibrary?: () => void; divided: boo
         Dolphin
       </span>
       <span className="label pointer-events-none absolute top-full left-4 z-40 mt-2 scale-95 border border-rule bg-paper-raised px-2 py-1.5 whitespace-nowrap text-ink-faint opacity-0 shadow-[0_12px_32px_-12px_rgba(16,15,15,0.22)] transition-[opacity,transform] duration-150 group-hover/mark:scale-100 group-hover/mark:opacity-100">
-        Course Library
+        course library
       </span>
     </button>
   )
@@ -168,7 +168,7 @@ function Contents({ n, of, lessons, modules, onJump }: Omit<Stepper, 'onPrev' | 
         {groupByModule(lessons, modules).map(({ module, items }) => (
           <DropdownMenuGroup key={module.n}>
             <DropdownMenuLabel className="border-b border-rule-soft bg-paper-sunk px-4 py-2 text-ink-faint label normal-case">
-              {module.title.toLowerCase()}
+              {module.title}
             </DropdownMenuLabel>
             {items.map((l) => {
               const i = lessons.indexOf(l)

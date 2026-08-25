@@ -22,14 +22,14 @@ export function BriefStation({ onDraft, onLibrary }: { onDraft: () => void; onLi
 
   return (
     <>
-      <StationHead station="New course" onLibrary={onLibrary} />
+      <StationHead station="new course" onLibrary={onLibrary} />
 
       <div className="min-h-0 flex-1 overflow-y-auto bg-paper">
         <div className="mx-auto w-full max-w-[48rem] px-6 pt-14 pb-24 md:px-10 md:pt-20">
           <header className="station-in">
-            <h1 className="display text-[clamp(2rem,4.5vw,2.75rem)]">What are we building you?</h1>
+            <h1 className="display text-[clamp(2rem,4.5vw,2.75rem)]">what are we building you?</h1>
             <p className="supporting mt-6 max-w-[54ch] text-ink-soft">
-              The Generator reads this once, then drafts a Syllabus you can argue with. Nothing is written to disk until
+              the generator reads this once, then drafts a syllabus you can argue with. nothing is written to disk until
               you agree to it.
             </p>
           </header>
@@ -41,7 +41,7 @@ export function BriefStation({ onDraft, onLibrary }: { onDraft: () => void; onLi
             }}
             className="mt-12 border-t border-ink/85"
           >
-            <Field label="Topic" hint="The subject you want to learn.">
+            <Field label="topic" hint="the subject you want to learn.">
               <Input
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
@@ -51,7 +51,7 @@ export function BriefStation({ onDraft, onLibrary }: { onDraft: () => void; onLi
               />
             </Field>
 
-            <Field label="Goal" hint="What you want to be able to do at the end.">
+            <Field label="goal" hint="what you want to be able to do at the end.">
               <Input
                 value={goal}
                 onChange={(e) => setGoal(e.target.value)}
@@ -60,7 +60,7 @@ export function BriefStation({ onDraft, onLibrary }: { onDraft: () => void; onLi
               />
             </Field>
 
-            <Field label="Familiarity" hint="How much of this you already know.">
+            <Field label="familiarity" hint="how much of this you already know.">
               <div className="inline-flex border border-rule bg-paper-raised p-1">
                 {familiarities.map((f) => (
                   <button
@@ -79,7 +79,7 @@ export function BriefStation({ onDraft, onLibrary }: { onDraft: () => void; onLi
               </div>
             </Field>
 
-            <Field label="Time Budget" hint="Shapes how many Lessons the Course has.">
+            <Field label="time budget" hint="shapes how many lessons the course has.">
               <div className="flex items-baseline gap-3">
                 <Input
                   type="number"
@@ -94,7 +94,7 @@ export function BriefStation({ onDraft, onLibrary }: { onDraft: () => void; onLi
               </div>
             </Field>
 
-            <Field label="Sources" hint="Documents the Generator must use. A URL, or a file on this machine.">
+            <Field label="sources" hint="documents the generator must use. a url, or a file on this machine.">
               <ul className="mb-3 space-y-2 empty:hidden">
                 {sources.map((s, i) => (
                   <li key={i} className="flex items-center gap-3 border border-rule bg-paper-raised px-3.5 py-2.5">
@@ -118,12 +118,12 @@ export function BriefStation({ onDraft, onLibrary }: { onDraft: () => void; onLi
               <div className="flex flex-wrap gap-2">
                 <AddSource
                   icon={Link2}
-                  label="Add a URL"
+                  label="add a url"
                   onClick={() => setSources([...sources, { kind: 'url', label: 'jepsen.io/consistency' }])}
                 />
                 <AddSource
                   icon={FileText}
-                  label="Add a file"
+                  label="add a file"
                   onClick={() =>
                     setSources([...sources, { kind: 'file', label: '~/books/designing-data-intensive-apps.pdf' }])
                   }
@@ -131,7 +131,7 @@ export function BriefStation({ onDraft, onLibrary }: { onDraft: () => void; onLi
               </div>
             </Field>
 
-            <Field label="Web search" hint="Live search, governing both the Generator and the Tutor.">
+            <Field label="web search" hint="live search, governing both the generator and the tutor.">
               <button
                 type="button"
                 role="switch"
@@ -153,17 +153,17 @@ export function BriefStation({ onDraft, onLibrary }: { onDraft: () => void; onLi
                     )}
                   />
                 </span>
-                <span className="label text-ink-soft">{webSearch ? 'On' : 'Off'}</span>
+                <span className="label text-ink-soft">{webSearch ? 'on' : 'off'}</span>
               </button>
             </Field>
 
             <div className="mt-10 flex flex-wrap items-center gap-5">
               <Button type="submit" disabled={!ready}>
-                Draft the Syllabus
+                draft the syllabus
                 <ArrowRight size={14} strokeWidth={2.2} />
               </Button>
               <p className="label text-ink-faint">
-                {ready ? 'Runs on your own agent · nothing uploaded' : 'Topic and Goal are required'}
+                {ready ? 'runs on your own agent · nothing uploaded' : 'topic and goal are required'}
               </p>
             </div>
           </form>

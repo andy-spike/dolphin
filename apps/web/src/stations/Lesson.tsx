@@ -30,7 +30,7 @@ export function LessonStation({
     <>
       <StationHead
         course={course}
-        station="Lesson"
+        station="lesson"
         onLibrary={onLibrary}
         stepper={{
           n: lesson.n,
@@ -53,7 +53,7 @@ export function LessonStation({
               <p className="label text-accent">{course.modules.find((m) => m.n === lesson.module)?.title}</p>
               <h1 className="display mt-2 text-[clamp(1.875rem,3.8vw,2.5rem)]">{lesson.title}</h1>
               <p className="label mt-5 flex flex-wrap items-center gap-2.5 text-ink-faint">
-                Lesson {lesson.n} of {course.lessons.length}
+                lesson {lesson.n} of {course.lessons.length}
                 <span className="size-[3px] bg-rule-strong" />
                 {lesson.minutes} minutes
                 {lesson.complete && (
@@ -61,20 +61,20 @@ export function LessonStation({
                     <span className="size-[3px] bg-rule-strong" />
                     <span className="inline-flex items-center gap-1 text-pass">
                       <Check size={12} strokeWidth={2.6} />
-                      Complete
+                      complete
                     </span>
                   </>
                 )}
               </p>
             </Frame>
 
-            <Section title="Concept">
+            <Section title="concept">
               <Prose blocks={lesson.concept} />
             </Section>
-            <Section title="Examples">
+            <Section title="examples">
               <Prose blocks={lesson.examples} />
             </Section>
-            <Section title="Exercises">
+            <Section title="exercises">
               <ExerciseList exercises={lesson.exercises} dockerDown={dockerDown} />
             </Section>
 
@@ -138,7 +138,7 @@ function AdjacentLessonButton({
     >
       <span className="min-w-0 flex-1">
         <span className="label block text-ink-faint transition-colors group-hover:text-accent">
-          {isPrev ? 'Previous lesson' : 'Next lesson'}
+          {isPrev ? 'previous lesson' : 'next lesson'}
         </span>
         <span className="title mt-2 block text-[1.125rem]/snug transition-colors group-hover:text-accent">
           {lesson.title}
