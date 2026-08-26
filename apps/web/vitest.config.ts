@@ -1,4 +1,4 @@
-import { cloudflareTest } from '@cloudflare/vitest-plugin'
+import { cloudflareTest, readD1Migrations } from '@cloudflare/vitest-plugin'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vitest/config'
@@ -18,8 +18,18 @@ export default defineConfig({
     }),
     tanstackStart(),
   ],
+  // Node-side: read the checked-in drizzle migrations once and ship them to
+  // test workers as a serializable value (`test/setup/apply-migrations.ts`
+  // applies them against `env.DB`). readD1Migrations reads the filesystem, so
+  // it must run here, not inside workerd.
+  define: {
+    __D1_MIGRATIONS__: JSON.stringify(
+      await readD1Migrations(fileURLToPath(new URL('./drizzle', import.meta.url))),
+    ),
+  },
   test: {
     include: ['test/**/*.test.ts'],
+    setupFiles: ['test/setup/apply-migrations.ts'],
     testTimeout: 30_000,
     hookTimeout: 30_000,
   },

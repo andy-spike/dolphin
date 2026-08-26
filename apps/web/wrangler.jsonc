@@ -12,4 +12,13 @@
   "observability": {
     "enabled": true,
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "dolphin-web",
+      "database_id": "b157feb4-4a4d-4b1e-938d-74748f4ff4ae",
+      // drizzle-kit generate output; wrangler applies from the same directory.
+      "migrations_dir": "drizzle",
+    },
+  ],
 }
