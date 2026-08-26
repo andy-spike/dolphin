@@ -80,6 +80,16 @@ _Avoid_: Dashboard, home, catalog
 The student's record of which lessons are complete. A lesson is complete when the student marks it done. When Tailor Mode edits a completed lesson, that lesson's mark returns to not complete.
 _Avoid_: Completion, advancement, tracking
 
+### Access
+
+**Allowlist**:
+The list of email addresses allowed to sign up while Dolphin is in private beta.
+_Avoid_: Invite code, whitelist
+
+**Waiting list**:
+The list of email addresses that asked to join but are not on the Allowlist.
+_Avoid_: Queue, backlog
+
 ### Agents
 
 **Harness**:
