@@ -5,7 +5,7 @@ import { useStream } from '@/lib/useStream'
 import { Spine } from '@/components/Spine'
 import type { CodeExercise, Exercise, WrittenExercise } from '@/mock/types'
 
-export function ExerciseList({ exercises, dockerDown }: { exercises: Exercise[]; dockerDown: boolean }) {
+export function ExerciseList({ exercises, sandboxDown }: { exercises: Exercise[]; sandboxDown: boolean }) {
   return (
     <ol className="space-y-8">
       {exercises.map((ex, i) => (
@@ -15,7 +15,7 @@ export function ExerciseList({ exercises, dockerDown }: { exercises: Exercise[];
             <span className="size-[3px] bg-rule-strong" />
             <span className="text-ink">{ex.kind === 'written' ? 'written' : ex.language.toLowerCase()}</span>
           </p>
-          {ex.kind === 'written' ? <Written ex={ex} /> : <CodeTask ex={ex} dockerDown={dockerDown} />}
+          {ex.kind === 'written' ? <Written ex={ex} /> : <CodeTask ex={ex} sandboxDown={sandboxDown} />}
         </li>
       ))}
     </ol>
@@ -121,12 +121,12 @@ function Written({ ex }: { ex: WrittenExercise }) {
   )
 }
 
-function CodeTask({ ex, dockerDown }: { ex: CodeExercise; dockerDown: boolean }) {
+function CodeTask({ ex, sandboxDown }: { ex: CodeExercise; sandboxDown: boolean }) {
   const [run, setRun] = useState(ex.run)
   const [copied, setCopied] = useState(false)
 
   const start = () => {
-    if (dockerDown) return
+    if (sandboxDown) return
     setRun('running')
     setTimeout(() => setRun(ex.run === 'untried' ? 'pass' : ex.run), 1100)
   }
@@ -159,10 +159,10 @@ function CodeTask({ ex, dockerDown }: { ex: CodeExercise; dockerDown: boolean })
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-4">
         <button
           onClick={start}
-          disabled={run === 'running' || dockerDown}
+          disabled={run === 'running' || sandboxDown}
           className={cn(
             'label inline-flex items-center gap-2 px-4 py-2.5 transition-colors',
-            dockerDown || run === 'running'
+            sandboxDown || run === 'running'
               ? 'cursor-not-allowed bg-rule text-ink-faint'
               : 'bg-ink text-paper hover:bg-accent',
           )}
@@ -172,18 +172,18 @@ function CodeTask({ ex, dockerDown }: { ex: CodeExercise; dockerDown: boolean })
           ) : (
             <Play size={12} strokeWidth={2.4} className="fill-current" />
           )}
-          {run === 'running' ? 'running in docker' : 'run tests'}
+          {run === 'running' ? 'running in sandbox' : 'run tests'}
         </button>
         <p className="label text-ink-faint">
-          {dockerDown ? 'docker is not running' : run === 'untried' ? 'tests are hidden' : `${ex.total} hidden tests`}
+          {sandboxDown ? 'sandbox unavailable' : run === 'untried' ? 'tests are hidden' : `${ex.total} hidden tests`}
         </p>
       </div>
 
-      {dockerDown ? (
+      {sandboxDown ? (
         <p className="supporting border-t border-rule bg-paper-sunk px-5 py-4 text-[0.875rem] text-ink-faint">
           {run === 'pass' || run === 'fail'
-            ? 'the last result is hidden while docker is down — it may no longer match your file.'
-            : 'start docker to run the hidden tests.'}
+            ? 'the last result is hidden while the sandbox is unavailable — it may no longer match your file.'
+            : 'press run tests again to retry.'}
         </p>
       ) : (
         (run === 'pass' || run === 'fail') && <Result ex={ex} run={run} />

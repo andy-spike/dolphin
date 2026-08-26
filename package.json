@@ -4,5 +4,8 @@
   "scripts": {
     "dev": "pnpm --filter @dolphin/web dev",
     "build": "pnpm --filter @dolphin/web build"
+  },
+  "devDependencies": {
+    "wrangler": "^4.125.0"
   }
 }

@@ -90,7 +90,7 @@ function CoursePage() {
           onToggleComplete={() => toggleComplete(course, index)}
           onOverview={() => navigate({ to: '/courses/$courseId', params: { courseId: course.id } })}
           onLibrary={toLibrary}
-          dockerDown={fault === 'docker'}
+          sandboxDown={fault === 'sandbox'}
         />
       )
     }

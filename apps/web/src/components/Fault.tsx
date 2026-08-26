@@ -1,7 +1,7 @@
 import { AlertTriangle } from 'lucide-react'
 import type { ReactNode } from 'react'
 
-export type FaultKind = 'none' | 'agent' | 'docker' | 'source'
+export type FaultKind = 'none' | 'agent' | 'sandbox' | 'source'
 
 const Path = ({ children }: { children: ReactNode }) => (
   <code className="numeral bg-fail/8 px-1 py-0.5 text-[0.8125rem] text-fail">{children}</code>
@@ -10,17 +10,17 @@ const Path = ({ children }: { children: ReactNode }) => (
 /** Every Fault names the problem, then the recovery. Never a modal. */
 const faults: Record<Exclude<FaultKind, 'none'>, { problem: string; recovery: ReactNode }> = {
   agent: {
-    problem: 'no agent found on this machine.',
+    problem: 'no usable harness connection.',
     recovery: (
       <>
-        dolphin drives the coding agent you already have. install <Path>codex</Path> or <Path>claude</Path>, then reload
-        this page — nothing in your course library is affected.
+        dolphin needs an active harness connection to run this. connect or reconnect one in settings, then reload this
+        page — nothing in your course library is affected.
       </>
     ),
   },
-  docker: {
-    problem: 'docker is not running, so code exercises cannot be tested.',
-    recovery: <>start docker and press run tests again. reading, written exercises and the tutor all work without it.</>,
+  sandbox: {
+    problem: 'the sandbox could not run, so code exercises cannot be tested.',
+    recovery: <>press run tests again. reading, written exercises and the tutor all work without it.</>,
   },
   source: {
     problem: 'one source could not be read.',

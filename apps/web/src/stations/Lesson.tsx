@@ -16,7 +16,7 @@ export function LessonStation({
   onOverview,
   onLibrary,
   locked,
-  dockerDown,
+  sandboxDown,
 }: {
   course: Course
   index: number
@@ -25,7 +25,7 @@ export function LessonStation({
   onOverview: () => void
   onLibrary: () => void
   locked: boolean
-  dockerDown: boolean
+  sandboxDown: boolean
 }) {
   const lesson = course.lessons[index]
   const prev = course.lessons[index - 1]
@@ -83,7 +83,7 @@ export function LessonStation({
               <Prose blocks={lesson.examples} />
             </Section>
             <Section title="exercises">
-              <ExerciseList exercises={lesson.exercises} dockerDown={dockerDown} />
+              <ExerciseList exercises={lesson.exercises} sandboxDown={sandboxDown} />
             </Section>
 
             <footer className="mt-16 lg:pl-[8.5rem]">

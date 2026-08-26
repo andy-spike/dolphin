@@ -1,10 +1,10 @@
 # Dolphin
 
-A local web application that generates personalized courses.
+A hosted web application that generates personalized courses.
 
-The student describes what they want to learn in a **Brief**, iterates on a **Syllabus** with the **Generator**, then studies the generated **Course** with help from the **Tutor**. Courses are markdown files on the student's own machine.
+The student describes what they want to learn in a **Brief**, iterates on a **Syllabus** with the **Generator**, then studies the generated **Course** with help from the **Tutor**. Courses are markdown files in a Course Folder, kept in cloud storage.
 
-Dolphin drives the coding-agent SDKs already installed locally (Codex, Claude Code), so the student reuses their existing AI subscription instead of paying for a separate model API.
+Dolphin drives a Harness — Codex, Claude Code, or OpenCode — through a revocable Harness Connection, so the student reuses their existing subscription instead of paying for a separate model API. Each Harness runs in an isolated Sandbox, never on the student's own machine.
 
 ## Status
 
@@ -51,6 +51,6 @@ The visual world is **The Inky Learning Workspace** — a [Flexoki](https://step
 
 ## Stack
 
-TypeScript monorepo (pnpm workspaces). Vite + React + Tailwind CSS v4 on the frontend. The planned backend is Hono on Node with SQLite via Drizzle, a Docker sandbox for Code Exercises, and SSE for live agent output — see [`docs/adr/0004-technology-stack.md`](docs/adr/0004-technology-stack.md).
+TypeScript monorepo (pnpm workspaces). TanStack Start and TanStack Query run the app as a single Cloudflare Worker; Tailwind CSS v4 styles it. The planned backend is TanStack AI driving every Harness and Code Exercise run in a Daytona Sandbox, Cloudflare D1 (via Drizzle) for relational data, R2 for Course Folders and Sources, Cloudflare Queues for durable Agent Jobs, and Better Auth for sign-in. A Durable Object per Course holds the Course Lock and streams Agent Job progress over SSE — see [`docs/adr/0004-technology-stack.md`](docs/adr/0004-technology-stack.md), [`0006`](docs/adr/0006-course-durable-object.md), and [`0007`](docs/adr/0007-harness-connection-credential-storage.md).
 
 Fonts are self-hosted; the app makes no network requests to third parties.

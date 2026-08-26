@@ -57,7 +57,7 @@ export function DemoBar({
           <Chip on={locked} onClick={() => onLocked(!locked)}>
             course lock
           </Chip>
-          {(['none', 'agent', 'docker', 'source'] as FaultKind[]).map((f) => (
+          {(['none', 'agent', 'sandbox', 'source'] as FaultKind[]).map((f) => (
             <Chip key={f} on={fault === f} onClick={() => onFault(f)}>
               {f === 'none' ? 'no fault' : f}
             </Chip>
