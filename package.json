@@ -3,7 +3,11 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter @dolphin/web dev",
-    "build": "pnpm --filter @dolphin/web build"
+    "build": "pnpm --filter @dolphin/web build",
+    "test": "pnpm --filter @dolphin/web test",
+    "typecheck": "pnpm --filter @dolphin/web typecheck",
+    "deploy": "pnpm --filter @dolphin/web deploy",
+    "cf-typegen": "pnpm --filter @dolphin/web cf-typegen"
   },
   "devDependencies": {
     "wrangler": "^4.125.0"

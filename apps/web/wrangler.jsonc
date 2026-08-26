@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "dolphin-web",
+  // Set this to today's date
+  "compatibility_date": "2026-08-26",
+  "compatibility_flags": ["nodejs_compat"],
+  // Server entrypoint: file wrapper around @tanstack/react-start/server-entry
+  // (see src/server/index.ts). Wrangler's loader resolves `main` as a filesystem
+  // path, so the bare package specifier does not work with Miniflare-based
+  // tooling (vitest workers integration).
+  "main": "./src/server/index.ts",
+  "observability": {
+    "enabled": true,
+  },
+}
