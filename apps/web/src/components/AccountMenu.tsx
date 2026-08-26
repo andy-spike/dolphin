@@ -1,7 +1,9 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Activity, LogOut, Plug, SlidersHorizontal } from 'lucide-react'
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { student, harnesses, usage } from '@/mock/data'
+import { signOutStudent } from '@/lib/auth-client'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,51 +20,83 @@ import {
  */
 export function AccountMenu() {
   const navigate = useNavigate()
+  const [signingOut, setSigningOut] = useState(false)
+  const [signOutFailed, setSignOutFailed] = useState(false)
   const connected = harnesses.filter((h) => h.connection).length
   const jobs = usage[0]
 
+  // Invalidate the server session first; only then leave for sign-in. A failed
+  // attempt keeps the Student on this page with a retryable message.
+  const signOut = async () => {
+    if (signingOut) return
+    setSigningOut(true)
+    setSignOutFailed(false)
+    try {
+      await signOutStudent()
+    } catch {
+      setSigningOut(false)
+      setSignOutFailed(true)
+      return
+    }
+    navigate({ to: '/sign-in' })
+  }
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        aria-label="your account"
-        className="group flex shrink-0 items-center gap-2.5 border-l border-rule-strong px-3 transition-colors hover:bg-paper data-popup-open:bg-paper-raised md:px-4"
-      >
-        <span className="label grid size-[1.5rem] shrink-0 place-items-center bg-ink pt-px text-[0.625rem] text-paper transition-transform duration-150 group-active:scale-[0.94]">
-          {student.initials}
-        </span>
-        {/* The lamp already reports the agent; this reports the connection behind it. */}
-        <span className="label hidden text-ink-faint transition-colors group-hover:text-ink lg:inline">
-          {connected} connected
-        </span>
-      </DropdownMenuTrigger>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          aria-label="your account"
+          className="group flex shrink-0 items-center gap-2.5 border-l border-rule-strong px-3 transition-colors hover:bg-paper data-popup-open:bg-paper-raised md:px-4"
+        >
+          <span className="label grid size-[1.5rem] shrink-0 place-items-center bg-ink pt-px text-[0.625rem] text-paper transition-transform duration-150 group-active:scale-[0.94]">
+            {student.initials}
+          </span>
+          {/* The lamp already reports the agent; this reports the connection behind it. */}
+          <span className="label hidden text-ink-faint transition-colors group-hover:text-ink lg:inline">
+            {connected} connected
+          </span>
+        </DropdownMenuTrigger>
 
-      <DropdownMenuContent
-        align="end"
-        sideOffset={8}
-        className="w-[min(19rem,calc(100vw-2rem))] border-rule bg-paper-raised p-0 shadow-[0_12px_32px_-12px_rgba(16,15,15,0.22)]"
-      >
-        <div className="border-b border-rule px-4 py-3.5">
-          <p className="title text-[0.9375rem]">{student.name}</p>
-          <p className="numeral mt-1 truncate text-[0.75rem] text-ink-faint">{student.email}</p>
-        </div>
+        <DropdownMenuContent
+          align="end"
+          sideOffset={8}
+          className="w-[min(19rem,calc(100vw-2rem))] border-rule bg-paper-raised p-0 shadow-[0_12px_32px_-12px_rgba(16,15,15,0.22)]"
+        >
+          <div className="border-b border-rule px-4 py-3.5">
+            <p className="title text-[0.9375rem]">{student.name}</p>
+            <p className="numeral mt-1 truncate text-[0.75rem] text-ink-faint">{student.email}</p>
+          </div>
 
-        <Item icon={Plug} onClick={() => navigate({ to: '/settings' })} note={`${connected} of ${harnesses.length}`}>
-          harness connections
-        </Item>
-        <Item icon={Activity} onClick={() => navigate({ to: '/settings/usage' })} note={`${jobs.month} this month`}>
-          usage
-        </Item>
-        <Item icon={SlidersHorizontal} onClick={() => navigate({ to: '/settings/account' })}>
-          account
-        </Item>
+          <Item icon={Plug} onClick={() => navigate({ to: '/settings' })} note={`${connected} of ${harnesses.length}`}>
+            harness connections
+          </Item>
+          <Item icon={Activity} onClick={() => navigate({ to: '/settings/usage' })} note={`${jobs.month} this month`}>
+            usage
+          </Item>
+          <Item icon={SlidersHorizontal} onClick={() => navigate({ to: '/settings/account' })}>
+            account
+          </Item>
 
-        <DropdownMenuSeparator className="my-0 bg-rule" />
+          <DropdownMenuSeparator className="my-0 bg-rule" />
 
-        <Item icon={LogOut} onClick={() => navigate({ to: '/sign-in' })} danger>
-          sign out
-        </Item>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <Item icon={LogOut} onClick={signOut} danger>
+            {signingOut ? 'signing out…' : 'sign out'}
+          </Item>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* The dropdown closes the moment its item is picked, so failure has to
+          surface outside it. Anchored under the header strip by StationHead's
+          relative positioning; clears on the next attempt. */}
+      {signOutFailed && (
+        <p
+          role="alert"
+          className="label absolute top-full right-4 mt-3 border border-fail/25 bg-fail-wash px-3.5 py-2 text-[0.75rem] text-fail"
+        >
+          couldn't sign out. try again.
+        </p>
+      )}
+    </>
   )
 }
 

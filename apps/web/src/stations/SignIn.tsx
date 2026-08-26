@@ -1,39 +1,68 @@
 import { useState } from 'react'
-import { ArrowRight, Check, Hourglass } from 'lucide-react'
+import { useNavigate } from '@tanstack/react-router'
+import { ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { stateTone } from '@/lib/state'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Field, underline, opening } from '@/components/Ruled'
-import { lifecycle, student } from '@/mock/data'
+import { lifecycle } from '@/mock/data'
+import { authClient } from '@/lib/auth-client'
 
 type Mode = 'sign-in' | 'sign-up'
-type Gate = 'form' | 'blocked' | 'waiting'
 
 /**
  * The front door, set the way every other station is: a ruled sheet on paper,
  * and a `paper-sunk` panel to its right — the same two-column frame the
  * Syllabus and the Lesson use, so the first screen is already the workspace.
  *
- * The panel is the Course lifecycle in its own five hues. It is the one thing
- * about Dolphin that cannot be shown with a screenshot the product has not
- * earned yet, and it teaches the Student the vocabulary of every later screen.
+ * The submit is a real Better Auth call over `/api/auth/*`; wrong credentials
+ * and server faults land back on the form as one generic line (the response
+ * never says whether an address exists). Google sign-in waits for ticket 04,
+ * so its button states that instead of faking anything.
  */
-export function SignInStation({ mode, onEnter, onSwitch }: { mode: Mode; onEnter: () => void; onSwitch: () => void }) {
+export function SignInStation({ mode }: { mode: Mode }) {
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
-  const [gate, setGate] = useState<Gate>('form')
+  const [submitting, setSubmitting] = useState(false)
+  const [failed, setFailed] = useState(false)
 
   const signUp = mode === 'sign-up'
-  const ready = email.includes('@') && password.length >= 8 && (!signUp || name.trim().length > 1)
+  const ready =
+    email.includes('@') && password.length >= 8 && (!signUp || name.trim().length > 1) && !submitting
 
-  const submit = (e: React.FormEvent) => {
+  const fail = () => {
+    setFailed(true)
+    setSubmitting(false)
+  }
+
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!ready) return
-    // The private beta is an allowlist. Only the seeded Student is on it.
-    if (signUp && email.trim().toLowerCase() !== student.email) return setGate('blocked')
-    onEnter()
+    if (!ready || submitting) return
+
+    setFailed(false)
+    setSubmitting(true)
+
+    if (signUp) {
+      const { error } = await authClient.signUp.email({
+        email: email.trim(),
+        password,
+        name: name.trim(),
+      })
+      if (error) return fail()
+    } else {
+      const { error } = await authClient.signIn.email({
+        email: email.trim(),
+        password,
+      })
+      if (error) return fail()
+    }
+
+    // Session cookie is set by the auth response; the reload picks it up.
+    setSubmitting(false)
+    navigate({ to: '/' })
   }
 
   return (
@@ -42,91 +71,115 @@ export function SignInStation({ mode, onEnter, onSwitch }: { mode: Mode; onEnter
         <div className="mx-auto flex w-full max-w-[38rem] flex-1 flex-col px-6 py-12 md:px-10 md:py-16">
           <Wordmark />
 
-          {gate === 'form' ? (
-            <>
-              <header className="station-in mt-14">
-                <h1 className="display text-[clamp(2rem,4.5vw,2.75rem)]">
-                  {signUp ? 'make an account.' : 'welcome back.'}
-                </h1>
-                <p className="supporting mt-5 max-w-[46ch] text-ink-soft">
-                  {signUp
-                    ? 'dolphin is in a private beta, so accounts are made from an allowlist. connect a harness after you are in — nothing runs until you do.'
-                    : 'your course library, your course folders, and whichever harness you connected last time.'}
-                </p>
-              </header>
+          <header className="station-in mt-14">
+            <h1 className="display text-[clamp(2rem,4.5vw,2.75rem)]">
+              {signUp ? 'make an account.' : 'welcome back.'}
+            </h1>
+            <p className="supporting mt-5 max-w-[46ch] text-ink-soft">
+              {signUp
+                ? 'dolphin runs on your own harness subscription. connect one after you are in — nothing starts until you do.'
+                : 'your course library, your course folders, and whichever harness you connected last time.'}
+            </p>
+          </header>
 
-              <form onSubmit={submit} className={cn('mt-11', opening)}>
-                {signUp && (
-                  <Field label="name" hint="what the tutor calls you.">
-                    <Input
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      autoComplete="name"
-                      autoFocus
-                      placeholder="Ada Lovelace"
-                      className={underline}
-                    />
-                  </Field>
-                )}
+          {/* The failure line owns this region so a screen reader hears it move in. */}
+          <form onSubmit={submit} aria-describedby={failed ? 'auth-error' : undefined} className={cn('mt-11', opening)}>
+            {signUp && (
+              <Field label="name" hint="what the tutor calls you.">
+                <Input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  autoComplete="name"
+                  autoFocus
+                  placeholder="Ada Lovelace"
+                  className={underline}
+                  disabled={submitting}
+                />
+              </Field>
+            )}
 
-                <Field label="email" hint={signUp ? 'must be on the beta allowlist.' : undefined}>
-                  <Input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    autoComplete="email"
-                    autoFocus={!signUp}
-                    placeholder="you@example.com"
-                    className={cn(underline, 'numeral text-[1.125rem] md:text-[1.125rem]')}
-                  />
-                </Field>
+            <Field label="email">
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                autoFocus={!signUp}
+                placeholder="you@example.com"
+                className={cn(underline, 'numeral text-[1.125rem] md:text-[1.125rem]')}
+                disabled={submitting}
+              />
+            </Field>
 
-                <Field label="password" hint={signUp ? 'eight characters or more.' : undefined}>
-                  <Input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    autoComplete={signUp ? 'new-password' : 'current-password'}
-                    placeholder="••••••••"
-                    className={cn(underline, 'numeral text-[1.125rem] md:text-[1.125rem] tracking-[0.15em]')}
-                  />
-                </Field>
+            <Field label="password" hint={signUp ? 'eight characters or more.' : undefined}>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete={signUp ? 'new-password' : 'current-password'}
+                placeholder="••••••••"
+                className={cn(underline, 'numeral text-[1.125rem] md:text-[1.125rem] tracking-[0.15em]')}
+                disabled={submitting}
+              />
+            </Field>
 
-                <div className="mt-9 flex flex-wrap items-center gap-5">
-                  <Button type="submit" disabled={!ready}>
-                    {signUp ? 'make the account' : 'sign in'}
-                    <ArrowRight size={14} strokeWidth={2.2} />
-                  </Button>
-                  <p className="label text-ink-faint">
-                    {ready ? 'no card, no model api key' : signUp ? 'name, email and password' : 'email and password'}
-                  </p>
-                </div>
-              </form>
-
-              <div className="mt-9 flex items-center gap-4">
-                <span className="h-px flex-1 bg-rule" />
-                <span className="label text-ink-faint">or</span>
-                <span className="h-px flex-1 bg-rule" />
-              </div>
-
-              <button
-                onClick={onEnter}
-                className="label mt-6 flex w-full items-center justify-center gap-3 border border-rule bg-paper-raised px-5 py-3.5 text-ink-soft transition-colors duration-150 hover:border-accent-soft hover:bg-accent-wash hover:text-accent active:scale-[0.99]"
-              >
-                <GoogleMark className="size-4" />
-                continue with google
-              </button>
-
-              <p className="supporting mt-8 text-[0.875rem] text-ink-faint">
-                {signUp ? 'already have an account?' : 'no account yet?'}{' '}
-                <button onClick={onSwitch} className="text-accent underline decoration-accent/30 hover:decoration-accent">
-                  {signUp ? 'sign in' : 'ask for an invite'}
-                </button>
+            {failed && (
+              <p id="auth-error" role="alert" className="mt-6 border-l-2 border-fail bg-fail-wash px-4 py-3 text-[0.875rem] text-ink">
+                {signUp
+                  ? 'we could not make that account. check the details and try again.'
+                  : 'that email and password did not match an account. check them and try again.'}
               </p>
-            </>
-          ) : (
-            <Allowlist state={gate} email={email} onWait={() => setGate('waiting')} onBack={() => setGate('form')} />
-          )}
+            )}
+
+            <div className="mt-9 flex flex-wrap items-center gap-5">
+              <Button type="submit" disabled={!ready} aria-busy={submitting}>
+                {submitting ? (
+                  'one moment…'
+                ) : signUp ? (
+                  <>
+                    make the account
+                    <ArrowRight size={14} strokeWidth={2.2} />
+                  </>
+                ) : (
+                  <>
+                    sign in
+                    <ArrowRight size={14} strokeWidth={2.2} />
+                  </>
+                )}
+              </Button>
+              {!submitting && !failed && (
+                <p className="label text-ink-faint">
+                  {ready ? 'no card, no model api key' : signUp ? 'name, email and password' : 'email and password'}
+                </p>
+              )}
+            </div>
+          </form>
+
+          <div className="mt-9 flex items-center gap-4">
+            <span className="h-px flex-1 bg-rule" />
+            <span className="label text-ink-faint">or</span>
+            <span className="h-px flex-1 bg-rule" />
+          </div>
+
+          {/* Ticket 04 wires the real provider; until then the button admits it. */}
+          <button
+            type="button"
+            disabled
+            aria-disabled="true"
+            title="google sign-in arrives with the next release"
+            className="label mt-6 flex w-full cursor-not-allowed items-center justify-center gap-3 border border-rule bg-paper-sunk px-5 py-3.5 text-ink-faint"
+          >
+            <GoogleMark className="size-4" />
+            continue with google
+            <span className="text-[0.6875rem]">— not available yet</span>
+          </button>
+
+          <p className="supporting mt-8 text-[0.875rem] text-ink-faint">
+            {signUp ? 'already have an account?' : 'no account yet?'}{' '}
+            <button type="button" onClick={() => navigate({ to: signUp ? '/sign-in' : '/sign-up' })} className="text-accent underline decoration-accent/30 hover:decoration-accent">
+              {signUp ? 'sign in' : 'ask for an invite'}
+            </button>
+          </p>
 
           <footer className="pt-16">
             <p className="supporting max-w-[46ch] text-[0.8125rem] text-ink-faint">
@@ -150,77 +203,6 @@ function Wordmark() {
     </span>
   )
 }
-
-/**
- * Not on the list. The address is a machine string, so it is set in mono, and
- * the recovery is a real action rather than an apology.
- */
-function Allowlist({
-  state,
-  email,
-  onWait,
-  onBack,
-}: {
-  state: Gate
-  email: string
-  onWait: () => void
-  onBack: () => void
-}) {
-  const waiting = state === 'waiting'
-
-  return (
-    <div className="station-in mt-14">
-      <h1 className="display text-[clamp(2rem,4.5vw,2.75rem)]">
-        {waiting ? 'you are on the list.' : 'not on the list yet.'}
-      </h1>
-
-      <p className="supporting mt-5 max-w-[48ch] text-ink-soft">
-        {waiting ? (
-          <>
-            we will write to <Address>{email}</Address> when the beta opens a place. nothing else is needed from you.
-          </>
-        ) : (
-          <>
-            <Address>{email}</Address> is not on the beta allowlist. dolphin runs every agent job on a student's own
-            harness subscription, and the beta is sized to a fixed number of students while it is still being built.
-          </>
-        )}
-      </p>
-
-      <div className={cn('mt-10', opening)}>
-        <div className="flex items-start gap-4 border-b border-rule py-5">
-          <span
-            className={cn(
-              'mt-0.5 grid size-5 shrink-0 place-items-center',
-              waiting ? 'bg-pass text-white' : 'text-ink-faint',
-            )}
-          >
-            {waiting ? <Check size={13} strokeWidth={3} /> : <Hourglass size={16} strokeWidth={1.9} />}
-          </span>
-          <div className="min-w-0">
-            <p className="title text-[1.0625rem]">{waiting ? 'waiting for a place' : 'ask for a place'}</p>
-            <p className="supporting mt-1.5 text-[0.875rem] text-ink-soft">
-              {waiting
-                ? 'places open as the beta widens. we do not send anything else.'
-                : 'one address on the waiting list. no course is generated until you are in.'}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-9 flex flex-wrap items-center gap-3">
-        {!waiting && <Button onClick={onWait}>join the waiting list</Button>}
-        <Button variant="quiet" onClick={onBack}>
-          {waiting ? 'back to sign in' : 'use a different address'}
-        </Button>
-      </div>
-    </div>
-  )
-}
-
-const Address = ({ children }: { children: React.ReactNode }) => (
-  <code className="numeral bg-paper-sunk px-1.5 py-0.5 text-[0.8125rem] text-ink">{children}</code>
-)
 
 /**
  * The five Course States, in lifecycle order, each in its own hue: cool at the

@@ -3,6 +3,7 @@ import {
   Outlet,
   Scripts,
   createRootRoute,
+  redirect,
   useNavigate,
 } from '@tanstack/react-router'
 import { NotFoundStation } from '@/stations/NotFound'
@@ -10,6 +11,9 @@ import { DemoBar } from '@/DemoBar'
 import { Lamp } from '@/components/Lamp'
 import { Fault } from '@/components/Fault'
 import { DemoProvider, useDemoStore } from '@/lib/demo-store'
+import { isPublicPath } from '@/lib/public-paths'
+import { getStudentPage } from '@/server/page-access'
+import { studentGate } from '@/server/student-gate'
 import '@/index.css'
 
 export const Route = createRootRoute({
@@ -20,6 +24,23 @@ export const Route = createRootRoute({
       { title: 'Dolphin' },
     ],
   }),
+  // Centralized route guard, two halves. `studentGate` (root server
+  // middleware) sends a real 307 for anonymous SSR page requests;
+  // `beforeLoad` covers client navigations only (import.meta.env.SSR is false
+  // in the client bundle), throwing a router redirect to /sign-in. UX only —
+  // protected server functions still enforce the session themselves (see
+  // src/server/students.ts).
+  server: {
+    middleware: [studentGate],
+  },
+  beforeLoad: async ({ location }) => {
+    if (import.meta.env.SSR) return
+    if (location.pathname.startsWith('/api/')) return
+    if (isPublicPath(location.pathname)) return
+
+    const student = await getStudentPage()
+    if (!student) throw redirect({ to: '/sign-in' })
+  },
   component: RootDocument,
   notFoundComponent: NotFound,
 })

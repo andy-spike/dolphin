@@ -17,6 +17,7 @@ import { Route as CoursesCourseIdRouteImport } from './routes/courses.$courseId'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as SettingsAccountRouteImport } from './routes/settings.account'
 import { Route as SettingsUsageRouteImport } from './routes/settings.usage'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as CoursesCourseIdBriefRouteImport } from './routes/courses.$courseId_.brief'
 
 const IndexRoute = IndexRouteImport.update({
@@ -59,6 +60,11 @@ const SettingsUsageRoute = SettingsUsageRouteImport.update({
   path: '/settings/usage',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoursesCourseIdBriefRoute = CoursesCourseIdBriefRouteImport.update({
   id: '/courses/$courseId_/brief',
   path: '/courses/$courseId/brief',
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/settings/account': typeof SettingsAccountRoute
   '/settings/usage': typeof SettingsUsageRoute
   '/settings/': typeof SettingsIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/courses/$courseId/brief': typeof CoursesCourseIdBriefRoute
 }
 export interface FileRoutesByTo {
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/settings/account': typeof SettingsAccountRoute
   '/settings/usage': typeof SettingsUsageRoute
   '/settings': typeof SettingsIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/courses/$courseId/brief': typeof CoursesCourseIdBriefRoute
 }
 export interface FileRoutesById {
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/settings/account': typeof SettingsAccountRoute
   '/settings/usage': typeof SettingsUsageRoute
   '/settings/': typeof SettingsIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/courses/$courseId_/brief': typeof CoursesCourseIdBriefRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/settings/account'
     | '/settings/usage'
     | '/settings/'
+    | '/api/auth/$'
     | '/courses/$courseId/brief'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/settings/account'
     | '/settings/usage'
     | '/settings'
+    | '/api/auth/$'
     | '/courses/$courseId/brief'
   id:
     | '__root__'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/settings/account'
     | '/settings/usage'
     | '/settings/'
+    | '/api/auth/$'
     | '/courses/$courseId_/brief'
   fileRoutesById: FileRoutesById
 }
@@ -144,6 +156,7 @@ export interface RootRouteChildren {
   SettingsAccountRoute: typeof SettingsAccountRoute
   SettingsUsageRoute: typeof SettingsUsageRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   CoursesCourseIdBriefRoute: typeof CoursesCourseIdBriefRoute
 }
 
@@ -205,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsUsageRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/courses/$courseId_/brief': {
       id: '/courses/$courseId_/brief'
       path: '/courses/$courseId/brief'
@@ -224,6 +244,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsAccountRoute: SettingsAccountRoute,
   SettingsUsageRoute: SettingsUsageRoute,
   SettingsIndexRoute: SettingsIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
   CoursesCourseIdBriefRoute: CoursesCourseIdBriefRoute,
 }
 export const routeTree = rootRouteImport

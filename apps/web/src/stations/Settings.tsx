@@ -259,7 +259,14 @@ export function UsageSection() {
 
 /* --- Account -------------------------------------------------------------- */
 
-export function AccountSection({ onSignOut }: { onSignOut: () => void }) {
+export function AccountSection({
+  onSignOut,
+  signOutFailed,
+}: {
+  onSignOut: () => void
+  /** Set when the server never confirmed sign-out; the Student stays here. */
+  signOutFailed?: boolean
+}) {
   const [name, setName] = useState(student.name)
   const [saved, setSaved] = useState(false)
   const [confirming, setConfirming] = useState(false)
@@ -318,6 +325,11 @@ export function AccountSection({ onSignOut }: { onSignOut: () => void }) {
               <p className="supporting mt-1.5 text-[0.875rem] text-ink-soft">
                 ends this session. every harness connection stays as it is.
               </p>
+              {signOutFailed && (
+                <p role="alert" className="label mt-3 text-[0.8125rem] text-fail">
+                  couldn't sign out. try again.
+                </p>
+              )}
             </div>
             <Button variant="quiet" onClick={onSignOut}>
               sign out
