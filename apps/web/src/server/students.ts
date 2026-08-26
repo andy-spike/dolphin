@@ -14,20 +14,20 @@ export type StudentSession = NonNullable<Awaited<ReturnType<Auth['api']['getSess
  * boundary.
  */
 
-/** Resolves the signed-in Student's session from the given request headers, or null. */
-export async function resolveStudentSession(headers: Headers): Promise<StudentSession | null> {
+/** Resolves the signed-in Student's session from the current Request, or null. */
+export async function resolveStudentSession(request: Request): Promise<StudentSession | null> {
   const [{ env }] = await Promise.all([import('cloudflare:workers')])
-  // Session validation only reads the cookie against D1; the origin is used for
-  // URL building, so a same-origin fallback is safe here. Browsers omit
-  // `origin` on plain GET navigations.
-  const origin = headers.get('origin') ?? 'http://localhost:5173'
-  const auth = createAuth(env, origin)
-  return auth.api.getSession({ headers })
+  // Origin comes from the request URL itself, matching the mounted auth
+  // handler: Better Auth prefixes session cookies with `__Secure-` when the
+  // baseURL is HTTPS, so any assumed or defaulted origin would look up the
+  // wrong cookie name (and plain GET navigations carry no `origin` header).
+  const auth = createAuth(env, new URL(request.url).origin)
+  return auth.api.getSession({ headers: new Headers(request.headers) })
 }
 
 /** Resolves the current session or rejects anonymous callers. Protected server fns start here. */
-export async function requireStudent(headers: Headers): Promise<StudentSession> {
-  const session = await resolveStudentSession(headers)
+export async function requireStudent(request: Request): Promise<StudentSession> {
+  const session = await resolveStudentSession(request)
   if (!session) {
     throw new Error('unauthorized: this data needs a signed-in Student')
   }

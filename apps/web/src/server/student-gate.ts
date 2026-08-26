@@ -26,7 +26,7 @@ export const studentGate = createMiddleware().server(async ({ request, next }) =
   if (!url.pathname.startsWith('/') || url.pathname.startsWith('/api/')) return next()
   if (isPublicPath(url.pathname)) return next()
 
-  const session = await resolveStudentSession(new Headers(request.headers))
+  const session = await resolveStudentSession(request)
   if (session) return next()
 
   return new Response(null, {

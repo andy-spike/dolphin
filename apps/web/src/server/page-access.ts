@@ -8,10 +8,10 @@ import { createServerFn } from '@tanstack/react-start'
  * this via the path check in __root.tsx.
  */
 export const getStudentPage = createServerFn({ method: 'GET' }).handler(async () => {
-  const [{ getRequestHeaders }, { resolveStudentSession }] = await Promise.all([
+  const [{ getRequest }, { resolveStudentSession }] = await Promise.all([
     import('@tanstack/react-start/server'),
     import('./students'),
   ])
 
-  return resolveStudentSession(getRequestHeaders())
+  return resolveStudentSession(getRequest())
 })

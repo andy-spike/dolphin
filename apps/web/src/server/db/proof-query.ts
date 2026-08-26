@@ -8,13 +8,13 @@ import { createServerFn } from '@tanstack/react-start'
 // client bundle; TanStack Start runs this handler server-side only.
 export const getMigrationCheckNote = createServerFn({ method: 'GET' }).handler(
   async () => {
-    const [{ getRequestHeaders }, { requireStudent }, { readProofRow }] = await Promise.all([
+    const [{ getRequest }, { requireStudent }, { readProofRow }] = await Promise.all([
       import('@tanstack/react-start/server'),
       import('../students'),
       import('./read-proof'),
     ])
 
-    await requireStudent(getRequestHeaders())
+    await requireStudent(getRequest())
 
     const [{ env }] = await Promise.all([import('cloudflare:workers')])
     return (await readProofRow(env.DB))?.note ?? null

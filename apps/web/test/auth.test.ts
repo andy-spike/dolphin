@@ -16,17 +16,17 @@ const fetchHandler = (request: Request) => exports.default.fetch(request)
 
 // The self-fetch layer follows redirects by default, so redirect assertions
 // must send `redirect: 'manual'` to observe the raw 3xx.
-function pageRequest(path: string, cookie?: string): Request {
+function pageRequest(path: string, cookie?: string, origin = ORIGIN): Request {
   const headers = new Headers({ accept: 'text/html' })
   if (cookie) headers.set('cookie', cookie)
-  return new Request(`${ORIGIN}${path}`, { headers, redirect: 'manual' })
+  return new Request(`${origin}${path}`, { headers, redirect: 'manual' })
 }
 
 /** Headers a same-origin browser would send on an auth POST. */
-function browserJsonHeaders(cookie?: string): Headers {
+function browserJsonHeaders(cookie?: string, origin = ORIGIN): Headers {
   const headers = new Headers({
     'content-type': 'application/json',
-    origin: ORIGIN,
+    origin,
   })
   if (cookie) headers.set('cookie', cookie)
   return headers
@@ -131,17 +131,21 @@ describe('ticket 03: email/password auth over the worker boundary', () => {
     },
   )
 
-  it('the protected server helper rejects anonymous headers', async () => {
+  it('the protected server helper rejects anonymous requests', async () => {
     const { requireStudent } = await import('../src/server/students')
-    await expect(requireStudent(new Headers())).rejects.toThrow(/unauthorized/i)
+    await expect(requireStudent(new Request(`${ORIGIN}/courses/course-01`))).rejects.toThrow(
+      /unauthorized/i,
+    )
   })
 
-  it('the protected server helper resolves a real session from authenticated headers', async () => {
+  it('the protected server helper resolves a real session from an authenticated request', async () => {
     const { creds, res } = await signUpNewAccount()
     expect(res.status).toBe(200)
 
     const { requireStudent } = await import('../src/server/students')
-    const session = await requireStudent(new Headers({ cookie: cookiePairs(res).join('; ') }))
+    const session = await requireStudent(new Request(`${ORIGIN}/courses/course-01`, {
+      headers: { cookie: cookiePairs(res).join('; ') },
+    }))
     expect(session.user.email).toBe(creds.email)
   })
 
@@ -169,5 +173,30 @@ describe('ticket 03: email/password auth over the worker boundary', () => {
     const page = await fetchHandler(pageRequest('/', oldCookiePair))
     expect([301, 302, 307, 308]).toContain(page.status)
     expect(page.headers.get('location')).toContain('/sign-in')
+  })
+})
+
+describe('regression: session resolution derives origin from the request', () => {
+  // Production sign-in over HTTPS makes Better Auth issue `__Secure-`-prefixed
+  // cookies (the prefix follows the baseURL protocol). A plain GET navigation
+  // sends no `origin` header, so resolution must come from the request URL.
+  it('a page GET without Origin still resolves the session created over HTTPS', async () => {
+    const httpsOrigin = 'https://dolphin.example'
+    const creds = freshCredentials()
+
+    const signUp = await fetchHandler(new Request(`${httpsOrigin}/api/auth/sign-up/email`, {
+      method: 'POST',
+      headers: browserJsonHeaders(undefined, httpsOrigin),
+      body: JSON.stringify(creds),
+    }))
+    expect(signUp.status, await signUp.text()).toBe(200)
+
+    const cookies = cookiePairs(signUp)
+    expect(cookies.some((c) => c.startsWith('__Secure-better-auth.session_token='))).toBe(true)
+
+    // The cookie carries no Origin header: browsers omit it on navigations.
+    const page = await fetchHandler(pageRequest('/', cookies.join('; '), httpsOrigin))
+    expect(page.status).toBe(200)
+    expect(await page.text()).toContain('course library')
   })
 })
