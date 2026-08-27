@@ -24,11 +24,6 @@ type Stepper = {
   onNext?: () => void
 }
 
-/**
- * Compact strip, used on every screen. A toolbar of full-height cells divided by
- * hairlines: the mark, then what is open and what state it is in, then where you
- * are inside it. Without a Course (the Course Library itself) it is the mark alone.
- */
 export function StationHead({
   course,
   station,
@@ -41,9 +36,9 @@ export function StationHead({
   station: string
   stepper?: Stepper
   onLibrary?: () => void
-  /** Makes the Course name a way back to its Overview. */
+
   onCourse?: () => void
-  /** Off only where the Student is not signed in yet. */
+
   account?: boolean
 }) {
   return (
@@ -73,10 +68,6 @@ export function StationHead({
   )
 }
 
-/**
- * The one place the brand is drawn, and the way back to the Course Library from
- * every station. Off the Library itself, a chevron hints the mark is a way back.
- */
 function Identity({ onLibrary, divided }: { onLibrary?: () => void; divided: boolean }) {
   const mark = (
     <span className="grid size-[1.5rem] shrink-0 place-items-center text-[1.1875rem] leading-none transition-transform duration-150 group-active/mark:scale-[0.94]">

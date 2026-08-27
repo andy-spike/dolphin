@@ -10,7 +10,7 @@ type DemoStore = {
   toggleComplete: (course: Course, index: number) => void
   saveBrief: (id: string, brief: BriefEdit) => void
   deleteCourse: (id: string) => void
-  /** A Course Lock: Tailor Mode holds the Course while it rewrites files. */
+
   locked: boolean
   setLocked: (v: boolean) => void
   empty: boolean
@@ -23,7 +23,6 @@ type DemoStore = {
 
 const DemoContext = createContext<DemoStore | null>(null)
 
-/** Holds the mock Course Library and reviewer-only demo switches across route navigation. */
 export function DemoProvider({ children }: { children: ReactNode }) {
   const [courses, setCourses] = useState(initialCourses)
   const [empty, setEmpty] = useState(false)

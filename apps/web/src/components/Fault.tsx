@@ -7,7 +7,6 @@ const Path = ({ children }: { children: ReactNode }) => (
   <code className="numeral bg-fail/8 px-1 py-0.5 text-[0.8125rem] text-fail">{children}</code>
 )
 
-/** Every Fault names the problem, then the recovery. Never a modal. */
 const faults: Record<Exclude<FaultKind, 'none'>, { problem: string; recovery: ReactNode }> = {
   agent: {
     problem: 'no usable harness connection.',

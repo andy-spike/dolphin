@@ -11,17 +11,7 @@ import { authClient } from '@/lib/auth-client'
 
 type Mode = 'sign-in' | 'sign-up'
 
-/**
- * The front door, set the way every other station is: a ruled sheet on paper,
- * and a `paper-sunk` panel to its right — the same two-column frame the
- * Syllabus and the Lesson use, so the first screen is already the workspace.
- *
- * The submit is a real Better Auth call over `/api/auth/*`; wrong credentials
- * and server faults land back on the form as one generic line (the response
- * never says whether an address exists). Google sign-in waits for ticket 04,
- * so its button states that instead of faking anything.
- */
-export function SignInStation({ mode }: { mode: Mode }) {
+export function SignIn({ mode }: { mode: Mode }) {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -60,7 +50,6 @@ export function SignInStation({ mode }: { mode: Mode }) {
       if (error) return fail()
     }
 
-    // Session cookie is set by the auth response; the reload picks it up.
     setSubmitting(false)
     navigate({ to: '/' })
   }
@@ -82,7 +71,6 @@ export function SignInStation({ mode }: { mode: Mode }) {
             </p>
           </header>
 
-          {/* The failure line owns this region so a screen reader hears it move in. */}
           <form onSubmit={submit} aria-describedby={failed ? 'auth-error' : undefined} className={cn('mt-11', opening)}>
             {signUp && (
               <Field label="name" hint="what the tutor calls you.">
@@ -161,7 +149,6 @@ export function SignInStation({ mode }: { mode: Mode }) {
             <span className="h-px flex-1 bg-rule" />
           </div>
 
-          {/* Ticket 04 wires the real provider; until then the button admits it. */}
           <button
             type="button"
             disabled
@@ -204,11 +191,6 @@ function Wordmark() {
   )
 }
 
-/**
- * The five Course States, in lifecycle order, each in its own hue: cool at the
- * start, warm in the Student's hands, green when it is done. It is the same
- * `StateChip` vocabulary every later screen uses, hung on one hairline spine.
- */
 function Lifecycle() {
   return (
     <aside className="flex shrink-0 flex-col border-t border-rule bg-paper-sunk lg:w-[24rem] lg:overflow-y-auto lg:border-t-0 lg:border-l xl:w-[27rem]">
@@ -220,11 +202,11 @@ function Lifecycle() {
             const tone = stateTone[state]
             return (
               <li key={state} className="relative flex gap-5 pb-9 last:pb-0">
-                {/* the spine runs behind the dots; each dot's ring cuts it */}
+
                 {i < lifecycle.length - 1 && (
                   <span className="absolute inset-y-0 left-[0.3125rem] w-px bg-rule-strong" aria-hidden />
                 )}
-                {/* a legend, not a live Course, so nothing here pulses */}
+
                 <span className={cn('relative z-10 mt-[0.4375rem] size-2.5 shrink-0 ring-4 ring-paper-sunk', tone.fill)} />
                 <div className="min-w-0">
                   <p className={cn('label', tone.text)}>{state.toLowerCase()}</p>
@@ -243,7 +225,6 @@ function Lifecycle() {
   )
 }
 
-/** Google's own mark. Not a lucide glyph, because it identifies a company. */
 function GoogleMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden="true">

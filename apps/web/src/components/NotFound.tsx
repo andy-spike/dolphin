@@ -4,17 +4,12 @@ import { Button } from '@/components/ui/button'
 import { StationHead } from '@/components/StationHead'
 import { Masthead, opening } from '@/components/Ruled'
 
-/**
- * A missing address is not a Fault — nothing broke, the Student simply asked
- * for a station that does not exist. So it is set as an ordinary station, and
- * it spends its rows saying where the Student can actually go.
- */
-export function NotFoundStation({
+export function NotFound({
   what,
   onLibrary,
   onNew,
 }: {
-  /** What was looked for, when the address named something specific. */
+
   what?: string
   onLibrary: () => void
   onNew: () => void

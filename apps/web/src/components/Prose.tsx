@@ -1,6 +1,5 @@
 import type { Block } from '@/mock/types'
 
-/** Lesson prose. One measure, one face, and more air above a heading than below it. */
 export function Prose({ blocks }: { blocks: Block[] }) {
   return (
     <>

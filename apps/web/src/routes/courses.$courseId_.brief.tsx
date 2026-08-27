@@ -1,11 +1,10 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { BriefStation } from '@/stations/Brief'
-import { NotFoundStation } from '@/stations/NotFound'
+import { Brief } from '@/components/Brief'
+import { NotFound } from '@/components/NotFound'
 import { useDemoStore } from '@/lib/demo-store'
 
 export const Route = createFileRoute('/courses/$courseId_/brief')({ component: EditBrief })
 
-/** The Brief a Course was generated from. Saving it never touches lessons already on disk. */
 function EditBrief() {
   const { courseId } = Route.useParams()
   const { courses, saveBrief } = useDemoStore()
@@ -15,10 +14,10 @@ function EditBrief() {
   const toLibrary = () => navigate({ to: '/' })
   const back = () => navigate({ to: '/courses/$courseId', params: { courseId } })
 
-  if (!course) return <NotFoundStation what={courseId} onLibrary={toLibrary} onNew={() => navigate({ to: '/new' })} />
+  if (!course) return <NotFound what={courseId} onLibrary={toLibrary} onNew={() => navigate({ to: '/new' })} />
 
   return (
-    <BriefStation
+    <Brief
       course={course}
       onSubmit={(values) => {
         saveBrief(course.id, values)

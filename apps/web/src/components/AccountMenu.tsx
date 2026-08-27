@@ -12,12 +12,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-/**
- * The last cell in the station strip, and the only permanent way to the
- * Student's own settings. It carries the Student's initials rather than a
- * photograph: Dolphin has no avatars, and a letter on ink is how this system
- * draws identity already.
- */
 export function AccountMenu() {
   const navigate = useNavigate()
   const [signingOut, setSigningOut] = useState(false)
@@ -25,8 +19,6 @@ export function AccountMenu() {
   const connected = harnesses.filter((h) => h.connection).length
   const jobs = usage[0]
 
-  // Invalidate the server session first; only then leave for sign-in. A failed
-  // attempt keeps the Student on this page with a retryable message.
   const signOut = async () => {
     if (signingOut) return
     setSigningOut(true)
@@ -51,7 +43,7 @@ export function AccountMenu() {
           <span className="label grid size-[1.5rem] shrink-0 place-items-center bg-ink pt-px text-[0.625rem] text-paper transition-transform duration-150 group-active:scale-[0.94]">
             {student.initials}
           </span>
-          {/* The lamp already reports the agent; this reports the connection behind it. */}
+
           <span className="label hidden text-ink-faint transition-colors group-hover:text-ink lg:inline">
             {connected} connected
           </span>
@@ -85,9 +77,6 @@ export function AccountMenu() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* The dropdown closes the moment its item is picked, so failure has to
-          surface outside it. Anchored under the header strip by StationHead's
-          relative positioning; clears on the next attempt. */}
       {signOutFailed && (
         <p
           role="alert"

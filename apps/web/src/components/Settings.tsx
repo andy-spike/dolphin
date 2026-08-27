@@ -16,12 +16,7 @@ const sections = [
   { to: '/settings/account', label: 'account' },
 ] as const
 
-/**
- * Settings is a ruled sheet like every other station — masthead, one heavy
- * rule, hairline rows. Its three sections are separate addresses, so a link
- * from the account menu lands on the one the Student asked for.
- */
-export function SettingsStation({
+export function Settings({
   title,
   lead,
   active,
@@ -42,7 +37,6 @@ export function SettingsStation({
         <div className="mx-auto w-full max-w-[52rem] px-6 pt-14 pb-24 md:px-10 md:pt-20">
           <Masthead title={title} lead={lead} />
 
-          {/* underlined labels, not pills — the same tab idiom the Tutor uses */}
           <nav className="mt-11 flex gap-7 border-b border-ink/85">
             {sections.map((s) => (
               <Link
@@ -67,16 +61,6 @@ export function SettingsStation({
   )
 }
 
-/* --- Harness Connections -------------------------------------------------- */
-
-/**
- * The screen the whole product rests on. A Harness Connection is a permission
- * the Student grants and can take back, so the row states what it grants, what
- * it has already spent, and how to revoke it — all before the button.
- *
- * Live reads blue, the way the agent lamp does. Course State hues never appear
- * here: a connection is not a Course.
- */
 export function HarnessSection() {
   const [harnesses, setHarnesses] = useState(seedHarnesses)
 
@@ -153,7 +137,7 @@ function HarnessRow({ harness, onToggle }: { harness: Harness; onToggle: () => v
             <p className="label mt-2 flex flex-wrap items-center gap-2.5 text-ink-faint">
               {harness.vendor}
               <span className="size-[3px] bg-rule-strong" />
-              {/* blue is live here for the same reason the agent lamp is blue */}
+
               <span className={cn('inline-flex items-center gap-1.5', live ? 'text-accent' : 'text-ink-faint')}>
                 <span className={cn('size-1.5', live ? 'bg-accent' : 'bg-rule-strong')} />
                 {live ? 'connected' : 'not connected'}
@@ -194,14 +178,6 @@ function Cell({ term, value, mono }: { term: string; value: string; mono?: boole
   )
 }
 
-/* --- Usage ---------------------------------------------------------------- */
-
-/**
- * What Dolphin has spent, not what is left. Dolphin sets no allowance of its
- * own, so a Usage line is a plain count — a Spine would draw a ceiling that
- * does not exist. The only limit Dolphin imposes is the Course Lock, and it is
- * about consistency rather than volume, so it is stated in words underneath.
- */
 export function UsageSection() {
   return (
     <>
@@ -257,14 +233,12 @@ export function UsageSection() {
   )
 }
 
-/* --- Account -------------------------------------------------------------- */
-
 export function AccountSection({
   onSignOut,
   signOutFailed,
 }: {
   onSignOut: () => void
-  /** Set when the server never confirmed sign-out; the Student stays here. */
+
   signOutFailed?: boolean
 }) {
   const [name, setName] = useState(student.name)
@@ -336,7 +310,6 @@ export function AccountSection({
             </Button>
           </div>
 
-          {/* Confirming washes the row `fail`, the same way the Course Overview frames its delete. */}
           <div
             className={cn(
               'flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-b py-6 transition-colors',

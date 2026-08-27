@@ -1,12 +1,5 @@
 import { cn } from '@/lib/utils'
 
-/**
- * The ruled sheet. Every station in Dolphin is set the same way: a masthead in
- * display type, one heavy `ink/85` rule under it, then rows divided by
- * hairlines. Labels hang in a left column; the answer keeps the rest of the
- * width and is the largest thing in its row. No station uses a card.
- */
-
 export function Masthead({
   title,
   lead,
@@ -32,7 +25,6 @@ export function Masthead({
   )
 }
 
-/** Label and hint hang in the left column; the control keeps the rest. */
 export function Field({
   label,
   hint,
@@ -60,7 +52,6 @@ export function Field({
   )
 }
 
-/** A term and its value, for reading back what the Student already decided. */
 export function Fact({ term, children }: { term: string; children: React.ReactNode }) {
   return (
     <div className="flex gap-4 border-b border-rule-soft py-3">
@@ -70,14 +61,7 @@ export function Fact({ term, children }: { term: string; children: React.ReactNo
   )
 }
 
-/**
- * A text input set on the row's own rule, not in a box, so the Student's answer
- * is the largest thing in its row. The row rule is the underline — it goes
- * `accent` while the field has focus — so a sheet never draws two hairlines
- * where it means one.
- */
 export const underline =
   'h-auto w-full rounded-none border-0 bg-transparent px-0 py-0 title text-[1.3125rem] md:text-[1.3125rem] outline-none placeholder:font-normal placeholder:text-ink-faint focus-visible:ring-0'
 
-/** The one heavy rule in the system: what opens a sheet. */
 export const opening = 'border-t border-ink/85'

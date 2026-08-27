@@ -2,10 +2,6 @@ import { cn } from '@/lib/utils'
 import { stateTone } from '@/lib/state'
 import type { CourseState } from '@/mock/types'
 
-/**
- * Course State reads as a mark plus its name, in the State's own Flexoki hue.
- * A live State (an agent is working right now) pulses; the rest hold steady.
- */
 export function StateChip({ state, className }: { state: CourseState; className?: string }) {
   const tone = stateTone[state]
   return (

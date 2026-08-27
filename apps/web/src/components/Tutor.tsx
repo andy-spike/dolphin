@@ -17,7 +17,6 @@ const REASONING = ['low', 'medium', 'high'] as const
 
 const daysAgo = (n: number) => new Date(Date.now() - n * 86_400_000)
 
-// Seed extra Tutor threads on older days so the grouped history reads like a real list.
 const tutorThreadYesterday: Turn[] = [
   { from: 'student', text: 'Can you explain quorum consistency one more time?' },
   { from: 'tutor', text: 'A quorum is the minimum number of replicas that must agree. The read returns the newest version among the replicas it contacts.' },
@@ -29,7 +28,7 @@ const tutorThreadEarlier: Turn[] = [
 
 const MIN_TUTOR_WIDTH = 300
 const MAX_TUTOR_WIDTH = 560
-// ponytail: fixed default, not the old xl:23rem/2xl:27rem responsive step. Add a resize-observer default if that's missed.
+
 const DEFAULT_TUTOR_WIDTH = 400
 
 export function TutorMargin({ lessonTitle, lessonComplete }: { lessonTitle: string; lessonComplete: boolean }) {
@@ -109,7 +108,6 @@ export function TutorMargin({ lessonTitle, lessonComplete }: { lessonTitle: stri
   )
 }
 
-/** Sits just outside the sidebar's left edge, so it slides with it as the Tutor resizes or collapses. */
 function DesktopTrigger() {
   const { open, setOpen } = useSidebar()
   return (
@@ -136,7 +134,6 @@ function MobileTrigger() {
   )
 }
 
-/** Drags the Tutor's left edge. Width is computed from the viewport's right edge, since the sidebar sits flush against it. */
 function ResizeHandle({ onResize }: { onResize: (w: number) => void }) {
   const dragging = useRef(false)
 
@@ -212,12 +209,10 @@ function Panel({
 
   const toFoot = () => requestAnimationFrame(() => scroller.current?.scrollTo({ top: 9e6, behavior: 'smooth' }))
 
-  // The newest turn is what the Student came back for; open on it.
   useEffect(() => {
     scroller.current?.scrollTo({ top: 9e6 })
   }, [mode, activeId])
 
-  // The thread fades into the composer, unless the Student has already read to the end.
   useEffect(() => {
     const el = scroller.current
     if (!el) return
@@ -389,7 +384,6 @@ function Panel({
   )
 }
 
-/** The thread's title is its first Student message, or a placeholder for an empty one. */
 function threadTitle(t: Thread) {
   const first = t.turns.find((x) => x.from === 'student')
   return first?.text ?? 'new thread'
@@ -404,7 +398,6 @@ function dateGroupLabel(d: Date) {
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }).toLowerCase()
 }
 
-/** Newest first, bucketed by day so the list reads as sections instead of one flat pile. */
 function threadsByDate(threads: Thread[]) {
   const groups: { label: string; items: { thread: Thread; i: number }[] }[] = []
   const sorted = threads
@@ -504,7 +497,7 @@ function TurnView({ turn, streaming }: { turn: Turn; streaming: boolean }) {
       </div>
     )
   }
-  // Tutor speaks in the margin: a name and prose, no container competing with it.
+
   return (
     <div className="px-1">
       <p className="label mb-1.5 text-ink-faint normal-case">tutor</p>

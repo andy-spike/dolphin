@@ -1,7 +1,4 @@
-/**
- * Synthetic demonstration data. Every Course, Lesson and Tutor reply below was
- * authored for this design pass — none of it came from a Generator run.
- */
+
 import type {
   AgentJobRecord,
   Course,
@@ -23,7 +20,6 @@ const lesson = (
   exercises: Lesson['exercises'],
 ): Lesson => ({ id: `l${n}`, n, module, title, minutes, complete, concept, examples, exercises })
 
-/** Chunks a course's Lessons into evenly-sized Modules, for demo Courses with no authored outline. */
 function autoModules(course: Course, size = 3) {
   course.modules = []
   course.lessons.forEach((l, i) => {
@@ -370,11 +366,6 @@ export const generatingLog = [
   { n: 5, title: 'Reading a plan that lied to you', words: 0, done: false },
 ]
 
-/**
- * Lesson 3 is the one written out in full. Every other Lesson borrows its body
- * so each station renders at real density — the titles are the honest seam in
- * this mock, not the layout.
- */
 const body = systemDesign.lessons[2]
 for (const course of library) {
   for (const l of course.lessons) {
@@ -385,9 +376,6 @@ for (const course of library) {
     }
   }
 }
-
-// --- The Student, their Harness Connections, and their Usage -----------------
-// Synthetic, like everything above. No Harness was contacted to write this.
 
 export const student: Student = {
   name: 'Andy Sanabria',
@@ -479,7 +467,6 @@ export const agentJobs: AgentJobRecord[] = [
   },
 ]
 
-/** The five Course States in lifecycle order, with what each one means. */
 export const lifecycle: { state: CourseState; line: string }[] = [
   { state: 'Drafting', line: 'you and the generator argue about the syllabus.' },
   { state: 'Generating', line: 'the course is written, one lesson at a time.' },

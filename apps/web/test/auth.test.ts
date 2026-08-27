@@ -1,28 +1,16 @@
 import { exports } from 'cloudflare:workers'
 import { describe, expect, it } from 'vitest'
 
-// Ticket 03 seam: the Worker HTTP boundary, exercised like the smoke test but
-// against the mounted Better Auth routes (`/api/auth/*`), the guarded pages,
-// and the protected server helper. Runs on emulated D1 migrated by
-// test/setup/apply-migrations.ts. Nothing about Better Auth or Drizzle is
-// mocked.
-//
-// Cookie hygiene: parse every `set-cookie` header and forward name=value
-// pairs only. Passwords, tokens, and hashes are never logged or snapshotted.
-
 const ORIGIN = 'http://localhost:5173'
 
 const fetchHandler = (request: Request) => exports.default.fetch(request)
 
-// The self-fetch layer follows redirects by default, so redirect assertions
-// must send `redirect: 'manual'` to observe the raw 3xx.
 function pageRequest(path: string, cookie?: string, origin = ORIGIN): Request {
   const headers = new Headers({ accept: 'text/html' })
   if (cookie) headers.set('cookie', cookie)
   return new Request(`${origin}${path}`, { headers, redirect: 'manual' })
 }
 
-/** Headers a same-origin browser would send on an auth POST. */
 function browserJsonHeaders(cookie?: string, origin = ORIGIN): Headers {
   const headers = new Headers({
     'content-type': 'application/json',
@@ -43,7 +31,6 @@ function sessionCookie(res: Response): string {
 
 type Credentials = { email: string; password: string; name: string }
 
-/** Unique credentials per call, kept in memory only. */
 function freshCredentials(): Credentials {
   return {
     email: `t03-${crypto.randomUUID().slice(0, 8)}@example.test`,
@@ -52,7 +39,6 @@ function freshCredentials(): Credentials {
   }
 }
 
-/** Signs up a brand-new account over the real auth endpoint; returns its cookies. */
 async function signUpNewAccount(creds = freshCredentials()): Promise<{ creds: Credentials; res: Response }> {
   const res = await fetchHandler(new Request(`${ORIGIN}/api/auth/sign-up/email`, {
     method: 'POST',
@@ -68,7 +54,6 @@ describe('ticket 03: email/password auth over the worker boundary', () => {
     expect(res.status, await res.text()).toBe(200)
     expect(sessionCookie(res)).toMatch(/^better-auth\.session_token=/)
 
-    // The cookie identifies its owner at the session endpoint.
     const me = await fetchHandler(new Request(`${ORIGIN}/api/auth/get-session`, {
       headers: { cookie: cookiePairs(res).join('; ') },
     }))
@@ -162,14 +147,12 @@ describe('ticket 03: email/password auth over the worker boundary', () => {
     }))
     expect(signOut.status).toBe(200)
 
-    // Old cookie is worthless at the session endpoint...
     const me = await fetchHandler(new Request(`${ORIGIN}/api/auth/get-session`, {
       headers: { cookie: oldCookiePair },
     }))
     const meBody = (await me.json()) as { user?: unknown } | null
     expect(meBody?.user ?? null).toBeFalsy()
 
-    // ...and worthless to the guarded library.
     const page = await fetchHandler(pageRequest('/', oldCookiePair))
     expect([301, 302, 307, 308]).toContain(page.status)
     expect(page.headers.get('location')).toContain('/sign-in')
@@ -177,9 +160,7 @@ describe('ticket 03: email/password auth over the worker boundary', () => {
 })
 
 describe('regression: session resolution derives origin from the request', () => {
-  // Production sign-in over HTTPS makes Better Auth issue `__Secure-`-prefixed
-  // cookies (the prefix follows the baseURL protocol). A plain GET navigation
-  // sends no `origin` header, so resolution must come from the request URL.
+
   it('a page GET without Origin still resolves the session created over HTTPS', async () => {
     const httpsOrigin = 'https://dolphin.example'
     const creds = freshCredentials()
@@ -194,7 +175,6 @@ describe('regression: session resolution derives origin from the request', () =>
     const cookies = cookiePairs(signUp)
     expect(cookies.some((c) => c.startsWith('__Secure-better-auth.session_token='))).toBe(true)
 
-    // The cookie carries no Origin header: browsers omit it on navigations.
     const page = await fetchHandler(pageRequest('/', cookies.join('; '), httpsOrigin))
     expect(page.status).toBe(200)
     expect(await page.text()).toContain('course library')

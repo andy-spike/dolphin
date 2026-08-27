@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react'
 
-/**
- * Reveals text the way the agent SDKs deliver it. This is the app's one
- * authored motion: the Generator, the Tutor and the Generating station all
- * use it, and nothing else animates on arrival.
- */
 export function useStream(text: string, enabled: boolean, cps = 260) {
   const [n, setN] = useState(enabled ? 0 : text.length)
 

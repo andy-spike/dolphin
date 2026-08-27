@@ -6,7 +6,7 @@ import {
   redirect,
   useNavigate,
 } from '@tanstack/react-router'
-import { NotFoundStation } from '@/stations/NotFound'
+import { NotFound as NotFoundScreen } from '@/components/NotFound'
 import { DemoBar } from '@/DemoBar'
 import { Lamp } from '@/components/Lamp'
 import { Fault } from '@/components/Fault'
@@ -24,12 +24,7 @@ export const Route = createRootRoute({
       { title: 'Dolphin' },
     ],
   }),
-  // Centralized route guard, two halves. `studentGate` (root server
-  // middleware) sends a real 307 for anonymous SSR page requests;
-  // `beforeLoad` covers client navigations only (import.meta.env.SSR is false
-  // in the client bundle), throwing a router redirect to /sign-in. UX only —
-  // protected server functions still enforce the session themselves (see
-  // src/server/students.ts).
+
   server: {
     middleware: [studentGate],
   },
@@ -49,7 +44,7 @@ function NotFound() {
   const navigate = useNavigate()
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-paper">
-      <NotFoundStation onLibrary={() => navigate({ to: '/' })} onNew={() => navigate({ to: '/new' })} />
+      <NotFoundScreen onLibrary={() => navigate({ to: '/' })} onNew={() => navigate({ to: '/new' })} />
     </div>
   )
 }

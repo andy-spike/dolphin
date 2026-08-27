@@ -8,7 +8,6 @@ const copy: Record<Health, string> = {
   down: 'no agent found',
 }
 
-/** Whether the Student's own coding agent is alive. Blue means live; nothing else does. */
 export function Lamp({ health }: { health: Health }) {
   return (
     <div className="group relative flex items-center justify-center py-1" title={copy[health]}>

@@ -1,6 +1,5 @@
 import type { Module } from '@/mock/types'
 
-/** Buckets a module-ordered list under its Module, in first-seen order. */
 export function groupByModule<T extends { module: number }>(items: T[], modules: Module[]) {
   const groups: { module: Module; items: T[] }[] = []
   for (const item of items) {

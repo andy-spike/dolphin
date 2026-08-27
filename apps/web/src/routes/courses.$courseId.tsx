@@ -5,7 +5,7 @@ import { GeneratingStation } from '@/stations/Generating'
 import { CourseOverviewStation } from '@/stations/CourseOverview'
 import { LessonStation } from '@/stations/Lesson'
 import { CourseCloseStation } from '@/stations/CourseClose'
-import { NotFoundStation } from '@/stations/NotFound'
+import { NotFound } from '@/components/NotFound'
 
 export const Route = createFileRoute('/courses/$courseId')({
   validateSearch: (search: Record<string, unknown>): { lesson?: number } => {
@@ -15,12 +15,6 @@ export const Route = createFileRoute('/courses/$courseId')({
   component: CoursePage,
 })
 
-/**
- * The Course State decides the station; the Student never navigates to one
- * directly. A written Course opens on its Overview, and `?lesson=n` is what
- * opens a Lesson — so marking one complete can never recompute "first
- * incomplete" out from under the Student and jump them forward.
- */
 function CoursePage() {
   const { courseId } = Route.useParams()
   const { lesson } = Route.useSearch()
@@ -35,7 +29,7 @@ function CoursePage() {
     navigate({ to: '/courses/$courseId', params: { courseId: id }, search: { lesson: index } })
 
   if (!course)
-    return <NotFoundStation what={courseId} onLibrary={toLibrary} onNew={() => navigate({ to: '/new' })} />
+    return <NotFound what={courseId} onLibrary={toLibrary} onNew={() => navigate({ to: '/new' })} />
 
   switch (course.state) {
     case 'Drafting':

@@ -1,14 +1,6 @@
 import { sql } from 'drizzle-orm'
 import { sqliteTable, text, integer, index, uniqueIndex } from 'drizzle-orm/sqlite-core'
 
-// Better Auth core schema (user, session, account, verification) as emitted by
-// `npx auth@latest generate` for better-auth@1.7.2 + @better-auth/drizzle-adapter
-// (sqlite provider, identity model names). Field-for-field the current generated
-// core schema; the CLI's relation constants are omitted because the adapter
-// consumes plain table mappings and no joins are enabled yet.
-//
-// The proof table from ticket 02 stays below.
-
 export const user = sqliteTable('user', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
@@ -93,8 +85,6 @@ export const verification = sqliteTable(
   (table) => [index('verification_identifier_idx').on(table.identifier)],
 )
 
-// Trivial proof table for ticket 02: proves the D1 + Drizzle migration loop
-// end to end. Plumbing only — later tickets add the real product tables.
 export const migrationCheck = sqliteTable('migration_check', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   note: text('note').notNull(),

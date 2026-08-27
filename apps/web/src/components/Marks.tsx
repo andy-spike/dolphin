@@ -1,7 +1,3 @@
-/**
- * Company marks, drawn rather than iconified: a harness is identified by its
- * own logo, and lucide has no glyph that honestly stands for one.
- */
 
 export function ClaudeMark({ className }: { className?: string }) {
   return (

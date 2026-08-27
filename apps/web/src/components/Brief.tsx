@@ -11,19 +11,13 @@ const difficulties: Difficulty[] = ['beginner', 'intermediate', 'advanced']
 
 export type BriefValues = Pick<Course, 'topic' | 'goal' | 'difficulty' | 'timeBudget' | 'sources' | 'webSearch'>
 
-/**
- * The Brief is a ruled sheet, not a card: label and hint hang in the left
- * column and the answer is the largest thing in its row. The same sheet writes
- * a new Brief and edits the one a Course was generated from — editing it does
- * not rewrite lessons, and the sheet says so rather than implying otherwise.
- */
-export function BriefStation({
+export function Brief({
   course,
   onSubmit,
   onLibrary,
   onCancel,
 }: {
-  /** Present when the Student is editing the Brief of a Course that already exists. */
+
   course?: Course
   onSubmit: (values: BriefValues) => void
   onLibrary: () => void

@@ -164,10 +164,6 @@ function AdjacentLessonButton({
   )
 }
 
-/**
- * The lesson sets on a two-column frame: a narrow left margin, and one 38rem
- * reading column. Below `lg` the margin folds away and its contents move above.
- */
 function Frame({
   margin,
   children,
@@ -180,19 +176,13 @@ function Frame({
   const rowRef = useRef<HTMLDivElement>(null)
   const marginColRef = useRef<HTMLDivElement>(null)
 
-  // The margin column stretches to the section's full height by default (needed so a sticky
-  // label inside it has room to travel as the Student scrolls) — but align-items: baseline,
-  // the one thing that lines it up with the content's first line regardless of that content's
-  // font size, can't apply to a stretched item; a grid item is sized by stretch OR positioned
-  // by baseline, never both. So: borrow the grid's own baseline math for one frame to find the
-  // right offset, then bake it in as padding on the still-stretched column.
   useLayoutEffect(() => {
     const row = rowRef.current
     const marginCol = marginColRef.current
     if (!row || !marginCol) return
 
     const align = () => {
-      if (!marginCol.offsetParent) return // hidden below `lg`
+      if (!marginCol.offsetParent) return
       marginCol.style.paddingTop = '0px'
       row.style.alignItems = 'baseline'
       const baselineTop = marginCol.getBoundingClientRect().top
@@ -211,14 +201,12 @@ function Frame({
       <div ref={marginColRef} className="hidden lg:flex lg:items-start lg:justify-end">
         {margin}
       </div>
-      {/* The mobile-only heading before `children` stays in the DOM at lg+ (just hidden),
-          so it breaks `first:` on the block after it — force that block's margin here instead. */}
+
       <div className="min-w-0 max-w-[var(--measure)] lg:max-w-none lg:[&>h3+*]:mt-0">{children}</div>
     </div>
   )
 }
 
-/** The section name hangs in the margin and stays with the Student as they read. */
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mt-14 lg:mt-20">

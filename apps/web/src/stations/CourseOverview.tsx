@@ -11,14 +11,6 @@ import { CourseLock } from '@/components/CourseLock'
 import { Fact, opening } from '@/components/Ruled'
 import type { Course } from '@/mock/types'
 
-/**
- * What a Course looks like when it is not open. The Course Library is an index
- * of Courses; this is the index of one Course — where it stands, what is inside
- * it, the Brief that produced it, and the folder it lives in.
- *
- * It is the only station that holds a Course's whole shape at once, so it is
- * also where the Brief is edited and where a Course is deleted.
- */
 export function CourseOverviewStation({
   course,
   onLesson,
@@ -59,7 +51,6 @@ export function CourseOverviewStation({
             <p className="supporting mt-5 max-w-[54ch] text-ink-soft">{course.goal}</p>
           </header>
 
-          {/* where the Course stands, in its own hue — the Library row's right column, given room */}
           <div className={cn('mt-11 flex flex-wrap items-end justify-between gap-x-10 gap-y-6 pb-7', opening, 'pt-7')}>
             <div className="flex items-end gap-6">
               <p className={cn('numeral text-[3rem] leading-none tabular-nums', pct ? tone.text : 'text-ink-faint')}>

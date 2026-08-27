@@ -23,7 +23,6 @@ export function SyllabusStation({
   const [streamIndex, setStreamIndex] = useState(-1)
   const scroller = useRef<HTMLDivElement>(null)
 
-  // Open on the newest turn: the thread is a conversation already in progress.
   useEffect(() => {
     scroller.current?.scrollTo({ top: 9e6 })
   }, [])
@@ -52,7 +51,7 @@ export function SyllabusStation({
       <StationHead course={course} station="syllabus" onLibrary={onLibrary} />
 
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
-        {/* The agreed outline. This is the artefact; the chat is how it changes. */}
+
         <section className="min-h-0 shrink-0 bg-paper lg:w-[27rem] lg:overflow-y-auto lg:border-r lg:border-rule xl:w-[31rem]">
           <div className="station-in px-6 pt-10 pb-8 md:px-8">
             <h1 className="display text-[clamp(1.75rem,3.5vw,2.125rem)]">syllabus</h1>
@@ -104,7 +103,6 @@ export function SyllabusStation({
           </div>
         </section>
 
-        {/* Free chat until the Student and the Generator agree. */}
         <section className="flex min-h-0 flex-1 flex-col border-t border-rule bg-paper-sunk lg:border-t-0">
           <h2 className="label shrink-0 border-b border-rule bg-transparent px-6 py-4 text-ink-faint">generator</h2>
 
@@ -189,7 +187,6 @@ function Brief({ course, onEdit }: { course: Course; onEdit: () => void }) {
     </div>
   )
 }
-
 
 function Turn({ turn, streaming }: { turn: ChatTurn; streaming: boolean }) {
   const { shown, done } = useStream(turn.text, streaming && turn.from === 'generator')

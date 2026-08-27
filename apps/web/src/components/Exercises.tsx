@@ -47,9 +47,6 @@ function Written({ ex }: { ex: WrittenExercise }) {
   const { shown, done } = useStream(feedback?.text ?? '', checking === false && !!feedback)
   const answerRef = useRef<HTMLTextAreaElement>(null)
 
-  // Grows the box with the Student's answer, capped at MAX_ANSWER_HEIGHT — past that it scrolls instead.
-  // scrollHeight excludes the border even under border-box sizing, so it has to be added back in,
-  // or the box permanently overflows itself by exactly the border width.
   useLayoutEffect(() => {
     const el = answerRef.current
     if (!el) return

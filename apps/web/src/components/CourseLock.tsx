@@ -1,10 +1,5 @@
 import { Lock } from 'lucide-react'
 
-/**
- * A Course Lock is not a Fault: nothing is broken, one Agent Job simply holds
- * the Course while Tailor Mode rewrites it. So it reads in the workspace's own
- * neutrals with a live blue lamp, not in `fail` — and it says what is waiting.
- */
 export function CourseLock({ files }: { files: string[] }) {
   return (
     <div role="status" className="flex shrink-0 items-start gap-3 border-b border-rule bg-paper-sunk px-5 py-3.5 md:px-7">
